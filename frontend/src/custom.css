@@ -1,0 +1,19 @@
+.css-1hb7zxy-IndicatorsContainer span.css-1u9des2-indicatorSeparator {
+    display: none;
+}
+.select.css-b62m3t-container .css-t3ipsp-control:hover {
+    border: none;
+}
+.select.css-b62m3t-container .css-t3ipsp-control:focus {
+    border: none;
+    box-shadow: none;
+}
+.select.css-b62m3t-container .css-1nmdiq5-menu {
+    z-index: 100;
+}
+.ant-pagination-prev.ant-pagination-disabled {
+    margin-right: 10px !important;
+}
+.ant-pagination-next.ant-pagination-disabled {
+    margin-left: 10px !important;
+}

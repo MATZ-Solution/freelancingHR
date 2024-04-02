@@ -1,0 +1,12 @@
+/* ::-webkit-overflow-scrolling: touch; */
+
+.pointer-events-none{
+    pointer-events: none;
+}
+
+.freelancer-dropDown{
+    position: absolute;
+    inset: 0px 0px auto auto;
+    margin: 0px;
+    transform: translate3d(399px,186px,0px);
+}

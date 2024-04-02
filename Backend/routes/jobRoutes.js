@@ -1,0 +1,18 @@
+const express = require("express");
+const router = express.Router();
+const jobController = require("../controllers/jobController");
+const { verifyToken } = require("../middleware/authenticate");
+const { uploads } = require("../middleware/imageUploads");
+const multer = require('multer');
+const upload = multer();
+// router.post("/cover", [verifyToken,upload.single('image')],userController.uploadCoverImage);
+router.post("/job", [verifyToken,upload.single('image')], jobController.Job); 
+router.get("/getUserJobs", verifyToken, jobController.getUserJobs);
+router.get("/getAllJobs", jobController.getAllJobs);
+router.post("/proposalSubmit", [verifyToken,upload.single('image')], jobController.proposalSubmit);
+router.get("/allAppliedJobs", verifyToken, jobController.allAppliedJobs);
+router.get("/allPostJobs", verifyToken, jobController.allPostJobs);
+router.get("/userAppliedJobs/:id", verifyToken, jobController.userAppliedJobs);
+router.get("/getJobById/:jobId", jobController.jobByID);
+router.put("/updateStatus", verifyToken, jobController.updateStatus);
+module.exports = router; 
