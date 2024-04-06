@@ -37,7 +37,7 @@ exports.projectCategoryQuery = "SELECT projectType, COUNT(*) AS count FROM proje
 exports.insertProjectProposalQuery = "INSERT INTO project_proposal (userId,projectId,price,est_hours,cover_letter,status,startDate,endDate,createdAt) VALUES (?,?,?,?,?,?,?,?,?)";
 exports.ProjectByIdQuery = "SELECT *,(select count(id) from project_proposal where projectId = P.id) as totalProposal FROM `project` as P LEFT JOIN user as U on P.userId = U.id LEFT JOIN user_company as UC on UC.userId = U.id where P.id = ?";
 exports.insertJobProposalQuery = "INSERT INTO job_proposal (userId,jobId,notice_Period,cover_letter,resume,resumeKey,status,createdAt) VALUES (?,?,?,?,?,?,?,?)";
-exports.GetProjectProposalQuery = "SELECT * FROM user as u left join project_proposal as PP on u.id = PP.userId LEFT join project as p on p.id = pp.projectId where PP.userId = ?";
+exports.GetProjectProposalQuery = "SELECT * FROM user as u left join project_proposal as PP on u.id = PP.userId LEFT join project as p on p.id = PP.projectId where PP.userId = ?";
 exports.GetJobProposalQuery = "SELECT * FROM user as u LEFT join job_proposal as jp on u.id = jp.userId LEFT join job as j on j.id = jp.jobId where jp.userId = ?";
 exports.projectSearchQuery = `SELECT * FROM project WHERE projectTitle LIKE ? OR projectType LIKE ? OR description LIKE ?`;
 exports.jobSearchQuery = `SELECT * FROM job WHERE jobDescription LIKE ? OR jobType LIKE ? OR jobCategory LIKE ? OR jobTitle LIKE ? OR skills LIKE ? OR qualification LIKE ?`;
