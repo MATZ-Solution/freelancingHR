@@ -149,7 +149,7 @@ exports.ForgetPassword = async function (req, res) {
         });
       } else if (await bcrypt.compare(password, selectResult[0][0].password)) {
         const id = selectResult[0][0].id;
-        const token = jwt.sign({ email, id }, config.JWT_SECRET_KEY, {
+        const token = jwt.sign({ email, id }, "11madklfnqo3393", {
           expiresIn: "3h",
         });
         return res.status(200).json({ 
