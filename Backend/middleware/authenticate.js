@@ -10,7 +10,7 @@ const verifyToken = async (req, res, next) => {
   if (!token) {
     return res.status(401).send("Access Denied");
   }
-    const decoded = jwt.verify(token, config.JWT_SECRET_KEY);
+    const decoded = jwt.verify(token, "11madklfnqo3393");
     const result = await queryRunner(selectQuery("user", "id"), [
       decoded.id,
     ]);
