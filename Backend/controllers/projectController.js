@@ -367,6 +367,8 @@ exports.updateStatus = async (req, res) => {
         [projectTitle, Location, companyType, projectType, amount, description, deliveryDate, status,updatedAt, projectId, userId]);
         if (insertResult[0].affectedRows > 0) {
           if(req.file){
+            console.log("4");
+
             // ############# delete Image #################
             const deleteImage = await queryRunner(deleteProjectImageQuery, [projectId, 'Project']);    
             // ################  delete Image ##############
@@ -375,7 +377,7 @@ exports.updateStatus = async (req, res) => {
     if (coverImage[0].affectedRows > 0) {
       return res.status(200).json({ 
         statusCode : 200,
-        message: "Project Created successfully",
+        message: "Project Updated successfully",
         id : insertResult[0].insertId
       });
     }else{
@@ -385,21 +387,21 @@ exports.updateStatus = async (req, res) => {
       });
     }
   }else{
+    
     return res.status(200).json({ 
       statusCode : 200,
-      message: "Project Created successfully",
-      id : id
+      message: "Project Updated successfully",
     });
   }
             
           } else {
-            return res.status(500).json({ statusCode : 500,message : "Failed to Create Project "});
+            return res.status(500).json({ statusCode : 500,message : "Project Not Found"});
           }
     } catch (error) {
       return res.status(500).json({
         // insertResult,
         statusCode : 500,
-        message: "Failed to Create Project",
+        message: "Failed to Update Project",
         error: error
       });
     }

@@ -18,7 +18,7 @@ router.get("/allPostProject", verifyToken, projectController.AllPostProject);
 router.get("/userAppliedProject/:id", verifyToken, projectController.userAppliedProject);
 router.put("/updateStatus", verifyToken, projectController.updateStatus);
 router.put("/updateProject", [verifyToken,upload.single('image')], projectController.updateProject);
-router.put("/deleteProject",verifyToken, projectController.deleteProject);
+router.delete("/deleteProject",verifyToken, projectController.deleteProject);
 
 module.exports = router;
 
