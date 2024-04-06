@@ -33,7 +33,7 @@ exports.updateCompanyProfileQuery = `UPDATE user_company SET companyName = ?, ta
 exports.insertProjectQuery = "INSERT INTO project (userId,projectTitle, Location, companyType, projectType, amount, description, deliveryDate, status,createdAt) VALUES (?,?,?,?,?,?,?,?,?,?)";
 exports.insertImageQuery = "INSERT INTO uploadimage (image, imageKey, type, userId) VALUES (?,?,?,?)";
 exports.insertJobQuery = "INSERT INTO job (userId,jobTitle,jobCategory,pay,shift,location,qualification,jobType,jobDescription, lastDate,status,createdAt) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
-exports.projectCategoryQuery = "SELECT projectType, COUNT(*) AS count FROM freelancing.project GROUP BY projectType";
+exports.projectCategoryQuery = "SELECT projectType, COUNT(*) AS count FROM project GROUP BY projectType";
 exports.insertProjectProposalQuery = "INSERT INTO project_proposal (userId,projectId,price,est_hours,cover_letter,status,startDate,endDate,createdAt) VALUES (?,?,?,?,?,?,?,?,?)";
 exports.ProjectByIdQuery = "SELECT *,(select count(id) from project_proposal where projectId = P.id) as totalProposal FROM `project` as P LEFT JOIN user as U on P.userId = U.id LEFT JOIN user_company as UC on UC.userId = U.id where P.id = ?";
 exports.insertJobProposalQuery = "INSERT INTO job_proposal (userId,jobId,notice_Period,cover_letter,resume,resumeKey,status,createdAt) VALUES (?,?,?,?,?,?,?,?)";
