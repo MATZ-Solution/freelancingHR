@@ -15,7 +15,8 @@ const server = http.createServer(app); // Use http.createServer to create the se
 
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(cors()); 
+// app.use(cors()); 
+app.use(cors({ credentials: true, origin: '*' }))
 
 
 app.get("/", (req, res) => {
