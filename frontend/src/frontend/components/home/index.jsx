@@ -961,7 +961,7 @@ const Home = () => {
 
         {/* /Projects */}
         {/* Top Instructor */}
-        <TopDevelopers />
+        {/* <TopDevelopers /> */}
         {/* / Review */}
         {/* <Reviews /> */}
         {/* Company Hire */}
