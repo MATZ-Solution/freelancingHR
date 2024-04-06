@@ -23,7 +23,8 @@ const {
   insertInCompany,
   projectSearchQuery,
   jobSearchQuery,
-  userDashboardQuery
+  userDashboardQuery,
+  websiteCountQuery
 
 } = require("../constants/queries");
 
@@ -626,3 +627,35 @@ exports.CompanyDashboard = async (req, res) => {
   }
 };
 // ###################### Company Dashboard End #######################################
+
+
+
+
+
+
+
+// ###################### website Frontend count start #######################################
+exports.websiteCount = async (req, res) => {
+  try {
+        const selectResult = await queryRunner(websiteCountQuery);
+        if(selectResult.length > 0){
+          res.status(200).json({
+            statusCode: 200,
+            message: "Success",
+            data : selectResult[0]
+          });
+        }else{
+          res.status(200).json({
+            statusCode: 200,
+            message: "Not Data Found",
+          });
+        }
+  } catch (error) {
+    return res.status(500).json({
+      statusCode : 500,
+      message: "Failed to Get Dashboard Data",
+      error: error.message
+    });
+  }
+};
+// ###################### website Frontend count End #######################################

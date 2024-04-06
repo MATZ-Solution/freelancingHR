@@ -66,6 +66,7 @@ const CompanyProfile = () => {
   let [error, setError] = useState(false)
   let [coverImage, setCoverimage] = useState('')
   let token = localStorage.getItem('token')
+  const [blobUrl, setBlobUrl] = useState(null);
   let [showSuccessModal, setSuccessModal] = useState({
     status: false,
     message: "",
@@ -93,7 +94,6 @@ const CompanyProfile = () => {
     return formattedDate
   }
 
-  const [blobUrl, setBlobUrl] = useState(null);
   async function Download(url) {
     try {
       const response = await fetch(url);
@@ -103,7 +103,7 @@ const CompanyProfile = () => {
 
       const link = document.createElement('a');
       link.href = blobUrl;
-      link.download = `document`; // Specify the desired file name
+      link.download = `document`; 
       link.click();
     } catch (error) {
       alert(error)
@@ -197,12 +197,6 @@ const CompanyProfile = () => {
 
   // #########################  HANDLE CHANGE FUNCTION END #########################################
 
-
-
-
-
-  console.log("this is details", getProj_Details)
-  console.log("this is proposal details", propsalDetails)
 
   // #########################  USE EFFECT START #########################################
 
@@ -777,7 +771,7 @@ const CompanyProfile = () => {
                       <div>
                         <Link
                           to="#"
-                          className="btn  btn-primary Price-btn btn-block"
+                          className="btn proposal-btn btn-primary"
                         >
                           Contact Me{" "}
                         </Link>

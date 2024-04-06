@@ -122,14 +122,15 @@ const Jobs = () => {
       <div className="content">
         <div className="container">
           <div className="row">
-            <div className="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar">
-              <StickyBox offsetTop={20} offsetBottom={20}>
+            {/* <div className="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar"> */}
+              {/* <StickyBox offsetTop={20} offsetBottom={20}> */}
                 {/* Search Filter */}
-                <FreelancerSidebar />
+                {/* <FreelancerSidebar /> */}
                 {/* /Search Filter */}
-              </StickyBox>
-            </div>
-            <div className="col-md-12 col-lg-8 col-xl-9">
+              {/* </StickyBox> */}
+            {/* </div> */}
+            {/* <div className="col-md-12 col-lg-8 col-xl-9"> */}
+            <div className="col-md-12 col-lg-12 col-xl-12">
 
               <div className="sort-tab develop-list-select">
                 <div className="row align-items-center">
@@ -145,7 +146,7 @@ const Jobs = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 d-flex justify-content-sm-end">
+                  {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 d-flex justify-content-sm-end">
                     <div className="sort-by">
                       <Select
                         className="select "
@@ -157,7 +158,7 @@ const Jobs = () => {
                       <li><Link to="/job" className="favour-active"><i className="fas fa-th-large" /></Link></li>
                       <li><Link to="/job-list"><i className="fas fa-list" /></Link></li>
                     </ul>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 

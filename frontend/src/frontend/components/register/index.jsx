@@ -182,10 +182,10 @@ function FormFreelancer(props) {
           type='submit'
           className="btn btn-primary w-100 btn-lg login-btn d-flex align-items-center justify-content-center">Sign Up Now<i className="feather-arrow-right ms-2" /></button>
 
-        <div className="login-or">
+        {/* <div className="login-or">
           <p><span>Or</span></p>
-        </div>
-        <div className="row social-login">
+        </div> */}
+        {/* <div className="row social-login">
           <div className="col-sm-4">
             <Link to="#" className="btn btn-block"><img src={google_icon} alt="Google" />Google</Link>
           </div>
@@ -195,7 +195,7 @@ function FormFreelancer(props) {
           <div className="col-sm-4">
             <Link to="#" className="btn btn-block"><img src={ios_icon} alt="Apple" />Apple</Link>
           </div>
-        </div>
+        </div> */}
         <div className="row">
           <div className="col-sm-8 dont-have d-flex  align-items-center">Already have account  <Link to="/login" className="ms-2">Sign in?</Link></div>
         </div>
@@ -385,10 +385,10 @@ function FormCompany(props) {
           type='submit'
           className="btn btn-primary w-100 btn-lg login-btn d-flex align-items-center justify-content-center">Sign In Now<i className="feather-arrow-right ms-2" /></button>
 
-        <div className="login-or">
+        {/* <div className="login-or">
           <p><span>Or</span></p>
-        </div>
-        <div className="row social-login">
+        </div> */}
+        {/* <div className="row social-login">
           <div className="col-sm-4">
             <Link to="#" className="btn btn-block"><img src={google_icon} alt="Google" />Google</Link>
           </div>
@@ -398,7 +398,7 @@ function FormCompany(props) {
           <div className="col-sm-4">
             <Link to="#" className="btn btn-block"><img src={ios_icon} alt="Apple" />Apple</Link>
           </div>
-        </div>
+        </div> */}
         <div className="row">
           <div className="col-sm-8 dont-have d-flex  align-items-center">Already have account  <Link to="/login" className="ms-2">Sign in?</Link></div>
         </div>

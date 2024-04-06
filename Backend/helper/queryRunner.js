@@ -1,5 +1,5 @@
-const { createConnection } = require("../config/connection")
+const { createPool } = require("../config/connection")
 exports.queryRunner= async(query,data)=>{
-    const connection = await createConnection();
+    const connection = await createPool();
     return await connection.execute(query,data)
 }

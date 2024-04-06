@@ -42,6 +42,7 @@ import DeleteAccount from "./components/foremployers/deleteaccount";
 import VerifyIdentity from "./components/foremployers/verifyidentity";
 import Projectproposal from "./components/foremployers/projectproposal";
 import CompanyPostedProject from "./components/foremployers/postedproject/index.jsx";
+import EditProjects from "./components/foremployers/editProjects/index.jsx";
 //For freelancer
 import Project from "./components/forfreelancer/projects/project";
 import ProjectDetails from "./components/forfreelancer/projects/project_details";
@@ -143,6 +144,7 @@ import FreelancerPayouts from "./components/forfreelancer/payouts/index.jsx";
 import PostJob from '../frontend/components/forfreelancer/job/post_Jobs.jsx'
 import Jobs from '../frontend/components/forfreelancer/job/job.jsx'
 import JobDetails from '../frontend/components/forfreelancer/job/job_Details.jsx'
+import EditJob from "./components/foremployers/EditJob/index.jsx";
 import { useState } from "react";
 // import PostJob from "./components/jobs/post-job";
 
@@ -313,11 +315,11 @@ const AppContainer = function (props) {
           </div>
         ) : (
           <>
-            <Route render={(props) => <Header 
-            {...props} 
+            <Route render={(props) => <Header
+              {...props}
             // userType={userType}
             //  setUsertype={setUsertype}
-             />} />
+            />} />
             <div className="about-us-page">
               <Switch>
                 {/* home */}
@@ -338,6 +340,7 @@ const AppContainer = function (props) {
                 />
                 <Route exact path="/post-project" component={PostProject} />
                 <Route exact path="/postJob" component={PostJob} />
+                <Route exact path="/edit-project/:id" component={EditProjects} />
                 {/* <Route
                   exact
                   path="/job-details"
@@ -360,6 +363,7 @@ const AppContainer = function (props) {
                 <Route exact path="/company-dashboard" component={Dashboard} />
                 <Route exact path="/company-postedJob" component={CompanyPostedJob} />
                 <Route exact path="/company-postedProject" component={CompanyPostedProject} />
+                <Route exact path="/edit-job/:id" component={EditJob} />
 
                 <Route exact path="/edit-project" component={EditProject} />
                 <Route
@@ -461,6 +465,12 @@ const AppContainer = function (props) {
                 {/* For Freelancer */}
                 <Route exact path="/project" component={Project} />
                 <Route exact path="/job" component={Jobs} />
+
+                <Route
+                  exact
+                  path="/freelancer-dashboard"
+                  component={FreelancerDashboard}
+                />
                 <Route
                   exact
                   path="/job-details/:id"
@@ -475,11 +485,6 @@ const AppContainer = function (props) {
                 />
                 <Route exact path="/project-list" component={ProjectList} />
 
-                <Route
-                  exact
-                  path="/freelancer-dashboard"
-                  component={FreelancerDashboard}
-                />
                 <Route
                   exact
                   path="/freelancer-project-proposals"

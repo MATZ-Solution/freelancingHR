@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Avatar_1,
@@ -26,6 +26,7 @@ import ErrorModal from "../../../../admin/component/pages/CustomModal/ErrorsModa
 import sampleCoverImage from '../../../assets/img/bg/breadcrumb-bg.png'
 
 const JobDetails = () => {
+
   const [date, setDate] = useState(new Date());
   const handleChange = (date) => {
     setDate(date);
@@ -61,6 +62,7 @@ const JobDetails = () => {
   let token = localStorage.getItem('token')
   let { id } = useParams();
   let [error, setError] = useState(false)
+  let [descriptionData, setDescription] = useState([])
   let coverImage;
   let [showSuccessModal, setSuccessModal] = useState({
     status: false,
@@ -100,37 +102,36 @@ const JobDetails = () => {
 
   // #########################  API START #########################################
 
-  // const getProjectDescription = async () => {
-  //   try {
-  //     const getProjectRequest = await fetch(`http://localhost:4500/project/projectById/${id}`, {
-  //       method: "GET",
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       }
-  //     })
-  //     if (!getProjectRequest.ok) {
-  //       setError(true)
-  //     }
-  //     const response = await getProjectRequest.json()
-  //     console.log(response)
-  //     if (response.message === 'Success') {
-  //       setProj_Details(response?.data)
-  //       setCoverimage(response?.data[0]?.coverImage)
-  //     }
-  //   } catch (err) {
-  //     console.log(err)
-  //     setError(true)
-  //   }
-  // }
+  const getJobDescription = async () => {
+    try {
+      const request = await fetch(`http://localhost:4500/job/getJobById/${id}`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      if (!request.ok) {
+        setError(true)
+      }
+      const response = await request.json()
+      console.log(response)
+      if (response.message === 'Success') {
+        setDescription(response?.data)
+      }
+    } catch (err) {
+      console.log(err)
+      setError(true)
+    }
+  }
 
   const sendproposal = async () => {
     const formdata = new FormData()
-    formdata.append('jobId',propsalDetails?.projectId || '')
-    formdata.append('notice_Period',propsalDetails?.notice_Period || '')
-    formdata.append('coverLetter',propsalDetails?.coverLetter || '')
-    formdata.append('status',propsalDetails?.status || '')
-    formdata.append('image',propsalDetails?.image || '')
-    
+    formdata.append('jobId', propsalDetails?.projectId || '')
+    formdata.append('notice_Period', propsalDetails?.notice_Period || '')
+    formdata.append('coverLetter', propsalDetails?.coverLetter || '')
+    formdata.append('status', propsalDetails?.status || '')
+    formdata.append('image', propsalDetails?.image || '')
+
     try {
       const getProposalRequest = await fetch(`http://localhost:4500/job/proposalSubmit`, {
         method: "POST",
@@ -163,15 +164,42 @@ const JobDetails = () => {
 
   // #########################  API END #########################################
 
+
+  // #########################  FUNCTION START #########################################
+
+
+  function dates(date) {
+    const dates = new Date(date);
+    const formattedDate = dates.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+    return formattedDate
+  }
+
+  // #########################  FUNCTION END #########################################
+
+
+
+  // #########################  USE EFFECT START #########################################
+
+  useEffect(() => {
+    getJobDescription()
+  }, [])
+
+  // console.log("this is description data", descriptionData)
+
+  // ######################### USE EFFECT END  #########################################
+
+
   if (error) {
     return <ErrorModal message={'Something Went Wrong'} />
   }
-
-
   return (
     <>
       {/* Breadcrumb */}
-      <EmployerBreadcrumb title="Job Details" subtitle="Project Details" coverImage={coverImage ? coverImage : sampleCoverImage} />
+      <EmployerBreadcrumb title="Job Details" subtitle="Project Details" coverImage={descriptionData[0]?.coverImage ? descriptionData[0]?.coverImage : sampleCoverImage} />
 
       {/* <EmployerBreadcrumb title="Job Details" subtitle="Project Details" /> */}
       {/* /Breadcrumb */}
@@ -183,27 +211,28 @@ const JobDetails = () => {
               <div className="company-detail-block pt-0">
                 <div className="company-detail">
                   <div className="company-detail-image">
-                    <img src={default_logo} className="img-fluid" alt="logo" />
+                    <img src={descriptionData[0]?.profileImage} className="img-fluid" alt="logo" style={{ width: "100%", height: "100%" }} />
                   </div>
                   <div className="company-title">
-                    <p>Soft Technologies</p>
-                    <h4>Build a Coaching Website Product Store images</h4>
+                    <p>{descriptionData[0]?.firstName} {descriptionData[0]?.lastName}</p>
+                    <h4>{descriptionData[0]?.jobTitle}</h4>
                   </div>
                 </div>
                 <div className="company-address">
                   <ul>
                     <li>
                       <i className="feather-map-pin" />
-                      Los Angels
+                      {descriptionData[0]?.city}
+
                     </li>
                     <li>
                       <i className="feather-calendar" />
-                      22 September 2023
+                      {dates(descriptionData[0]?.createdAt)}
                     </li>
-                    <li>
+                    {/* <li>
                       <i className="feather-eye" />
                       902 Views
-                    </li>
+                    </li> */}
                     <li>
                       <i className="feather-edit-2" />
                       15 Proposal
@@ -217,8 +246,8 @@ const JobDetails = () => {
                         <img src={computer_line} alt="icons" />
                       </div>
                       <div className="proposal-detail text-capitalize">
-                        <span className=" d-block">Freelancer Type</span>
-                        <p className="mb-0">Full Time</p>
+                        <span className=" d-block">Job Type</span>
+                        <p className="mb-0">{descriptionData[0]?.jobType}</p>
                       </div>
                     </li>
                     <li>
@@ -226,8 +255,8 @@ const JobDetails = () => {
                         <img src={time_line} alt="icons" />
                       </div>
                       <div className="proposal-detail text-capitalize">
-                        <span className=" d-block">Project Type</span>
-                        <p className="mb-0">Hourly</p>
+                        <span className=" d-block">Work Type</span>
+                        <p className="mb-0">{descriptionData[0]?.Worktype}</p>
                       </div>
                     </li>
                     <li>
@@ -235,35 +264,8 @@ const JobDetails = () => {
                         <img src={time_line} alt="icons" />
                       </div>
                       <div className="proposal-detail text-capitalize">
-                        <span className=" d-block">Project Duration</span>
-                        <p className="mb-0">10-15 Hours</p>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="proposal-detail-img">
-                        <img src={user_heart_line} alt="icons" />
-                      </div>
-                      <div className="proposal-detail text-capitalize">
-                        <span className=" d-block">Experience</span>
-                        <p className="mb-0">Basic</p>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="proposal-detail-img">
-                        <img src={translate_2} alt="icons" />
-                      </div>
-                      <div className="proposal-detail text-capitalize">
-                        <span className=" d-block">Languages</span>
-                        <p className="mb-0">English, Arabic</p>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="proposal-detail-img">
-                        <img src={translate} alt="icons" />
-                      </div>
-                      <div className="proposal-detail text-capitalize">
-                        <span className=" d-block">Language Fluency</span>
-                        <p className="mb-0">Conversational</p>
+                        <span className=" d-block">Pay</span>
+                        <p className="mb-0">{descriptionData[0]?.pay}</p>
                       </div>
                     </li>
                   </ul>
@@ -271,49 +273,27 @@ const JobDetails = () => {
               </div>
               <div className="company-detail-block company-description">
                 <h4 className="company-detail-title">Description</h4>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                  laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                  irure dolor in reprehenderit in voluptate velit esse cillum
-                  dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                  cupidatat non proident, sunt in culpa qui officia deserunt
-                  mollit anim id est laborum.
-                </p>
-                <p className="mb-0">
-                  Sed ut perspiciatis unde omnis iste natus error sit voluptatem
-                  accusantium doloremque laudantium, totam rem aperiam, eaque
-                  ipsa quae ab illo inventore veritatis et quasi architecto
-                  beatae vitae dicta sunt explicabo. Nemo enim ipsam
-                  consequuntur magni dolores eos qui ratione voluptatem sequi
-                  nesciunt.
-                </p>
+                <p>{descriptionData[0]?.jobDescription}</p>
               </div>
               <div className="company-detail-block company-description">
                 <h4 className="company-detail-title">Skills Required</h4>
                 <div className="tags">
-                  <Link to="#">
-                    <span className="badge badge-pill badge-design">
-                      After Effects
-                    </span>
-                  </Link>
-                  <Link to="#">
-                    <span className="badge badge-pill badge-design">
-                      Illustrator
-                    </span>
-                  </Link>
-                  <Link to="#">
-                    <span className="badge badge-pill badge-design">HTML</span>
-                  </Link>
-                  <Link to="#">
-                    <span className="badge badge-pill badge-design">
-                      Whiteboard
-                    </span>
-                  </Link>
+                  {
+                    descriptionData[0]?.skills?.map((data, index) => {
+                      return (
+                        data?.map((data, index) => {
+                          return (
+                            < span key={index} className="badge badge-pill badge-design" >
+                              {data?.skill}
+                            </span>
+                          )
+                        })
+                      )
+                    })
+                  }
                 </div>
               </div>
-              <div className="company-detail-block">
+              {/* <div className="company-detail-block">
                 <h4 className="company-detail-title">Attachments</h4>
                 <div className="row row-gap">
                   <div className="col-lg-4 col-md-4 col-sm-12">
@@ -383,8 +363,8 @@ const JobDetails = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="company-detail-block company-description">
+              </div> */}
+              {/* <div className="company-detail-block company-description">
                 <h4 className="company-detail-title">Tags</h4>
                 <div className="tags">
                   <Link to="#">
@@ -621,7 +601,7 @@ const JobDetails = () => {
                     </p>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
             {/* Blog Sidebar */}
             <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar project-client-view">
@@ -629,8 +609,7 @@ const JobDetails = () => {
                 <div className="card budget-widget">
                   <div className="budget-widget-details">
                     <h6>Budget</h6>
-                    <h4>$125 - $180</h4>
-                    <p className="mb-0">Hourly Rate</p>
+                    <h4>{descriptionData[0]?.pay}</h4>
                   </div>
                   <div>
                     <Link
@@ -647,13 +626,14 @@ const JobDetails = () => {
                     <h6>About Client</h6>
                     <div className="company-detail-image">
                       <img
-                        src={default_logo}
+                        style={{ width: "100%", height: "100%" }}
+                        src={descriptionData[0]?.profileImage}
                         className="img-fluid"
                         alt="logo"
                       />
                     </div>
-                    <h5>KIND SOFTWARES</h5>
-                    <span>Member Since December 31, 2020</span>
+                    <h5>{descriptionData[0]?.firstName} {descriptionData[0]?.lastName}</h5>
+                    <span>Member Since {dates(descriptionData[0]?.firstName)}</span>
                     <div className="rating mb-3">
                       <i className="fas fa-star filled" />
                       <i className="fas fa-star filled" />
@@ -663,48 +643,63 @@ const JobDetails = () => {
                       <span className="average-rating">5.0</span>
                     </div>
                     <ul className="d-flex list-style mb-0 social-list">
-                      <li>
-                        <Link to="#" className="social-link-block">
-                          <i className="fa-brands fa-facebook-f" />
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="#" className="social-link-block">
-                          <i className="fab fa-twitter" />
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="#" className="social-link-block">
-                          <i className="fa-brands fa-linkedin-in" />
-                        </Link>
-                      </li>
-                      <li>
-                        <Link to="#" className="social-link-block">
-                          <i className="fa-brands fa-instagram" />
-                        </Link>
-                      </li>
+                      {descriptionData[0]?.facebook && (
+                        <li>
+                          <Link to="#" className="social-link-block">
+                            <i className="fa-brands fa-facebook-f" />
+                          </Link>
+                        </li>
+                      )}
+                      {descriptionData[0]?.twitter && (
+                        <li>
+                          <Link to="#" className="social-link-block">
+                            <i className="fab fa-twitter" />
+                          </Link>
+                        </li>
+                      )}
+
+                      {descriptionData[0]?.linkedIn && (
+                        <li>
+                          <Link to="#" className="social-link-block">
+                            <i className="fa-brands fa-linkedin-in" />
+                          </Link>
+                        </li>
+                      )}
+
+                      {descriptionData[0]?.linkedIn && (
+                        <li>
+                          <Link to="#" className="social-link-block">
+                            <i className="fa-brands fa-instagram" />
+                          </Link>
+                        </li>
+                      )}
                     </ul>
                     <ul className="d-flex list-style mb-0 client-detail-list">
-                      <li>
-                        <span>Departments</span>
-                        <p className="mb-0">Designer</p>
-                      </li>
-                      <li>
-                        <span>Employees</span>
-                        <p className="mb-0">30-50</p>
-                      </li>
+                      {descriptionData[0]?.industry && (
+                        <li>
+                          <span>Departments</span>
+                          <p className="mb-0">{descriptionData[0]?.industry}</p>
+                        </li>
+                      )}
+
+                      {descriptionData[0]?.teamSize && (
+                        <li>
+                          <span>Employees</span>
+                          <p className="mb-0">{descriptionData[0]?.teamSize}</p>
+                        </li>
+                      )}
                     </ul>
                   </div>
                   <div>
                     <Link
                       to="#"
-                      className="btn  btn-primary notice_Period-btn btn-block"
+                      className="btn proposal-btn btn-primary"
                     >
                       Contact Me{" "}
                     </Link>
                   </div>
                 </div>
-                <div className="card budget-widget">
+                {/* <div className="card budget-widget">
                   <ul className="d-flex mb-0 list-style job-list-block">
                     <li>
                       <span>Jobs Posted</span>
@@ -731,13 +726,13 @@ const JobDetails = () => {
                       <p className="mb-0">29</p>
                     </li>
                   </ul>
-                </div>
+                </div> */}
               </StickyBox>
             </div>
             {/* /Blog Sidebar */}
           </div>
         </div>
-      </div>
+      </div >
 
       {/* The Modal */}
 
@@ -834,13 +829,13 @@ const JobDetails = () => {
                         >
                           <label className="form-label">Add Resume</label>
                           <div className="custom-file">
-                              <input type="file" className="custom-file-input" onChange={handleDocument} />
-                              <label className="custom-file-label" />
-                            </div>
-                            {/* <p className="mb-0"> */}
-                            {propsalDetails?.image && (
-                              <p className="mt-3">{propsalDetails.image.name}</p>
-                            )}
+                            <input type="file" className="custom-file-input" onChange={handleDocument} />
+                            <label className="custom-file-label" />
+                          </div>
+                          {/* <p className="mb-0"> */}
+                          {propsalDetails?.image && (
+                            <p className="mt-3">{propsalDetails.image.name}</p>
+                          )}
                           {/* <DatePicker
                             selected={propsalDetails.startDate}
                             onChange={handleChangestartDate}

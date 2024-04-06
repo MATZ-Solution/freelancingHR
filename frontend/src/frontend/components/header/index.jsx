@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   Avatar_1,
   Logo_img,
@@ -19,13 +19,23 @@ import {
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import ErrorModal from "../../../admin/component/pages/CustomModal/ErrorsModal";
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux'
+import { updateStatus } from '../../../redux/Slices/NavbarSlice';
+import { updateFreelancerDetail } from "../../../redux/Slices/FreelancerDetailsSlice";
 
 const Header = (props) => {
-  // const { userType, setUsertype } = props;
+
+  // get value from store
+  const flag = useSelector(state => state.navbarState.status)
+  const freelancerDetails = useSelector(state => state.freelancerDetails.data)
+  const { name, profileImage } = freelancerDetails
+  const dispatch = useDispatch()
 
   const [isSideMenu, setSideMenu] = useState("");
   const [isSideMenu1, setSideMenu1] = useState("");
   const [isSideMenu2, setSideMenu2] = useState("");
+
+  const history = useHistory();
 
   const toggleSidebar = (value) => {
     setSideMenu(value);
@@ -108,7 +118,11 @@ const Header = (props) => {
   let [userType, setUsertype] = useState('')
   let token = localStorage.getItem('token')
   let [error, setError] = useState(false)
-
+  let [userInfo, setUserInfo] = useState({
+    name: '',
+    email: '',
+    profileImage: ''
+  })
   function Logout() {
     setUsertype('')
     localStorage.removeItem('token')
@@ -128,6 +142,13 @@ const Header = (props) => {
         setError(true)
       }
       setUsertype(response?.userType || '')
+      dispatch(updateFreelancerDetail(response || ''))
+      // if(response?.userType === 'freelancer'){
+      // }else{
+      //   dispatch(updateCompanyDetails(response || ''))
+      // }
+
+      dispatch(updateStatus(false))
     } catch (err) {
       console.log(err)
       setError(true)
@@ -138,11 +159,32 @@ const Header = (props) => {
 
 
 
+  // ##############  FUNCTION START ###########################
+  function postProject() {
+    if (!token) {
+      history.push('/login')
+    } else {
+      history.push('/post-project')
+    }
+  }
+
+  function postJob() {
+    if (!token) {
+      history.push('/login')
+    } else {
+      history.push('/postJob')
+    }
+  }
+
+  // ##############  FUNCTION END ###########################
+
+
+
   // ##############  USE EFFECT START ###########################
 
   useEffect(() => {
     Authenticate()
-  }, [])
+  }, [flag])
 
   // ##############  USE EFFECT END ###########################
 
@@ -184,7 +226,7 @@ const Header = (props) => {
                       <span />
                     </span>
                   </Link>
-                  <Link to="/index" className="navbar-brand logo">
+                  <Link to="/" className="navbar-brand logo">
                     <img src={Logo_img} className="img-fluid" alt="Logo" />
                   </Link>
                 </div>
@@ -259,7 +301,7 @@ const Header = (props) => {
                     </li>
 
                     <li
-                      className={`has-submenu ${pathname === "about" ||
+                      className={`has-submenu ${pathname === "project" ||
                         pathname === "blank-page" ||
                         pathname === "404-page" ||
                         pathname === "user-account-details" ||
@@ -411,13 +453,42 @@ const Header = (props) => {
                         ""
                       )} */}
                     </li>
-                    <li>
+                    {
+                      userType === 'freelancer' && (
+                        <li>
+                          <Link to="/freelancer-dashboard"
+                          //  target="_blank"
+                          >Dashboard
+                          </Link>
+                        </li>
+                      )
+                    }
+                    {
+                      userType === 'company' && (
+                        <li>
+                          <Link to="/company-dashboard"
+                          //  target="_blank"
+                          >Dashboard
+                          </Link>
+                        </li>
+                      )
+                    }
+                    {/* {
+                      userType === '' && (
+                        <li>
+                          <Link to="/admin/login"
+                          >
+                            Admin
+                          </Link>
+                        </li>
+                      )
+                    } */}
+                    {/* <li>
                       <Link to="/admin/login"
-                      //  target="_blank"
                       >
                         Admin
                       </Link>
-                    </li>
+                    </li> */}
                   </ul>
                 </div>
                 {
@@ -640,9 +711,9 @@ const Header = (props) => {
                               data-bs-toggle="dropdown"
                             >
                               <span className="user-img">
-                                <img src={Avatar_1} alt="" />
+                                <img src={profileImage} alt="" />
                               </span>
-                              <span>Bruce Bush</span>
+                              <span>{name}</span>
                             </Link>
                             <div className="dropdown-menu emp">
                               <div className="drop-head">Account Details</div>
@@ -727,8 +798,15 @@ const Header = (props) => {
                               </div>
                             </li>
                             <li>
-                              <Link to="/post-project" className="login-btn">
+                              <Link to="/post-project" className="login-btn"
+                              // onClick={postProject}
+                              >
                                 Post a Project{" "}
+                              </Link>
+                            </li>
+                            <li>
+                              <Link to="/post-job" className="login-btn">
+                                Post a Job{" "}
                               </Link>
                             </li>
                           </ul>
@@ -798,7 +876,7 @@ const Header = (props) => {
                               <li>
                                 <Link to="/register" className="reg-btn">
                                   <img src={users} className="me-1" alt="img" />
-                                  Register
+                                  Registers
                                 </Link>
                               </li>
                               <li>
@@ -810,16 +888,22 @@ const Header = (props) => {
                                 (userType === 'company' || userType === "") && (
                                   <>
                                     <li>
-                                      <Link to="/post-project" className="login-btn">
+                                      <div
+                                        // to="/post-project"
+                                        className="login-btn"
+                                        onClick={postProject}
+                                      >
                                         <i className="feather-plus me-1" />
                                         Post a Projects{" "}
-                                      </Link>
+                                      </div>
                                     </li>
                                     <li>
-                                      <Link to="/postJob" className="login-btn">
+                                      <div 
+                                      onClick={postJob}
+                                      className="login-btn">
                                         <i className="feather-plus me-1" />
                                         Post a Job{" "}
-                                      </Link>
+                                      </div>
                                     </li>
                                   </>
                                 )

@@ -48,5 +48,13 @@ exports.userJobAppliedQuery = "SELECT U.firstName, U.lastName, U.email, U.phoneN
 exports.userDashboardQuery = "select (select count(*) from job) as totalJobs, (select count(*) from job_proposal as JP INNER JOIN user as U ON JP.userId = U.id WHERE JP.userId = ? ) as appliedJob, (select count(*) from project) as totalProject, (select count(*) from project_proposal as PP INNER JOIN user as U ON PP.userId = U.id WHERE PP.userId = ? ) as 	appliedProject";
 exports.updateStatusQuery = "UPDATE job SET status = ? WHERE id = ?";
 exports.updateProjectStatusQuery = "UPDATE project SET status = ? WHERE id = ?";
-
+exports.jobByIdQuery = "SELECT *,(select count(id) from job_proposal where jobId = J.id) as totalProposal FROM `job` as J LEFT JOIN user as U on J.userId = U.id LEFT JOIN user_company as UC on U.id = UC.userId where J.id = ?";
+exports.websiteCountQuery = "select (SELECT COUNT(id) FROM `user` where userType = 'freelancer') as totalfreelancer, (SELECT COUNT(id) FROM `user` where userType = 'company') as totalCompany, (SELECT COUNT(id) FROM `project` ) as totalProject  ,(SELECT COUNT(id) FROM `project` where status = 'Completed') as totalCompletedProject;";
+exports.updateJobQuery = "UPDATE `job` set jobTitle = ?, jobCategory = ?, pay = ?, shift = ?, location = ?, qualification = ? , jobType = ?, jobDescription = ?, updatedAt = ? where id = ? and userId = ? ";
+// exports.updateJobQuery = "UPDATE `job` set jobTitle = ?, jobCategory = ?, pay = ?, shift = ?, location = ?, qualification = ?, jobType = ?, jobDescription = ? where id = ? and userId = ? ";
+exports.deleteJobQuery = "DELETE J, JP FROM job as J LEFT JOIN job_proposal as JP ON J.id = JP.jobId WHERE J.id = ? ";
+exports.updateProjectQuery = "UPDATE project SET projectTitle = ?, Location = ?, companyType = ?, projectType = ?, amount = ?, description = ?, deliveryDate = ?, status = ?,updatedAt = ? where id = ? AND userId = ?";
+exports.deleteProjectImageQuery = "DELETE FROM `uploadimage` WHERE userId = ? and type = ?";
+exports.deleteProjectQuery = "DELETE P, PP FROM project as P LEFT JOIN project_proposal as PP ON P.id = PP.projectId LEFT JOIN uploadimage as UI ON P.id = UI.userId and UI.type = 'Project' WHERE P.id = ?";
+exports.deleteJobSkillsQuery = "DELETE FROM `skills` WHERE userId = ? and type = ?";
 

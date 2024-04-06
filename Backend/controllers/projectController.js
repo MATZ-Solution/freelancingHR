@@ -14,7 +14,11 @@ const {
     GetProjectProposalQuery,
     postProjectQuery,
     userProjectAppliedQuery,
-    updateProjectStatusQuery
+    updateProjectStatusQuery,
+    updateProjectQuery,
+    deleteProjectImageQuery,
+    deleteProjectQuery
+
   
   } = require("../constants/queries.js");
   const { queryRunner } = require("../helper/queryRunner.js");
@@ -24,11 +28,10 @@ const {
   
   // ###################### Project Start #######################################
   exports.Project = async (req, res)=> {
-    const {projectTitle, Location, companyType, projectType, amount, description, deliveryDate, status} = req.body;
-    const {userId} = req.user;
-    const currentDate = new Date();
-    console.log(projectTitle, Location, companyType, projectType, amount, description, deliveryDate, status,userId,currentDate);
     try {
+      const {userId} = req.user;
+      const currentDate = new Date();
+      const {projectTitle, Location, companyType, projectType, amount, description, deliveryDate, status} = req.body;
       const insertResult = await queryRunner(insertProjectQuery, 
         [userId,projectTitle, Location, companyType, projectType, amount, description, deliveryDate, status,currentDate]);
       
@@ -353,3 +356,76 @@ exports.updateStatus = async (req, res) => {
   }
 };
 // ###################### update Status End #######################################
+
+  // ###################### update Project Start #######################################
+  exports.updateProject = async (req, res)=> {
+    try {
+      const {userId} = req.user;
+      const updatedAt = new Date();
+      const {projectTitle, Location, companyType, projectType, amount, description, deliveryDate, status, projectId} = req.body;
+      const insertResult = await queryRunner(updateProjectQuery, 
+        [projectTitle, Location, companyType, projectType, amount, description, deliveryDate, status,updatedAt, projectId, userId]);
+        if (insertResult[0].affectedRows > 0) {
+          if(req.file){
+            // ############# delete Image #################
+            const deleteImage = await queryRunner(deleteProjectImageQuery, [projectId, 'Project']);    
+            // ################  delete Image ##############
+          const imageUrl = await imageUploads.uploadImage(req.file);
+          const coverImage = await queryRunner(insertImageQuery, [imageUrl.url,imageUrl.asset_id,"project",projectId]);
+    if (coverImage[0].affectedRows > 0) {
+      return res.status(200).json({ 
+        statusCode : 200,
+        message: "Project Created successfully",
+        id : insertResult[0].insertId
+      });
+    }else{
+      return res.status(500).json({ 
+        statusCode : 500,
+        message: "Project Image is not saved",
+      });
+    }
+  }else{
+    return res.status(200).json({ 
+      statusCode : 200,
+      message: "Project Created successfully",
+      id : id
+    });
+  }
+            
+          } else {
+            return res.status(500).json({ statusCode : 500,message : "Failed to Create Project "});
+          }
+    } catch (error) {
+      return res.status(500).json({
+        // insertResult,
+        statusCode : 500,
+        message: "Failed to Create Project",
+        error: error
+      });
+    }
+  };
+  // ###################### update Project END #######################################
+  
+
+  // ###################### delete Project start #######################################
+exports.deleteProject = async (req, res) => {
+  try {
+    const { ProjectId } = req.body;
+    const selectResult = await queryRunner(deleteProjectQuery, [ProjectId]);    
+    if (selectResult[0].affectedRows > 0) { 
+      res.status(200).json({
+        statusCode: 200,
+        message: "Successfully Deleted Project",
+      });
+    } else {
+      res.status(200).json({ message: "Job Not Found" });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      statusCode : 500,
+      message: "Failed to Delete A Project",
+      error: error.message
+    });
+  }
+};
+// ###################### delete Project End ####################################

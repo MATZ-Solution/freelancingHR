@@ -24,6 +24,7 @@ router.get("/searchProject/:keyword", userController.searchProject);
 router.get("/searchJob/:keyword", userController.searchJob);
 router.get("/testAllUser", userController.testAllUser);
 router.get("/freelancingDashboard", verifyToken, userController.freelancingDashboard);
+router.get("/websiteCount", userController.websiteCount);
 // router.get("/Search" , userController.search);
 // router.post("/DMNS", userController.DMNS); 
 module.exports = router;

@@ -161,11 +161,42 @@ const CompanyPostedProject = () => {
                                                             </td>
                                                             <td>{dates(data.deliveryDate)}</td>
                                                             <td>
-                                                                <Link data-bs-toggle="modal" to="#file" className="btn btn-primary sub-btn"
+                                                                <Link
+                                                                    to="#"
+                                                                    className="action-icon "
+                                                                    data-bs-toggle="dropdown"
+                                                                    aria-expanded="false"
+                                                                >
+                                                                    <i className="fa fa-ellipsis-v" />
+                                                                </Link>
+                                                                <div className="dropdown-menu dropdown-menu-right">
+                                                                    <Link
+                                                                        className="dropdown-item"
+                                                                    to={`/edit-project/${data?.id}`}
+                                                                    // data-bs-toggle="modal"
+                                                                    // data-bs-target="#"
+                                                                    >
+                                                                        <i className="fas fa-pencil-alt me-1" /> Edit
+                                                                    </Link>
+                                                                    <div
+                                                                        className="dropdown-item"
+                                                                    // onClick={()=>deleteJob(data?.id)}
+                                                                    >
+                                                                        <i className="far fa-trash-alt me-1" /> Delete
+                                                                    </div>
+
+                                                                    <Link data-bs-toggle="modal" to="#file" className="dropdown-item"
+                                                                        onClick={() => getAllProjectUser(data?.id)}
+                                                                    >
+                                                                        <i className="feather-eye me-1" />
+                                                                        View Applicants
+                                                                    </Link>
+                                                                </div>
+                                                                {/* <Link data-bs-toggle="modal" to="#file" className="btn btn-primary sub-btn"
                                                                     onClick={() => getAllProjectUser(data?.id)}
                                                                 >
                                                                     View Proposal
-                                                                </Link>
+                                                                </Link> */}
                                                             </td>
 
                                                         </tr>
@@ -258,7 +289,7 @@ const CompanyPostedProject = () => {
                                 <h4 className="modal-title">Applied Users</h4>
                                 <span className="modal-close">
                                     <Link to="#" data-bs-dismiss="modal" aria-label="Close"
-                                    onClick={()=>{setProjectUserData([])}}>
+                                        onClick={() => { setProjectUserData([]) }}>
                                         <i className="fa fa-times orange-text" />
                                     </Link>
                                 </span>
@@ -268,43 +299,43 @@ const CompanyPostedProject = () => {
                                 </div>
                                 {
                                     projectUserData?.length !== 0 ?
-                                    <div className="table-responsive">
-                                    <table className="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Name</th>
-                                                <th>Email</th>
-                                                <th>Phone Number</th>
-                                                <th>Status</th>
-                                                <th>Apply Date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                projectUserData?.map((data, index) => {
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td>{data?.firstName} {data?.lastName}</td>
-                                                            <td>{data?.email}</td>
-                                                            <td>{data?.phoneNumber ? <>{data?.phoneNumber}</>: <p style={{color: "red"}}>Not Available</p>}</td>
-                                                            <td>
-                                                                <div className={`badge ${data?.status === 'pending' ? 'badge-pending' : data.status === 'success' ? 'badge-success' : 'badge-fail'}`}>
-                                                                    <span>{data?.status}</span>
-                                                                </div>
-                                                            </td>
-                                                            <td>{dates(data?.createdAt)}</td>
-                                                        </tr>
-                                                    )
-                                                })
-                                            }
+                                        <div className="table-responsive">
+                                            <table className="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Name</th>
+                                                        <th>Email</th>
+                                                        <th>Phone Number</th>
+                                                        <th>Status</th>
+                                                        <th>Apply Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        projectUserData?.map((data, index) => {
+                                                            return (
+                                                                <tr key={index}>
+                                                                    <td>{data?.firstName} {data?.lastName}</td>
+                                                                    <td>{data?.email}</td>
+                                                                    <td>{data?.phoneNumber ? <>{data?.phoneNumber}</> : <p style={{ color: "red" }}>Not Available</p>}</td>
+                                                                    <td>
+                                                                        <div className={`badge ${data?.status === 'pending' ? 'badge-pending' : data.status === 'success' ? 'badge-success' : 'badge-fail'}`}>
+                                                                            <span>{data?.status}</span>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>{dates(data?.createdAt)}</td>
+                                                                </tr>
+                                                            )
+                                                        })
+                                                    }
 
-                                        </tbody>
-                                    </table>
-                                </div>
-                                    :
-                                    <p>No proposal found.</p>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        :
+                                        <p>No proposal found.</p>
                                 }
-                              
+
                             </div>
                         </div>
                     </div>

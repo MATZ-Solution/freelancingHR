@@ -4,7 +4,8 @@ import { createRoot } from 'react-dom/client';
 import ReactDOM from 'react-dom/client';
 import AppRouter from './frontend/approuter';
 import '../src/custom.css'
-
+import store from './redux/store'
+import { Provider } from 'react-redux'
 // Use For Switch
 // import 'react-toggle-switch/dist/css/switch.min.css';
 
@@ -18,6 +19,9 @@ import '../src/custom.css'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
-    <AppRouter/>
+    <Provider store={store}>
+      <AppRouter />
+    </Provider>
+
   </>
 );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Editor } from "react-draft-wysiwyg";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
@@ -6,17 +6,18 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import ErrorModal from "../../../admin/component/pages/CustomModal/ErrorsModal";
-import SuccessModal from "../../../admin/component/pages/CustomModal/index";
+import ErrorModal from "../../../../admin/component/pages/CustomModal/ErrorsModal";
+import SuccessModal from "../../../../admin/component/pages/CustomModal/index";
 import { useForm, Controller } from 'react-hook-form'
-import TextEditor from "../foremployers/dashboard/texteditor";
+// import TextEditor from "../foremployers/dashboard/texteditor";
 import { useHistory } from 'react-router-dom'
+import { useParams } from 'react-router-dom';
 
-const PostProject = () => {
+const EditProject = () => {
 
 
   // #########################  VARIABLES START #########################################
-
+  let { id } = useParams();
   const { register, handleSubmit, formState: { errors }, watch, control, setValue } = useForm()
   const getImage = watch("image");
   const history = useHistory();
@@ -93,27 +94,60 @@ const PostProject = () => {
 
   // #########################  SUBMIT PROJECT FUNCTION START #########################################
 
-  const submitProject = async (data) => {
-    let formData = new FormData()
-    formData.append('projectTitle', projectDetails.projectTitle)
-    formData.append('Location', projectDetails.Location)
-    formData.append('projectType', projectDetails.projectType)
-    formData.append('companyType', projectDetails.companyType)
-    formData.append('amount', projectDetails.amount)
-    formData.append('description', projectDetails.description)
-    formData.append('deliveryDate', formatDate)
-    formData.append('status', projectDetails.status)
-    formData.append('image', projectDetails.image)
+  const getProjectDescription = async () => {
+    try {
+      const getProjectRequest = await fetch(`http://localhost:4500/project/projectById/${id}`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+      if (!getProjectRequest.ok) {
+        setError(true)
+      }
+      const response = await getProjectRequest.json()
+      console.log(response)
+      if (response.message === 'Success') {
+        setProjectDetails({
+            ...projectDetails,
+            projectTitle: response?.data[0]?.projectTitle,
+            Location: response?.data[0]?.Location,
+            companyType: response?.data[0]?.companyType,
+            projectType: response?.data[0]?.projectType,
+            amount: response?.data[0]?.amount,
+            description: response?.data[0]?.description,
+            deliveryDate: new Date(response?.data[0]?.deliveryDate),
+            status: response?.data[0]?.status,
+            image: response?.data[0]?.image
+          })
+      }
+    } catch (err) {
+      console.log(err)
+      setError(true)
+    }
+  }
 
+  const submitProject = async (data) => {
+    // let formData = new FormData()
+    // formData.append('projectTitle', projectDetails.projectTitle)
+    // formData.append('Location', projectDetails.Location)
+    // formData.append('projectType', projectDetails.projectType)
+    // formData.append('companyType', projectDetails.companyType)
+    // formData.append('amount', projectDetails.amount)
+    // formData.append('description', projectDetails.description)
+    // formData.append('deliveryDate', formatDate)
+    // formData.append('status', projectDetails.status)
+    // formData.append('image', projectDetails.image)
 
     try {
       const postProjectReq = await fetch('http://localhost:4500/project/project', {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
         // body: JSON.stringify(data)
-        body: formData
+        body: JSON.stringify(projectDetails)
       })
       const response = await postProjectReq.json()
       if (!response.ok) {
@@ -148,6 +182,10 @@ const PostProject = () => {
 
   // #########################  SUBMIT PROJECT FUNCTION END #########################################
 
+
+  useEffect(()=>{
+    getProjectDescription()
+  },[])
 
   console.log("this is data: ", projectDetails)
   console.log("this is date: ", formatDate)
@@ -199,6 +237,7 @@ const PostProject = () => {
                               <h3>Project Name</h3>
                               <div className="form-group mb-0">
                                 <input
+                                value={projectDetails.projectTitle}
                                   type="text"
                                   className="form-control"
                                   placeholder="Enter Project Name"
@@ -217,6 +256,7 @@ const PostProject = () => {
                               <h3>Company Type</h3>
                               <div className="form-group mb-0">
                                 <input
+                                value={projectDetails.companyType}
                                   type="text"
                                   className="form-control"
                                   placeholder="Enter Company Type"
@@ -235,7 +275,7 @@ const PostProject = () => {
                               <h3>Location</h3>
                               <div className="form-group mb-0">
                                 <input
-                                  // value={projectDetails.Location}
+                                  value={projectDetails.Location}
                                   type="text"
                                   className="form-control"
                                   placeholder="Enter Location"
@@ -256,7 +296,7 @@ const PostProject = () => {
                               <div className="form-group mb-0">
 
                                 <select
-                                  // value={projectDetails.projectType} 
+                                  value={projectDetails.projectType} 
                                   className="form-control select"
                                   {...register("projectType", {
                                     required: "Please fill Project Type",
@@ -282,7 +322,7 @@ const PostProject = () => {
                               <h3>Pricing Type</h3>
                               <div className="form-group price-cont mb-0" id="price_type">
                                 <select
-                                  // value={projectDetails.amount} 
+                                  value={projectDetails.amount} 
                                   name="price" className="form-control select"
                                   {...register("pricingType", {
                                     required: "Please fill Pricing Type",
@@ -493,7 +533,7 @@ const PostProject = () => {
                                         render={() => (
                                           <DatePicker
                                             className="custom-date-picker"
-                                            selected={date}
+                                            selected={projectDetails.deliveryDate}
                                             placeholderText="Select date"
                                             onChange={handleChange}
                                           />
@@ -593,4 +633,4 @@ const PostProject = () => {
     </div>
   )
 }
-export default PostProject;
+export default EditProject;

@@ -160,17 +160,21 @@ const FreelancerDashboard = () => {
 
   // #########################  USE EFFECT START  #########################################
 
-  useEffect(() => {
-    let chartprofileoptionsColumn = document.getElementById("chartprofile");
-    let chartprofileoptionsChart = new ApexCharts(chartprofileoptionsColumn, chartprofileoptions);
-    chartprofileoptionsChart.render();
+  // useEffect(() => {
+  //   let chartprofileoptionsColumn = document.getElementById("chartprofile");
+  //   let chartprofileoptionsChart = new ApexCharts(chartprofileoptionsColumn, chartprofileoptions);
+  //   chartprofileoptionsChart.render();
 
-    let invoiceColumn = document.getElementById("chartradial");
-    let invoiceChart = new ApexCharts(invoiceColumn, chartradialOptions);
-    invoiceChart.render();
-    document.body.className = 'dashboard-page';
-    return () => { document.body.className = ''; }
-  });
+  //   let invoiceColumn = document.getElementById("chartradial");
+  //   let invoiceChart = new ApexCharts(invoiceColumn, chartradialOptions);
+  //   invoiceChart.render();
+  //   document.body.className = 'dashboard-page';
+  //   return () => { document.body.className = 's'; }
+  // });
+
+  useEffect(() => {
+    document.body.className = "dashboard-page";
+  }, [])
 
   useEffect(() => {
     getDashboardDetails()

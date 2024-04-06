@@ -70,8 +70,8 @@ const Home = () => {
   //   });
   // }, []);
   const options = [
-    { value: 1, label: "project" },
-    { value: 2, label: "job" },
+    { value: 1, label: "Project" },
+    { value: 2, label: "Job" },
   ];
   useEffect(() => {
     document.body.classList.add("home-page");
@@ -207,7 +207,7 @@ const Home = () => {
             <div className="row align-items-center">
               <div className="col-md-8 col-lg-7">
                 <div className="banner-content aos" data-aos="fade-up">
-                  <div className="rating">
+                  {/* <div className="rating">
                     <i className="fas fa-star checked" />
                     <i className="fas fa-star checked" />
                     <i className="fas fa-star checked" />
@@ -215,7 +215,7 @@ const Home = () => {
                     <i className="fas fa-star checked" />
 
                     <h5>Trused by over 2M+ users</h5>
-                  </div>
+                  </div> */}
                   <h1>
                     Get the perfect{" "}
                     <span className="orange-text">
@@ -698,9 +698,9 @@ const Home = () => {
           </div>
         </section>
         {/* Projects */}
-        <section className="section projects">
-          <div className="container">
-            <div className="row">
+        {/* <section className="section projects">
+          <div className="container"> */}
+            {/* <div className="row">
               <div className="col-12 col-md-12 mx-auto">
                 <div
                   className="section-header text-center aos"
@@ -712,10 +712,10 @@ const Home = () => {
                   <p>High performing solutions to your requests</p>
                 </div>
               </div>
-            </div>
-            <div className="row">
+            </div> */}
+            {/* <div className="row"> */}
               {/*- Project Item  */}
-              <div className="col-lg-3 col-md-6 col-sm-6">
+              {/* <div className="col-lg-3 col-md-6 col-sm-6">
                 <div className="project-item aos" data-aos="fade-up">
                   <div className="project-img">
                     <Link to="/project">
@@ -741,10 +741,10 @@ const Home = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/*- /Project Item  */}
               {/*- Project Item  */}
-              <div className="col-lg-3 col-md-6 col-sm-6 d-flex">
+              {/* <div className="col-lg-3 col-md-6 col-sm-6 d-flex">
                 <div className="project-item aos" data-aos="fade-up">
                   <div className="project-img">
                     <Link to="/project">
@@ -770,10 +770,10 @@ const Home = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/*- /Project Item  */}
               {/*- Project-Item  */}
-              <div className="col-lg-3 col-md-6 col-sm-6 d-flex">
+              {/* <div className="col-lg-3 col-md-6 col-sm-6 d-flex">
                 <div className="project-item aos" data-aos="fade-up">
                   <div className="project-img">
                     <Link to="/project">
@@ -799,10 +799,10 @@ const Home = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/*- /Project Item  */}
               {/*- Project Item  */}
-              <div className="col-lg-3 col-md-6 col-sm-6 d-flex">
+              {/* <div className="col-lg-3 col-md-6 col-sm-6 d-flex">
                 <div className="project-item aos" data-aos="fade-up">
                   <div className="project-img">
                     <Link to="/project">
@@ -828,10 +828,10 @@ const Home = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/*- /Project Item  */}
               {/*- Project Item  */}
-              <div className="col-lg-3 col-md-6 col-sm-6 d-flex">
+              {/* <div className="col-lg-3 col-md-6 col-sm-6 d-flex">
                 <div className="project-item aos" data-aos="fade-up">
                   <div className="project-img">
                     <Link to="/project">
@@ -857,10 +857,10 @@ const Home = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/*- /Project Item  */}
               {/*- Project Item  */}
-              <div className="col-lg-3 col-md-6 col-sm-6 d-flex">
+              {/* <div className="col-lg-3 col-md-6 col-sm-6 d-flex">
                 <div className="project-item aos" data-aos="fade-up">
                   <div className="project-img">
                     <Link to="/project">
@@ -886,10 +886,10 @@ const Home = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/*- /Project Item  */}
               {/*- Project Item  */}
-              <div className="col-lg-3 col-md-6 col-sm-6 d-flex">
+              {/* <div className="col-lg-3 col-md-6 col-sm-6 d-flex">
                 <div className="project-item aos" data-aos="fade-up">
                   <div className="project-img">
                     <Link to="/project">
@@ -915,10 +915,10 @@ const Home = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/*- /Project Item  */}
               {/*- Project-Item  */}
-              <div className="col-lg-3 col-md-6 col-sm-6 d-flex">
+              {/* <div className="col-lg-3 col-md-6 col-sm-6 d-flex">
                 <div className="project-item aos" data-aos="fade-up">
                   <div className="project-img">
                     <Link to="/project">
@@ -944,10 +944,10 @@ const Home = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
               {/*- /Project Item  */}
-            </div>
-            <div className="row">
+            {/* </div> */}
+            {/* <div className="row">
               <div className="col-md-12 text-center">
                 <div className="see-all aos" data-aos="fade-up">
                   <Link to="/project" className="btn all-btn">
@@ -955,19 +955,19 @@ const Home = () => {
                   </Link>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
+            </div> */}
+          {/* </div>
+        </section> */}
 
         {/* /Projects */}
         {/* Top Instructor */}
         <TopDevelopers />
         {/* / Review */}
-        <Reviews />
+        {/* <Reviews /> */}
         {/* Company Hire */}
         {/* / Company Hire */}
         {/* News */}
-        <section className="section news">
+        {/* <section className="section news">
           <div className="container">
             <div className="row">
               <div className="col-12">
@@ -983,9 +983,9 @@ const Home = () => {
               </div>
             </div>
             <div className="row blog-grid-row">
-              <div className="col-xl-4 col-md-6 d-flex">
+              <div className="col-xl-4 col-md-6 d-flex"> */}
                 {/* Blog Post */}
-                <div className="blog grid-blog aos" data-aos="fade-up">
+                {/* <div className="blog grid-blog aos" data-aos="fade-up">
                   <div className="blog-image">
                     <Link to="/blog-details">
                       <img
@@ -1022,12 +1022,12 @@ const Home = () => {
                       </Link>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 {/* /Blog Post */}
-              </div>
-              <div className="col-xl-4 col-md-6 d-flex">
+              {/* </div>
+              <div className="col-xl-4 col-md-6 d-flex"> */}
                 {/* Blog Post */}
-                <div className="blog grid-blog aos" data-aos="fade-up">
+                {/* <div className="blog grid-blog aos" data-aos="fade-up">
                   <div className="blog-image">
                     <Link to="/blog-details">
                       <img
@@ -1064,12 +1064,12 @@ const Home = () => {
                       </Link>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 {/* /Blog Post */}
-              </div>
-              <div className="col-xl-4 col-md-6 d-flex">
+              {/* </div>
+              <div className="col-xl-4 col-md-6 d-flex"> */}
                 {/* Blog Post */}
-                <div className="blog grid-blog aos" data-aos="fade-up">
+                {/* <div className="blog grid-blog aos" data-aos="fade-up">
                   <div className="blog-image">
                     <Link to="/blog-details">
                       <img
@@ -1107,12 +1107,12 @@ const Home = () => {
                       </Link>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 {/* /Blog Post */}
-              </div>
+              {/* </div>
             </div>
           </div>
-        </section>
+        </section> */}
 
         {/* / News */}
         {/* News */}

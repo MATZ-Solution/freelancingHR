@@ -481,7 +481,6 @@ const UserDetails = () => {
   const addSkills = () => {
     setSkillsArray([...skillsArray, skills])
     setSkills('')
-
   }
 
   function deleteSkills(indexValue) {

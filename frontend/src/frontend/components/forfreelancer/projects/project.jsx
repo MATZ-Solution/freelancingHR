@@ -129,15 +129,15 @@ const Project = () => {
       <div className="content">
         <div className="container">
           <div className="row">
-            <div className="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar">
-              <StickyBox offsetTop={20} offsetBottom={20}>
-                {/* Search Filter */}
-                <FreelancerSidebar />
-                {/* /Search Filter */}
-              </StickyBox>
-            </div>
-            <div className="col-md-12 col-lg-8 col-xl-9">
-
+            {/* <div className="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar"> */}
+            {/* <StickyBox offsetTop={20} offsetBottom={20}> */}
+            {/* Search Filter */}
+            {/* <FreelancerSidebar /> */}
+            {/* /Search Filter */}
+            {/* </StickyBox> */}
+            {/* </div> */}
+            {/* <div className="col-md-12 col-lg-8 col-xl-9"> */}
+            <div className="col-md-12 col-lg-12 col-xl-12">
               <div className="sort-tab develop-list-select">
                 <div className="row align-items-center">
                   <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
@@ -147,7 +147,7 @@ const Project = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 d-flex justify-content-sm-end">
+                  {/* <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6 d-flex justify-content-sm-end">
                     <div className="sort-by">
                       <Select
                         className="select "
@@ -159,7 +159,7 @@ const Project = () => {
                       <li><Link to="/project" className="favour-active"><i className="fas fa-th-large" /></Link></li>
                       <li><Link to="/project-list"><i className="fas fa-list" /></Link></li>
                     </ul>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -176,62 +176,62 @@ const Project = () => {
                   {
                     getProject?.length !== 0 ?
                       <>
-                   {   getProject?.map((project, index) => {
-                       return (
-                         < div className="col-xl-4 col-md-6" key={index} >
-                           <div className="freelance-widget widget-author position-relative">
-                             <div className="freelance-content">
-                               <div className="freelance-location freelance-time"><i className="feather-clock me-1" /> {dates(project?.createdAt)}</div>
-                               {/* <Link data-bs-toggle="modal" to="#rating" onClick={() => handleItemClick(1)} className={`favourite ${selectedItems[1] ? 'color-active' : ''}`}><i className="feather-heart" /></Link> */}
-                               <div className="author-heading ">
-                                 <div className=" freelance-img">
-                                   <Link to="#">
-                                     <img src={company_img1} alt="author" />
-                                     <span className="verified"><i className="fas fa-check-circle" /></span>
-                                   </Link>
-                                 </div>
-                                 <div className="profile-name">
-                                   <div className="author-location">{project?.projectTitle}</div>
-                                 </div>
-                                 <div className="freelance-info">
-                                   <h3><Link to="#">{project?.projectType}</Link></h3>
-                                   <div className="freelance-location"><img src={locations} className="me-2" alt="img" />{project?.Location}</div>
-                                 </div>
-                                 {/* <div className="freelance-tags">
+                        {getProject?.map((project, index) => {
+                          return (
+                            < div className="col-xl-4 col-md-6" key={index} >
+                              <div className="freelance-widget widget-author position-relative">
+                                <div className="freelance-content">
+                                  <div className="freelance-location freelance-time"><i className="feather-clock me-1" /> {dates(project?.createdAt)}</div>
+                                  {/* <Link data-bs-toggle="modal" to="#rating" onClick={() => handleItemClick(1)} className={`favourite ${selectedItems[1] ? 'color-active' : ''}`}><i className="feather-heart" /></Link> */}
+                                  <div className="author-heading ">
+                                    <div className=" freelance-img">
+                                      <Link to="#">
+                                        <img src={company_img1} alt="author" />
+                                        <span className="verified"><i className="fas fa-check-circle" /></span>
+                                      </Link>
+                                    </div>
+                                    <div className="profile-name">
+                                      <div className="author-location">{project?.projectTitle}</div>
+                                    </div>
+                                    <div className="freelance-info">
+                                      <h3><Link to="#">{project?.projectType}</Link></h3>
+                                      <div className="freelance-location"><img src={locations} className="me-2" alt="img" />{project?.Location}</div>
+                                    </div>
+                                    {/* <div className="freelance-tags">
                    <Link to="#"><span className="badge badge-pill badge-design">HTML</span></Link>
                    <Link to="#"><span className="badge badge-pill badge-design">React</span></Link>
                    <Link to="#"><span className="badge badge-pill badge-design">PHP</span></Link>
                  </div> */}
-                                 <div className="freelancers-price">{project?.amount}</div>
-                               </div>
-                               <div className="counter-stats">
-                                 <ul style={{ justifyContent: 'space-between' }}>
-                                   <li>
-                                     <h5>{dates(project?.deliveryDate)}</h5>
-                                     <h3 className="counter-value">4 Days Left</h3>
-                                   </li>
-                                   {/* <li>
+                                    <div className="freelancers-price">{project?.amount}</div>
+                                  </div>
+                                  <div className="counter-stats">
+                                    <ul style={{ justifyContent: 'space-between' }}>
+                                      <li>
+                                        <h5>{dates(project?.deliveryDate)}</h5>
+                                        <h3 className="counter-value">4 Days Left</h3>
+                                      </li>
+                                      {/* <li>
                                      <h5>Proposals</h5>
                                      <h3 className="counter-value">15</h3>
                                    </li> */}
-                                   <li>
-                                     <h5>Job Type</h5>
-                                     <h3 className="counter-value"><span className="jobtype">{project?.projectType}</span></h3>
-                                   </li>
-                                 </ul>
-                               </div>
-                             </div>
-                             <div className="cart-hover">
-                               <Link to={`/project-details/${project.id}`} className="btn-cart" tabIndex={-1}>View Project</Link>
-                               {/* <Link to="/project-details" className="btn-cart" tabIndex={-1}>View Project</Link> */}
- 
-                             </div>
-                           </div>
-                         </div>
-                       )
-                     })}
-                     </>
-                    : <p>No Project Found</p>
+                                      <li>
+                                        <h5>Job Type</h5>
+                                        <h3 className="counter-value"><span className="jobtype">{project?.projectType}</span></h3>
+                                      </li>
+                                    </ul>
+                                  </div>
+                                </div>
+                                <div className="cart-hover">
+                                  <Link to={`/project-details/${project.id}`} className="btn-cart" tabIndex={-1}>View Project</Link>
+                                  {/* <Link to="/project-details" className="btn-cart" tabIndex={-1}>View Project</Link> */}
+
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </>
+                      : <p>No Project Found</p>
                   }
                 </div>
               </div>

@@ -6,9 +6,12 @@ import { useForm } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
 import Modal from '../../../admin/component/pages/CustomModal/index'
 import ErrorModal from '../../../admin/component/pages/CustomModal/ErrorsModal';
+import { useSelector, useDispatch } from 'react-redux'
+import { updateStatus } from '../../../redux/Slices/NavbarSlice';
 // import ErrorModal from '../../../admin/component/pages/CustomModal/ErrorsModal';
 // import { FaCheckCircle } from "react-icons/fa";
 const Login = () => {
+  const dispatch = useDispatch()
   const history = useHistory();
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [message, setMessage] = useState('');
@@ -48,7 +51,7 @@ const Login = () => {
       else if (response?.message === 'SignIn successfully') {
         setMessage(response?.message)
         localStorage.setItem('token', response?.token);
-
+        dispatch(updateStatus(true))
         setTimeout(() => {
           if (response.data[0].userType === 'freelancer') {
             history.push('/freelancer-dashboard')
@@ -61,7 +64,7 @@ const Login = () => {
         setMessage(response.error?.message)
       }
     } catch (err) {
-  
+
       if (err.message === 'Failed to fetch') {
         setMessage("Server Can't respond")
 
@@ -69,7 +72,7 @@ const Login = () => {
     }
   }
 
-  console.log("this is message:",message)
+  console.log("this is message:", message)
 
   useEffect(() => {
     document.body.className = 'account-page';
@@ -86,8 +89,8 @@ const Login = () => {
           )
         }
         {
-          message === "Server Can't respond" || message === "Some thing wents wrong"?
-            <ErrorModal message={message}/>
+          message === "Server Can't respond" || message === "Some thing wents wrong" ?
+            <ErrorModal message={message} />
             :
             <div className="content">
               {/* Login Content */}
@@ -147,7 +150,7 @@ const Login = () => {
                         Login Now
                         <i className="feather-arrow-right ms-2" />
                       </button>
-                      <div className="login-or">
+                      {/* <div className="login-or">
                         <p><span>OR</span></p>
                       </div>
                       <div className="row social-login">
@@ -160,7 +163,7 @@ const Login = () => {
                         <div className="col-sm-4">
                           <Link to="#" className="btn btn-block"><img src={ios_icon} alt="Apple" />Apple</Link>
                         </div>
-                      </div>
+                      </div> */}
                       <div className="row">
                         <div className="col-sm-8 dont-have d-flex  align-items-center">New to XGEN Freelancing Platform <Link to="/register" className="ms-2">Signup?</Link></div>
                         <div className="col-sm-4 text-sm-end">

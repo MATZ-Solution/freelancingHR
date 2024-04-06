@@ -2,8 +2,14 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Avatar_1, sidebar_icon_01, sidebar_icon_02, sidebar_icon_03, sidebar_icon_04, sidebar_icon_05, sidebar_icon_06, sidebar_icon_07, sidebar_icon_08, sidebar_icon_09, sidebar_icon_10, verified_badge } from "../../imagepath";
 import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from "react-redux";
+// import { freelancerDetailsSlice } from "../../../../redux/Slices/FreelancerDetailsSlice";
+
 
 const Sidebar = (props) => {
+  const freelancerDetails = useSelector(state => state.freelancerDetails.data)
+  const {name, email, profileImage} = freelancerDetails
+
   const [isHighlighted, setIsHighlighted] = useState(false);
   const [isFavourities, setIsFavourities] = useState(false);
   const [isSettings, setIsSettings] = useState(false);
@@ -26,10 +32,10 @@ const Sidebar = (props) => {
 
       <div className="settings-widget">
         <div className="settings-header d-sm-flex flex-row flex-wrap text-center text-sm-start align-items-center">
-          <Link to="/freelancer-profile"><img alt="profile image" src={Avatar_1} className="avatar-lg rounded-circle" /></Link>
+          <Link to="/freelancer-profile"><img alt="profile image" src={profileImage} className="avatar-lg rounded-circle" /></Link>
           <div className="ms-sm-3 ms-md-0 ms-lg-3 mt-2 mt-sm-0 mt-md-2 mt-lg-0">
-            <h3 className="mb-0"><Link to="/freelancer-profile">Bruce Bush</Link><img src={verified_badge} className="ms-1" alt="Img" /></h3>
-            <p className="mb-0">@brucebush</p>
+            <h3 className="mb-0"><Link to="/freelancer-profile">{name}</Link><img src={verified_badge} className="ms-1" alt="Img" /></h3>
+            <p className="mb-0">{email}</p>
           </div>
         </div>
         <div className="settings-menu">

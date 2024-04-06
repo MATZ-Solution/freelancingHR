@@ -5,16 +5,43 @@ import { bank_line, paypal_line, wallet_icon } from "../../imagepath";
 import { Sidebar } from "../sidebar";
 import { useState } from "react";
 import ErrorModal from "../../../../admin/component/pages/CustomModal/ErrorsModal";
+import Select from "react-select";
+import SuccessModal from '../../../../admin/component/pages/CustomModal/index'
 
 const CompanyPostedJob = () => {
 
   // #########################  VARIABLE START #########################################
 
   let [error, setError] = useState(false)
+  let [flag, setFlag] = useState(false)
   let token = localStorage.getItem('token')
   let [allJobs, setAllJobs] = useState([])
   let [projectUserData, setProjectUserData] = useState([])
   const [blobUrl, setBlobUrl] = useState(null);
+  let [statusDetails, setStatusDetails] = useState({
+    status: "",
+    getSingleJob: ""
+  })
+  let [showSuccessModal, setSuccessModal] = useState({
+    status: false,
+    message: "",
+    errorStatus: false
+  })
+  const options = [
+    { value: 1, label: "pending" },
+    { value: 2, label: "approved" },
+    { value: 3, label: "reject" },
+  ];
+
+  const cancelModal = () => {
+    let modal = document.getElementById('changeStatus')
+    if (modal) {
+      modal.classList.remove('show')
+      modal.style.display = 'none'
+      modal.setAttribute('aria-modal', 'false');
+    }
+  }
+
 
   // #########################  VARIABLE END #########################################
 
@@ -38,6 +65,7 @@ const CompanyPostedJob = () => {
       console.log(response)
       if (response.message === 'Success') {
         setAllJobs(response?.data)
+        setFlag(false)
       }
     } catch (err) {
       console.log(err)
@@ -46,6 +74,7 @@ const CompanyPostedJob = () => {
   }
 
   const getAllJobUser = async (singleJobID) => {
+    setStatusDetails({ ...statusDetails, getSingleJob: singleJobID })
     try {
       const getAllprojectRequest = await fetch(`http://localhost:4500/job/userAppliedJobs/${singleJobID}`, {
         method: "GET",
@@ -59,7 +88,7 @@ const CompanyPostedJob = () => {
       }
       const response = await getAllprojectRequest.json()
       console.log(response)
-      if (response.message === 'Success' && response.data.length !== 0) {
+      if (response?.message === 'Success' && response?.data?.length !== 0) {
         setProjectUserData(response?.data)
       }
     } catch (err) {
@@ -68,7 +97,77 @@ const CompanyPostedJob = () => {
     }
   }
 
-  console.log("this is single user", projectUserData)
+  const updateStatus = async () => {
+    try {
+      const request = await fetch(`http://localhost:4500/job/updateStatus`, {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          jobId: statusDetails.getSingleJob,
+          status: statusDetails.status
+        })
+      })
+      if (!request.ok) {
+        setError(true)
+      }
+      const response = await request.json()
+      console.log(response)
+
+      if (!response.ok) {
+        setSuccessModal({ ...showSuccessModal, status: true, message: response.message, errorStatus: true });
+        setTimeout(() => {
+          setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: false })
+        }, 2000)
+      }
+      if (response.statusCode === 200) {
+        setSuccessModal({ ...showSuccessModal, status: true, message: response.message, errorStatus: false });
+        setTimeout(() => {
+          setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: true })
+        }, 2000)
+        cancelModal()
+      }
+    } catch (err) {
+      console.log(err)
+      setError(true)
+    }
+  }
+
+  const deleteJob = async (id) => {
+    try {
+        const request = await fetch(`http://localhost:4500/job/deleteJob`, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({jobId:id})
+        })
+        if (!request.ok) {
+            setError(true)
+        }
+        const response = await request.json()
+        if (!response.ok) {
+            setSuccessModal({ ...showSuccessModal, status: true, message: response.message, errorStatus: true });
+            setTimeout(() => {
+                setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: false })
+            }, 2000)
+        }
+        if (response.statusCode === 200) {
+            setSuccessModal({ ...showSuccessModal, status: true, message: response.message });
+            setTimeout(() => {
+                setSuccessModal({ ...showSuccessModal, status: false, message: '' })
+            }, 2000)
+            setFlag(true)
+
+        }
+    } catch (err) {
+        console.log(err)
+        setError(true)
+    }
+}
 
   // #########################  API END #########################################
 
@@ -77,7 +176,7 @@ const CompanyPostedJob = () => {
 
   useEffect(() => {
     getAllJob()
-  }, [])
+  }, [flag])
 
   useEffect(() => {
     document.body.className = "dashboard-page";
@@ -118,6 +217,12 @@ const CompanyPostedJob = () => {
 
   }
 
+  const handleChangeStatus = (selectedOption) => {
+    setStatusDetails({ ...statusDetails, status: selectedOption.label });
+  }
+
+  console.log("this is status details", statusDetails)
+
   // ######################### FUNCTION END #########################################
 
   if (error) {
@@ -127,6 +232,8 @@ const CompanyPostedJob = () => {
   return (
     <>
       {/* Page Content */}
+      {showSuccessModal.status && (<SuccessModal message={showSuccessModal.message} errorStatus={showSuccessModal.errorStatus} />)}
+
       <div className="content">
         <div className="container-fluid">
           <div className="row">
@@ -231,7 +338,7 @@ const CompanyPostedJob = () => {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th>Applicants</th>
+                        <th>Job Title</th>
                         <th>Job Category</th>
                         <th>Job Type</th>
                         <th>Status</th>
@@ -254,11 +361,45 @@ const CompanyPostedJob = () => {
                               </td>
                               <td>{dates(data.lastDate)}</td>
                               <td>
-                                <Link data-bs-toggle="modal" to="#file" className="btn btn-primary sub-btn"
+                                {/* <div className="dropdown profile-action"> */}
+                                <Link
+                                  to="#"
+                                  className="action-icon "
+                                  data-bs-toggle="dropdown"
+                                  aria-expanded="false"
+                                >
+                                  <i className="fa fa-ellipsis-v" />
+                                </Link>
+                                <div className="dropdown-menu dropdown-menu-right">
+                                  <Link
+                                    className="dropdown-item"
+                                    to={`/edit-job/${data?.id}`}
+                                    // data-bs-toggle="modal"
+                                    // data-bs-target="#"
+                                  >
+                                    <i className="fas fa-pencil-alt me-1" /> Edit
+                                  </Link>
+                                  <div
+                                    className="dropdown-item"
+                                    onClick={()=>deleteJob(data?.id)}
+                                  >
+                                    <i className="far fa-trash-alt me-1" /> Delete
+                                  </div>
+
+                                  <Link data-bs-toggle="modal" to="#file" className="dropdown-item"
+                                    onClick={() => getAllJobUser(data?.id)}
+                                  >
+                                    <i className="feather-eye me-1" />
+                                    View Applicants
+                                  </Link>
+                                </div>
+                                {/* </div> */}
+                                {/* <Link data-bs-toggle="modal" to="#file" className="btn btn-primary sub-btn"
                                   onClick={() => getAllJobUser(data?.id)}
                                 >
                                   View Applicants
-                                </Link>
+                                </Link> */}
+
                               </td>
                             </tr>
                           )
@@ -344,7 +485,6 @@ const CompanyPostedJob = () => {
       {/* Modal */}
       <>
         <div className="modal fade" id="file">
-
           <div className="modal-dialog modal-dialog-centered modal-lg">
             <div className="modal-content">
               <div className="modal-header">
@@ -374,6 +514,7 @@ const CompanyPostedJob = () => {
                               <th>Status</th>
                               <th>Apply Date</th>
                               <th>Document</th>
+                              <th>Change Status</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -383,7 +524,7 @@ const CompanyPostedJob = () => {
                                   <tr key={index}>
                                     <td>{data?.firstName} {data?.lastName}</td>
                                     <td>{data?.email}</td>
-                                    <td>{data?.phoneNumber ? <>{data?.phoneNumber}</> : <p style={{color: "red"}}>Not Available</p>}</td>
+                                    <td>{data?.phoneNumber ? <>{data?.phoneNumber}</> : <p style={{ color: "red" }}>Not Available</p>}</td>
                                     <td>
                                       <div className={`badge ${data?.status === 'pending' ? 'badge-pending' : data.status === 'success' ? 'badge-success' : 'badge-fail'}`}>
                                         <span>{data?.status}</span>
@@ -395,6 +536,13 @@ const CompanyPostedJob = () => {
                                         className="btn btn-primary sub-btn"
                                         onClick={() => Download(data?.resume)}
                                       >Download CV</button>
+                                    </td>
+                                    <td>
+                                      <Link data-bs-toggle="modal" to="#changeStatus">
+                                        <button
+                                          className="btn btn-primary sub-btn"
+                                        >Change Status</button>
+                                      </Link>
                                     </td>
                                   </tr>
                                 )
@@ -414,6 +562,51 @@ const CompanyPostedJob = () => {
         </div>
       </>
       {/* Modal */}
+
+      {/* Change Status Modal */}
+      <>
+        <div className="modal fade" id="changeStatus">
+          {showSuccessModal.status && (<SuccessModal message={showSuccessModal.message} errorStatus={showSuccessModal.errorStatus} />)}
+          <div className="modal-dialog modal-dialog-centered modal-lg">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">Change Status</h4>
+                <span className="modal-close">
+                  <Link to="#" data-bs-dismiss="modal" aria-label="Close"
+                    onClick={() => { setProjectUserData([]) }}>
+                    <i className="fa fa-times orange-text" />
+                  </Link>
+                </span>
+              </div>
+              <div className="modal-body" style={{ padding: "15px" }}>
+                <div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                    <Select
+                      // value={profileDetails.companyCountry ? options.find((item) => item.label === profileDetails.companyCountry) : ''}
+                      className="select"
+                      options={options}
+                      placeholder="Select"
+                      onChange={handleChangeStatus}
+                    />
+                    <div className="card text-end border-0">
+                      <div className="pro-body">
+                        <button
+                          // type="button"
+                          className="btn btn-primary click-btn btn-plan"
+                          onClick={updateStatus}
+                        >
+                          Update
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+      {/* Change Status Modal */}
 
     </>
   );
