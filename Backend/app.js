@@ -6,7 +6,7 @@ const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/userRoutes");
 const projectRoutes = require("./routes/projectRoutes");
 const jobRoutes = require("./routes/jobRoutes");
-const { connect } = require("./config/connection");
+const { getConnectionFromPool } = require("./config/connection");
 const http = require("http");
 const { Server } = require("socket.io");
 
@@ -21,7 +21,7 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
-connect();
+getConnectionFromPool();
 
 app.use("/", userRoutes);
 app.use("/project", projectRoutes);

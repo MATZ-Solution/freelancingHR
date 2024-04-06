@@ -4,7 +4,7 @@ require("dotenv").config();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const userRoutes = require("./routes/userRoutes");
-const { connect } = require("./config/connection");
+const { getConnectionFromPool } = require("./config/connection");
 const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -21,7 +21,7 @@ app.use("/api/spade", userRoutes);
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
-connect();
+getConnectionFromPool();
 
 // Remove the app.listen() block
 
