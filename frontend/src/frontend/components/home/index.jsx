@@ -148,7 +148,7 @@ const Home = () => {
 
   const getCategory = async () => {
     try {
-      const getCategoryRequest = await fetch('http://localhost:4500/project/projectCategoryCount', {
+      const getCategoryRequest = await fetch('https://freelanceserver.xgentechnologies.com/project/projectCategoryCount', {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -961,7 +961,7 @@ const Home = () => {
 
         {/* /Projects */}
         {/* Top Instructor */}
-        {/* <TopDevelopers /> */}
+        <TopDevelopers />
         {/* / Review */}
         {/* <Reviews /> */}
         {/* Company Hire */}

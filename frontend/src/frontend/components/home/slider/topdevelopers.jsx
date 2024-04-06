@@ -49,7 +49,7 @@ const TopDevelopers = (props) => {
   return (
     <>
       {/* Top Instructor */}
-      <section className="section developer">
+      {/* <section className="section developer">
         <div className="container">
           <div className="row">
             <div className="col-md-12 col-sm-12 col-12 mx-auto">
@@ -695,7 +695,7 @@ const TopDevelopers = (props) => {
             </OwlCarousel>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 };

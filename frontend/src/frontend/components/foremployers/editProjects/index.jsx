@@ -96,7 +96,7 @@ const EditProject = () => {
 
   const getProjectDescription = async () => {
     try {
-      const getProjectRequest = await fetch(`http://localhost:4500/project/projectById/${id}`, {
+      const getProjectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/projectById/${id}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -140,7 +140,7 @@ const EditProject = () => {
     // formData.append('image', projectDetails.image)
 
     try {
-      const postProjectReq = await fetch('http://localhost:4500/project/project', {
+      const postProjectReq = await fetch('https://freelanceserver.xgentechnologies.com/project/project', {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${token}`,

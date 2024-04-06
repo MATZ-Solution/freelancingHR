@@ -29,7 +29,7 @@ const Login = () => {
 
   const LogIn = async (data) => {
     try {
-      const loginRequest = await fetch('http://localhost:4500/signin', {
+      const loginRequest = await fetch('https://freelanceserver.xgentechnologies.com/signin', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -165,10 +165,10 @@ const Login = () => {
                         </div>
                       </div> */}
                       <div className="row">
-                        <div className="col-sm-8 dont-have d-flex  align-items-center">New to XGEN Freelancing Platform <Link to="/register" className="ms-2">Signup?</Link></div>
-                        <div className="col-sm-4 text-sm-end">
+                        <div className="col-sm-12 dont-have d-flex  align-items-center">New to XGEN Freelancing Platform <Link to="/register" className="ms-2">Signup?</Link></div>
+                        {/* <div className="col-sm-4 text-sm-end">
                           <Link className="forgot-link" to="/forgot-password">Lost Password?</Link>
-                        </div>
+                        </div> */}
                       </div>
                     </form>
                   </div>

@@ -121,7 +121,7 @@ const CompanyProfile = () => {
 
   const getProjectDescription = async () => {
     try {
-      const getProjectRequest = await fetch(`http://localhost:4500/project/projectById/${id}`, {
+      const getProjectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/projectById/${id}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ const CompanyProfile = () => {
 
   const sendproposal = async () => {
     try {
-      const getProposalRequest = await fetch(`http://localhost:4500/project/proposalSubmit`, {
+      const getProposalRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/proposalSubmit`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',

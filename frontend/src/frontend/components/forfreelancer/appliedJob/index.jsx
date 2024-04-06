@@ -22,7 +22,7 @@ const FreelancerAppliedJob = () => {
 
   const getAllJob = async () => {
     try {
-      const getAllJobRequest = await fetch(`http://localhost:4500/job/allAppliedJobs`, {
+      const getAllJobRequest = await fetch(`https://freelanceserver.xgentechnologies.com/job/allAppliedJobs`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
