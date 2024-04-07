@@ -23,7 +23,7 @@ function FormFreelancer(props) {
 
   const SignUpFreelancer = async (data) => {
     try {
-      const registerRequest = await fetch('https://freelanceserver.xgentechnologies.com/signup', {
+      const registerRequest = await fetch('http://localhost:4500/signup', {
 
         method: "POST",
         headers: {
@@ -33,7 +33,8 @@ function FormFreelancer(props) {
       })
 
       const response = await registerRequest.json()
-      if (response.message === 'User already exists') {
+      console.log("this is freelancer sigin up response", response)
+      if (response.message === 'Email already exists') {
         setMessage(response.message)
       }
 
@@ -115,7 +116,7 @@ function FormFreelancer(props) {
             })}
           />
           <p style={{ color: "red" }}>{errors?.email?.message}</p>
-          {message === 'User already exists' && (
+          {message === 'Email already exists' && (
             <p style={{ color: "red" }}>User already exists</p>
           )}
 
@@ -133,10 +134,7 @@ function FormFreelancer(props) {
               {...register("password", {
                 required: "Please fill password",
                 pattern: {
-                  // value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
-                  // value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9\s])[A-Za-z\d^a-zA-Z0-9\s]{8,}$/,
-
-                 value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
+                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&* ]{8,}$/,
                   message: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character and length should be 8 characters."
                 }
               })}
@@ -170,12 +168,12 @@ function FormFreelancer(props) {
             </div>
           </div>
         </div>
-        <div className="dont-have">
+        {/* <div className="dont-have">
           <label className="custom_check">
             <input type="checkbox" name="rem_password" />
             <span className="checkmark" /> I have read and agree to all <Link to="/privacy-policy">Terms &amp; Conditions</Link>
           </label>
-        </div>
+        </div> */}
         {/* <Link to="/onboard-screen" className="btn btn-primary w-100 btn-lg login-btn d-flex align-items-center justify-content-center">Sign In Now<i className="feather-arrow-right ms-2" /></Link> */}
         <button
           // onClick={handleSubmit(submitFormFreelancer)}
@@ -231,7 +229,7 @@ function FormCompany(props) {
 
   const SignUpCompany = async (data) => {
     try {
-      const registerRequest = await fetch('https://freelanceserver.xgentechnologies.com/signUp', {
+      const registerRequest = await fetch('http://localhost:4500/signUp', {
 
         method: "POST",
         headers: {
@@ -241,7 +239,7 @@ function FormCompany(props) {
       })
 
       const response = await registerRequest.json()
-      if (response.message === 'User already exists') {
+      if (response.message === 'Email already exists') {
         setMessage(response.message)
       }
 
@@ -253,7 +251,7 @@ function FormCompany(props) {
       }
 
       else {
-        alert(response.message)
+        // alert(response.message)
       }
       console.log(response)
     } catch (err) {
@@ -325,7 +323,7 @@ function FormCompany(props) {
           />
           <p style={{ color: "red" }}>{errors?.email?.message}</p>
 
-          {message === 'User already exists' && (
+          {message === 'Email already exists' && (
             <p style={{ color: "red" }}>User already exists</p>
           )}
 
@@ -340,7 +338,9 @@ function FormCompany(props) {
               {...register("password", {
                 required: true,
                 pattern: {
-                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+                  value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&* ]{8,}$/,
+                  // value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
+                  // value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
                   message: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
                 }
               })}
@@ -373,12 +373,12 @@ function FormCompany(props) {
             </div>
           </div>
         </div>
-        <div className="dont-have">
+        {/* <div className="dont-have">
           <label className="custom_check">
             <input type="checkbox" name="rem_password" />
             <span className="checkmark" /> I have read and agree to all <Link to="/privacy-policy">Terms &amp; Conditions</Link>
           </label>
-        </div>
+        </div> */}
         {/* <Link to="/onboard-screen" className="btn btn-primary w-100 btn-lg login-btn d-flex align-items-center justify-content-center">Sign In Now<i className="feather-arrow-right ms-2" /></Link> */}
         <button
           // onClick={handleSubmit(submitFormCompany)} 

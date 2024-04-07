@@ -16,7 +16,8 @@ import '../../../admin/assets/css/CustomDatePicker.css'
 import ErrorModal from "../../../admin/component/pages/CustomModal/ErrorsModal";
 import SuccessModal from "../../../admin/component/pages/CustomModal/index";
 import { get } from "react-hook-form";
-
+import getCurrentDate from "../../../CustomFunction/reactDatepickerVal";
+import Dates from "../../../CustomFunction/formatDate";
 // Img_04,
 
 const UserDetails = () => {
@@ -95,7 +96,7 @@ const UserDetails = () => {
 
   const updateUserProfile = async () => {
     try {
-      const updateProfileRequest = await fetch('https://freelanceserver.xgentechnologies.com/profileHeader', {
+      const updateProfileRequest = await fetch('http://localhost:4500/profileHeader', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -125,7 +126,7 @@ const UserDetails = () => {
 
   const updateExperience = async () => {
     try {
-      const updateExperienceRequest = await fetch('https://freelanceserver.xgentechnologies.com/experience', {
+      const updateExperienceRequest = await fetch('http://localhost:4500/experience', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -168,7 +169,7 @@ const UserDetails = () => {
     formData.append('image', selectedFile)
     formData.append('type', 'cover')
     try {
-      let updateCoverImgReq = await fetch('https://freelanceserver.xgentechnologies.com/cover', {
+      let updateCoverImgReq = await fetch('http://localhost:4500/cover', {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -204,7 +205,7 @@ const UserDetails = () => {
     formData.append('image', selectedFile)
     formData.append('type', 'profile')
     try {
-      let updateProfileImgReq = await fetch('https://freelanceserver.xgentechnologies.com/profile', {
+      let updateProfileImgReq = await fetch('http://localhost:4500/profile', {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -233,7 +234,7 @@ const UserDetails = () => {
 
   const updateOverView = async () => {
     try {
-      const updateOverViewRequest = await fetch('https://freelanceserver.xgentechnologies.com/profileOverview', {
+      const updateOverViewRequest = await fetch('http://localhost:4500/profileOverview', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -249,6 +250,7 @@ const UserDetails = () => {
         }, 2000)
       }
       if (response.message === 'User Profile Header updated successfully') {
+        cancelEditSection('pro-text1', 'pro-new1')
         setSuccessModal({ ...showSuccessModal, status: true, message: response.message });
         setTimeout(() => {
           setSuccessModal({ ...showSuccessModal, status: false, message: '' })
@@ -264,7 +266,7 @@ const UserDetails = () => {
 
   const updateEducation = async () => {
     try {
-      const updateEducationReq = await fetch('https://freelanceserver.xgentechnologies.com/education', {
+      const updateEducationReq = await fetch('http://localhost:4500/education', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -293,38 +295,41 @@ const UserDetails = () => {
   }
 
   const updateSkills = async () => {
-    try {
-      const updateSkillsReq = await fetch('https://freelanceserver.xgentechnologies.com/skill', {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ skills: skillsArray })
-      })
-      const response = await updateSkillsReq.json()
-      if (!response.ok) {
-        setSuccessModal({ ...showSuccessModal, status: true, message: response.message, errorStatus: true });
-        setTimeout(() => {
-          setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: false })
-        }, 2000)
+    if (skillsArray.length !== 0) {
+      try {
+        const updateSkillsReq = await fetch('http://localhost:4500/skill', {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({ skills: skillsArray })
+        })
+        const response = await updateSkillsReq.json()
+        if (!response.ok) {
+          setSuccessModal({ ...showSuccessModal, status: true, message: response.message, errorStatus: true });
+          setTimeout(() => {
+            setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: false })
+          }, 2000)
+        }
+        if (response.message === "User profile skills saved successfully.") {
+          setSuccessModal({ ...showSuccessModal, status: true, message: response.message });
+          setTimeout(() => {
+            setSuccessModal({ ...showSuccessModal, status: false, message: '' })
+          }, 2000)
+          setFlag(true)
+          setSkills('')
+          // cancelEditSection('pro-text2', 'pro-new2')
+        }
+      } catch (err) {
+        setError(true)
       }
-      if (response.message === "User profile skills saved successfully.") {
-        setSuccessModal({ ...showSuccessModal, status: true, message: response.message });
-        setTimeout(() => {
-          setSuccessModal({ ...showSuccessModal, status: false, message: '' })
-        }, 2000)
-        setFlag(true)
-        // cancelEditSection('pro-text2', 'pro-new2')
-      }
-    } catch (err) {
-      setError(true)
     }
   }
 
   const getProfileData = async () => {
     try {
-      const getProfileReq = await fetch('https://freelanceserver.xgentechnologies.com/getUserProfile', {
+      const getProfileReq = await fetch('http://localhost:4500/getUserProfile', {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -537,7 +542,7 @@ const UserDetails = () => {
                       <label id='cover-image' className="file-upload image-btn"
 
                       >
-                        Change Image <input type="file" onChange={handleChangeCoverImg} />
+                        Change Image <input  accept="image/*" type="file" onChange={handleChangeCoverImg} />
                       </label>
 
                     </div>
@@ -570,7 +575,7 @@ const UserDetails = () => {
                                 <div style={{ width: "150px", height: "150px", objectFit: "contain" }}>
                                   <img
                                     // src={profileDetails.profileImage.file ? profileDetails.profileImage.file : Img_04}
-                                    src={getUserData[0]?.profileImage}
+                                    src={getUserData[0]?.profileImage ? getUserData[0]?.profileImage : Img_04}
 
                                     alt="User"
                                     style={{ width: '100%', height: '100%' }}
@@ -595,11 +600,16 @@ const UserDetails = () => {
 
                               <div className="pro-text3" id='pro-text3'>
                                 <p className="profile-position">{getUserData[0]?.professionalHeadline}</p>
-                                <div>
-                                  <Link to="#" className="btn full-btn">
-                                    {getUserData[0]?.Worktype}
-                                  </Link>
-                                </div>
+                                {
+                                  getUserData[0]?.Worktype && (
+                                    <div>
+                                      <Link to="#" className="btn full-btn">
+                                        {getUserData[0]?.Worktype}
+                                      </Link>
+                                    </div>
+                                  )
+                                }
+
                                 <ul className="profile-preword">
                                   <li>
                                     {/* <img src={Flags_pl} alt="" height={16} />{" "} */}
@@ -607,14 +617,14 @@ const UserDetails = () => {
 
                                   </li>
                                   <li>
-                                    <div className="rating">
+                                    {/* <div className="rating">
                                       <span className="average-rating">4.6</span>
                                       <i className="fas fa-star filled" />
                                       <i className="fas fa-star filled" />
                                       <i className="fas fa-star filled" />
                                       <i className="fas fa-star filled" />
                                       <i className="fas fa-star filled" />
-                                    </div>
+                                    </div> */}
                                   </li>
                                 </ul>
                               </div>
@@ -761,7 +771,7 @@ const UserDetails = () => {
                           </div>
                         </div>
                       </div>
-                      <div className="profile-list">
+                      {/* <div className="profile-list">
                         <ul>
                           <li>
                             <span className="cont bg-blue">22</span>
@@ -788,7 +798,7 @@ const UserDetails = () => {
                             <strong className="proj-title"> Feedbacks</strong>
                           </li>
                         </ul>
-                      </div>
+                      </div> */}
                     </div>
                     {/* /User Profile Details */}
                   </div>
@@ -796,8 +806,7 @@ const UserDetails = () => {
                 <div className="row">
                   <div className="col-lg-8 col-md-12">
                     <div className="pro-view">
-                      {/* Tab Heading */}
-                      <nav className="provider-tabs mb-4">
+                      {/* <nav className="provider-tabs mb-4">
                         <ul className="nav nav-tabs nav-tabs-solid nav-justified">
                           <li className="nav-item">
                             <Link
@@ -872,11 +881,9 @@ const UserDetails = () => {
                             </Link>
                           </li>
                         </ul>
-                      </nav>
-                      {/* /Tab Heading */}
-                      {/* Tab Details */}
+                      </nav> */}
+
                       <div className="tab-content pt-0">
-                        {/* Overview Tab Content */}
                         <div
                           role="tabpanel"
                           id="overview"
@@ -928,12 +935,10 @@ const UserDetails = () => {
                                       </Link>
                                     </div>
                                   </div>
-                                  {/* </div> */}
                                 </div>
                               </div>
                             </div>
                           </div>
-                          {/* Experience */}
                           <div className="pro-post project-widget widget-box">
                             <div className="row">
                               <div className="col-md-6">
@@ -964,7 +969,7 @@ const UserDetails = () => {
                                         <div key={index}>
                                           <li>
                                             <h4>{data.title}</h4>
-                                            <h5>{data.companyName} {data.startDate} - {data.endDate}</h5>
+                                            <h5>{data.companyName} &nbsp;&nbsp;&nbsp;&nbsp; {Dates(data.startDate)} - {Dates(data.endDate)}</h5>
                                             <p>
                                               {data.Description}
                                             </p>
@@ -1005,6 +1010,7 @@ const UserDetails = () => {
                                         <div className="form-row">
 
                                           <DatePicker
+                                            minDate={getCurrentDate()}
                                             className="custom-date-picker"
                                             placeholderText="Select a date"
                                             selected={experienceDetails.startDate}
@@ -1018,6 +1024,7 @@ const UserDetails = () => {
                                         <label>End Date</label>
                                         <div className="form-row">
                                           <DatePicker
+                                            minDate={getCurrentDate()}
                                             className="custom-date-picker"
                                             placeholderText="Select a date"
                                             selected={experienceDetails.endDate}
@@ -1142,14 +1149,14 @@ const UserDetails = () => {
                                           // <div key={index} style={{width:""}}>
                                           <li key={index} style={{ width: "100%" }}>
                                             <div className="dropdown profile-action">
-                                              <Link
+                                              {/* <Link
                                                 to="#"
                                                 className="action-icon dropdown-toggle"
                                                 data-bs-toggle="dropdown"
                                                 aria-expanded="false"
                                               >
                                                 <i className="fa fa-ellipsis-v" />
-                                              </Link>
+                                              </Link> */}
                                               <div className="dropdown-menu dropdown-menu-right">
                                                 <Link
                                                   className="dropdown-item"
@@ -1173,7 +1180,7 @@ const UserDetails = () => {
                                               {data.degree}
                                             </h4>
                                             <h5>
-                                              {data.school} {data.startDate} - {data.endDate}
+                                              {data.school} &nbsp;&nbsp;&nbsp;&nbsp; {Dates(data.startDate)} - {Dates(data.endDate)}
                                             </h5>
                                             <p>
                                               {data.Description}
@@ -1215,6 +1222,7 @@ const UserDetails = () => {
                                       <div className="form-group col-md-6">
                                         <label>Start year</label>
                                         <DatePicker
+                                          minDate={getCurrentDate()}
                                           className="custom-date-picker"
                                           placeholderText="Select a date"
                                           selected={educationDetails.startDate}
@@ -1225,6 +1233,7 @@ const UserDetails = () => {
                                       <div className="form-group col-md-6">
                                         <label>End year</label>
                                         <DatePicker
+                                          minDate={getCurrentDate()}
                                           className="custom-date-picker"
                                           placeholderText="Select a date"
                                           selected={educationDetails.endDate}
@@ -5157,10 +5166,10 @@ const UserDetails = () => {
                     </div>
                   </div>
                   {/* Blog Sidebar */}
-                  <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
-                    <StickyBox offsetTop={20} offsetBottom={20}>
-                      {/* Verifications */}
-                      <div className="pro-post widget-box about-widget">
+                  {/* <div className="col-lg-4 col-md-12 sidebar-right theiaStickySidebar">
+                    <StickyBox offsetTop={20} offsetBottom={20}> */}
+                  {/* Verifications */}
+                  {/* <div className="pro-post widget-box about-widget">
                         <div className="row">
                           <div className="col-12">
                             <h4 className="pro-title">Verifications</h4>
@@ -5204,10 +5213,10 @@ const UserDetails = () => {
                             <span className="float-end text-danger">Verify Now</span>
                           </li>
                         </ul>
-                      </div>
-                      {/* /Verifications */}
-                      {/* Follow Widget */}
-                      <div className="pro-post">
+                      </div> */}
+                  {/* /Verifications */}
+                  {/* Follow Widget */}
+                  {/* <div className="pro-post">
                         <div className="follow-widget">
                           <div className="text-end custom-edit-btn">
                             <Link
@@ -5231,10 +5240,10 @@ const UserDetails = () => {
                             </li>
                           </ul>
                         </div>
-                      </div>
-                      {/* /Follow Widget */}
-                      {/* Language Widget */}
-                      <div className="pro-post widget-box language-widget">
+                      </div> */}
+                  {/* /Follow Widget */}
+                  {/* Language Widget */}
+                  {/* <div className="pro-post widget-box language-widget">
                         <div className="row">
                           <div className="col-10">
                             <h4 className="pro-title mb-0">Language Skills</h4>
@@ -5289,10 +5298,10 @@ const UserDetails = () => {
                             </div>
                           </li>
                         </ul>
-                      </div>
-                      {/* /Language Widget */}
-                      {/* About Widget */}
-                      <div className="pro-post widget-box about-widget">
+                      </div> */}
+                  {/* /Language Widget */}
+                  {/* About Widget */}
+                  {/* <div className="pro-post widget-box about-widget">
                         <div className="row">
                           <div className="col-10">
                             <h4 className="pro-title mb-0">ABOUT ME</h4>
@@ -5320,10 +5329,10 @@ const UserDetails = () => {
                             <h6>Istanbul/Turkey</h6>
                           </li>
                         </ul>
-                      </div>
-                      {/* /About Widget */}
-                      {/* Categories */}
-                      <div className="pro-post category-widget">
+                      </div> */}
+                  {/* /About Widget */}
+                  {/* Categories */}
+                  {/* <div className="pro-post category-widget">
                         <div className="widget-title-box">
                           <div className="row">
                             <div className="col-10">
@@ -5356,10 +5365,10 @@ const UserDetails = () => {
                             <Link to="#"> Http://www.pinterest.com/john...</Link>
                           </li>
                         </ul>
-                      </div>
-                      {/* /Categories */}
-                      {/* LInk Widget */}
-                      <div className="pro-post widget-box post-widget">
+                      </div> */}
+                  {/* /Categories */}
+                  {/* LInk Widget */}
+                  {/* <div className="pro-post widget-box post-widget">
                         <div className="row">
                           <div className="col-10">
                             <h3 className="pro-title">Profile Link</h3>
@@ -5390,20 +5399,20 @@ const UserDetails = () => {
                             </div>
                           </div>
                         </div>
-                      </div>
-                      {/* /Link Widget */}
-                      {/* Share Widget */}
-                      <div className="pro-post widget-box post-widget">
+                      </div> */}
+                  {/* /Link Widget */}
+                  {/* Share Widget */}
+                  {/* <div className="pro-post widget-box post-widget">
                         <h3 className="pro-title">Share</h3>
                         <div className="pro-content">
                           <Link to="#" className="share-icon">
                             <i className="fas fa-share-alt" /> Share
                           </Link>
                         </div>
-                      </div>
-                      {/* /Share Widget */}
-                    </StickyBox>
-                  </div>
+                      </div> */}
+                  {/* /Share Widget */}
+                  {/* </StickyBox>
+                  </div> */}
                   {/* /Blog Sidebar */}
                 </div>
               </div>
@@ -5461,6 +5470,9 @@ const UserDetails = () => {
                                 </button>
                               </div>
                             </div>
+                            {
+                              skillsArray.length === 0 && (<p style={{marginTop:"5px",color:"red"}}>Please Add Skills</p>)
+                            }
                           </div>
 
                           {/* <hr className="hr-text" data-content="or" /> */}

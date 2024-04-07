@@ -39,6 +39,7 @@
     "eslint": "^5.16.0",
     "feather-icons-react": "^0.6.2",
     "fslightbox-react": "^1.7.6",
+    "html-react-parser": "^5.1.10",
     "lightbox.js-react": "^0.9.9",
     "moment": "^2.27.0",
     "nouislider-react": "^3.4.1",

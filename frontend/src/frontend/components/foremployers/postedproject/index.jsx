@@ -5,6 +5,7 @@ import { bank_line, paypal_line, wallet_icon } from "../../imagepath";
 import { Sidebar } from "../sidebar";
 import { useState } from "react";
 import ErrorModal from "../../../../admin/component/pages/CustomModal/ErrorsModal";
+import SuccessModal from '../../../../admin/component/pages/CustomModal/index'
 
 const CompanyPostedProject = () => {
 
@@ -12,9 +13,15 @@ const CompanyPostedProject = () => {
 
     let [error, setError] = useState(false)
     let token = localStorage.getItem('token')
+    let [flag, setFlag] = useState(false)
     let [SingleProjectID, setSingleProjectID] = useState('')
     let [projectData, setProjectData] = useState([])
     let [projectUserData, setProjectUserData] = useState([])
+    let [showSuccessModal, setSuccessModal] = useState({
+        status: false,
+        message: "",
+        errorStatus: false
+    })
 
     console.log("this is single project id", SingleProjectID)
 
@@ -26,7 +33,7 @@ const CompanyPostedProject = () => {
 
     const getAllProject = async () => {
         try {
-            const getAllprojectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/allPostProject`, {
+            const getAllprojectRequest = await fetch(`http://localhost:4500/project/allPostProject`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
@@ -40,6 +47,7 @@ const CompanyPostedProject = () => {
             console.log(response)
             if (response.message === 'Success') {
                 setProjectData(response?.data)
+                setFlag(false)
             }
         } catch (err) {
             console.log(err)
@@ -49,7 +57,7 @@ const CompanyPostedProject = () => {
 
     const getAllProjectUser = async (singleProjectID) => {
         try {
-            const getAllprojectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/userAppliedProject/${singleProjectID}`, {
+            const getAllprojectRequest = await fetch(`http://localhost:4500/project/userAppliedProject/${singleProjectID}`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
@@ -70,6 +78,40 @@ const CompanyPostedProject = () => {
         }
     }
 
+    const deleteProject = async (id) => {
+        try {
+            const request = await fetch(`http://localhost:4500/project/deleteProject`, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+                body: JSON.stringify({ ProjectId: id })
+            })
+            // if (!request.ok) {
+            //     setError(true)
+            // }
+            const response = await request.json()
+            if (!response.ok) {
+                setSuccessModal({ ...showSuccessModal, status: true, message: response.message, errorStatus: true });
+                setTimeout(() => {
+                    setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: false })
+                }, 2000)
+            }
+            if (response.statusCode === 200) {
+                setSuccessModal({ ...showSuccessModal, status: true, message: response.message });
+                setTimeout(() => {
+                    setSuccessModal({ ...showSuccessModal, status: false, message: '' })
+                }, 2000)
+                setFlag(true)
+
+            }
+        } catch (err) {
+            console.log(err)
+            setError(true)
+        }
+    }
+
     // #########################  API END #########################################
 
 
@@ -81,7 +123,7 @@ const CompanyPostedProject = () => {
 
     useEffect(() => {
         getAllProject()
-    }, [])
+    }, [flag])
 
     useEffect(() => {
         document.body.className = "dashboard-page";
@@ -115,6 +157,8 @@ const CompanyPostedProject = () => {
 
     return (
         <>
+            {showSuccessModal.status && (<SuccessModal message={showSuccessModal.message} errorStatus={showSuccessModal.errorStatus} />)}
+
             {/* Page Content */}
             <div className="content">
                 <div className="container-fluid">
@@ -133,80 +177,87 @@ const CompanyPostedProject = () => {
                                 {/* Table */}
                                 <div className="table-top-section">
                                 </div>
-                                <div className="table-responsive">
-                                    <table className="table">
-                                        <thead>
-                                            <tr>
-                                                <th>Project Title</th>
-                                                <th>Job Type</th>
-                                                <th>Amount</th>
-                                                <th>Status</th>
-                                                <th>Delievery Date</th>
-                                                <th>Action</th>
+                                {
+                                    projectData ?
+                                        <p>No Project Found.</p>
+                                        :
+                                        <div className="table-responsive">
+                                            <table className="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Project Title</th>
+                                                        <th>Job Type</th>
+                                                        <th>Amount</th>
+                                                        <th>Status</th>
+                                                        <th>Delievery Date</th>
+                                                        <th>Action</th>
 
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                projectData?.map((data, index) => {
-                                                    return (
-                                                        <tr key={index}>
-                                                            <td>{data.projectTitle}</td>
-                                                            <td>{data.projectType}</td>
-                                                            <td>{data.amount}</td>
-                                                            <td>
-                                                                <div className={`badge ${data.status === 'pending' ? 'badge-pending' : data.status === 'success' ? 'badge-success' : 'badge-fail'}`}>
-                                                                    <span>{data.status}</span>
-                                                                </div>
-                                                            </td>
-                                                            <td>{dates(data.deliveryDate)}</td>
-                                                            <td>
-                                                                <Link
-                                                                    to="#"
-                                                                    className="action-icon "
-                                                                    data-bs-toggle="dropdown"
-                                                                    aria-expanded="false"
-                                                                >
-                                                                    <i className="fa fa-ellipsis-v" />
-                                                                </Link>
-                                                                <div className="dropdown-menu dropdown-menu-right">
-                                                                    <Link
-                                                                        className="dropdown-item"
-                                                                    to={`/edit-project/${data?.id}`}
-                                                                    // data-bs-toggle="modal"
-                                                                    // data-bs-target="#"
-                                                                    >
-                                                                        <i className="fas fa-pencil-alt me-1" /> Edit
-                                                                    </Link>
-                                                                    <div
-                                                                        className="dropdown-item"
-                                                                    // onClick={()=>deleteJob(data?.id)}
-                                                                    >
-                                                                        <i className="far fa-trash-alt me-1" /> Delete
-                                                                    </div>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {
+                                                        projectData?.map((data, index) => {
+                                                            return (
+                                                                <tr key={index}>
+                                                                    <td>{data.projectTitle}</td>
+                                                                    <td>{data.projectType}</td>
+                                                                    <td>{data.amount}</td>
+                                                                    <td>
+                                                                        <div className={`badge ${data.status === 'pending' ? 'badge-pending' : data.status === 'success' ? 'badge-success' : 'badge-fail'}`}>
+                                                                            <span>{data.status}</span>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>{dates(data.deliveryDate)}</td>
+                                                                    <td>
+                                                                        <Link
+                                                                            to="#"
+                                                                            className="action-icon "
+                                                                            data-bs-toggle="dropdown"
+                                                                            aria-expanded="false"
+                                                                        >
+                                                                            <i className="fa fa-ellipsis-v" />
+                                                                        </Link>
+                                                                        <div className="dropdown-menu dropdown-menu-right">
+                                                                            <Link
+                                                                                className="dropdown-item"
+                                                                                to={`/edit-project/${data?.id}`}
+                                                                            // data-bs-toggle="modal"
+                                                                            // data-bs-target="#"
+                                                                            >
+                                                                                <i className="fas fa-pencil-alt me-1" /> Edit
+                                                                            </Link>
+                                                                            <div
+                                                                                className="dropdown-item"
+                                                                                onClick={() => deleteProject(data?.id)}
 
-                                                                    <Link data-bs-toggle="modal" to="#file" className="dropdown-item"
-                                                                        onClick={() => getAllProjectUser(data?.id)}
-                                                                    >
-                                                                        <i className="feather-eye me-1" />
-                                                                        View Applicants
-                                                                    </Link>
-                                                                </div>
-                                                                {/* <Link data-bs-toggle="modal" to="#file" className="btn btn-primary sub-btn"
+                                                                            >
+                                                                                <i className="far fa-trash-alt me-1" /> Delete
+                                                                            </div>
+
+                                                                            <Link data-bs-toggle="modal" to="#file" className="dropdown-item"
+                                                                                onClick={() => getAllProjectUser(data?.id)}
+                                                                            >
+                                                                                <i className="feather-eye me-1" />
+                                                                                View Applicants
+                                                                            </Link>
+                                                                        </div>
+                                                                        {/* <Link data-bs-toggle="modal" to="#file" className="btn btn-primary sub-btn"
                                                                     onClick={() => getAllProjectUser(data?.id)}
                                                                 >
                                                                     View Proposal
                                                                 </Link> */}
-                                                            </td>
+                                                                    </td>
 
-                                                        </tr>
-                                                    )
-                                                })
-                                            }
+                                                                </tr>
+                                                            )
+                                                        })
+                                                    }
 
-                                        </tbody>
-                                    </table>
-                                </div>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                }
+
                                 {/* /Table */}
                             </div>
                         </div>

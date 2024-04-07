@@ -22,6 +22,7 @@ import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux'
 import { updateStatus } from '../../../redux/Slices/NavbarSlice';
 import { updateFreelancerDetail } from "../../../redux/Slices/FreelancerDetailsSlice";
+import { updateUserType } from "../../../redux/Slices/UserType";
 
 const Header = (props) => {
 
@@ -114,8 +115,8 @@ const Header = (props) => {
 
 
   // ##############  API START ###########################
-
-  let [userType, setUsertype] = useState('')
+  const userType = useSelector(state => state.UserType.userType)
+  // let [userType, setUsertype] = useState('')
   let token = localStorage.getItem('token')
   let [error, setError] = useState(false)
   let [userInfo, setUserInfo] = useState({
@@ -124,12 +125,14 @@ const Header = (props) => {
     profileImage: ''
   })
   function Logout() {
-    setUsertype('')
+    // setUsertype('')
+    dispatch(updateUserType(''))
     localStorage.removeItem('token')
+    history.push('/')
   }
   const Authenticate = async () => {
     try {
-      const request = await fetch(`https://freelanceserver.xgentechnologies.com/protected`, {
+      const request = await fetch(`http://localhost:4500/protected`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -141,7 +144,8 @@ const Header = (props) => {
       if (!request.ok) {
         setError(true)
       }
-      setUsertype(response?.userType || '')
+      // setUsertype(response?.userType || '')
+      dispatch(updateUserType(response?.userType || ''))
       dispatch(updateFreelancerDetail(response || ''))
       // if(response?.userType === 'freelancer'){
       // }else{
@@ -724,7 +728,7 @@ const Header = (props) => {
                                 <i className="material-icons">verified_user</i> View
                                 profile
                               </Link>
-                              <div className="drop-head">Projects Settings</div>
+                              {/* <div className="drop-head">Projects Settings</div>
                               <Link className="dropdown-item" to="/manage-projects">
                                 <i className="material-icons">business_center</i>{" "}
                                 Projects
@@ -741,11 +745,11 @@ const Header = (props) => {
                                 {" "}
                                 <i className="material-icons">settings</i> Profile
                                 Settings
-                              </Link>
-                              <Link className="dropdown-item" to="/" onClick={Logout}>
+                              </Link> */}
+                              <div className="dropdown-item"  onClick={Logout}>
                                 <i className="material-icons">power_settings_new</i>{" "}
                                 Logout
-                              </Link>
+                              </div>
                             </div>
                           </li>
                         </ul>
@@ -773,7 +777,7 @@ const Header = (props) => {
                                   <i className="material-icons">verified_user</i> View
                                   profile
                                 </Link>
-                                <div className="drop-head">Projects Settings</div>
+                                {/* <div className="drop-head">Projects Settings</div>
                                 <Link className="dropdown-item" to="/manage-projects">
                                   <i className="material-icons">business_center</i>{" "}
                                   Projects
@@ -790,11 +794,11 @@ const Header = (props) => {
                                   {" "}
                                   <i className="material-icons">settings</i> Profile
                                   Settings
-                                </Link>
-                                <Link className="dropdown-item" to="/" onClick={Logout}>
+                                </Link> */}
+                                <div className="dropdown-item" onClick={Logout}>
                                   <i className="material-icons">power_settings_new</i>{" "}
                                   Logout
-                                </Link>
+                                </div>
                               </div>
                             </li>
                             <li>
@@ -876,7 +880,7 @@ const Header = (props) => {
                               <li>
                                 <Link to="/register" className="reg-btn">
                                   <img src={users} className="me-1" alt="img" />
-                                  Registers
+                                  Register
                                 </Link>
                               </li>
                               <li>
@@ -898,9 +902,9 @@ const Header = (props) => {
                                       </div>
                                     </li>
                                     <li>
-                                      <div 
-                                      onClick={postJob}
-                                      className="login-btn">
+                                      <div
+                                        onClick={postJob}
+                                        className="login-btn">
                                         <i className="feather-plus me-1" />
                                         Post a Job{" "}
                                       </div>

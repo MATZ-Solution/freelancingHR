@@ -84,7 +84,7 @@ import Login from "./components/login";
 import Register from "./components/register";
 import ForgotPassword from "./components/pages/forgot_password";
 import onboardScreen from "./components/pages/onboardScreen";
-
+import CookiePolicy from "./components/cookie-policy/index.jsx";
 //Blog
 import BlogList from "./components/blog/blog_list";
 import BlogGrid from "./components/blog/blog_grid";
@@ -163,7 +163,7 @@ const AppContainer = function (props) {
   // let [error, setError] = useState(false)
   // const Authenticate = async () => {
   //   try {
-  //     const request = await fetch(`https://freelanceserver.xgentechnologies.com/protected`, {
+  //     const request = await fetch(`http://localhost:4500/protected`, {
   //       method: "GET",
   //       headers: {
   //         'Content-Type': 'application/json',
@@ -648,6 +648,11 @@ const AppContainer = function (props) {
                   exact
                   path="/term-condition"
                   component={TermsCondition}
+                />
+                <Route
+                  exact
+                  path="/cookie-policy"
+                  component={CookiePolicy}
                 />
                 {/* Jobs*/}
                 <Route exact path="/post-job" component={PostJob} />

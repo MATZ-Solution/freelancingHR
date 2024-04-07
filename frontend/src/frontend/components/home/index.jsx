@@ -109,15 +109,16 @@ const Home = () => {
   // }, []);
   const history = useHistory();
   const eventclick = () => {
-    if (!searchDetails.select) {
+    let url = '/'
+
+    if (!searchDetails.select || !searchDetails.keyword) {
       return alert("Please Select Fields")
     }
 
-    let url = '/'
-    if (searchDetails.select === 'project' || searchDetails.keyword) {
+    if (searchDetails.select === 'Project' ) {
       url += `project?keywords=${searchDetails.keyword}`;
     } 
-    else if (searchDetails.select === 'job' || searchDetails.keyword) {
+    else if (searchDetails.select === 'Job' ) {
       url += `job?keywords=${searchDetails.keyword}`;
     } 
     else {
@@ -148,7 +149,7 @@ const Home = () => {
 
   const getCategory = async () => {
     try {
-      const getCategoryRequest = await fetch('https://freelanceserver.xgentechnologies.com/project/projectCategoryCount', {
+      const getCategoryRequest = await fetch('http://localhost:4500/project/projectCategoryCount', {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -495,7 +496,7 @@ const Home = () => {
                       Do you want to earn money, find unlimited clients and
                       build your freelance career?
                     </p>
-                    <Link to="/project" className="btn btn-primary">
+                    <Link to="/job" className="btn btn-primary">
                       Browse
                     </Link>
                   </div>
@@ -505,7 +506,7 @@ const Home = () => {
           </div>
         </section>
         {/*- /Developed Project  */}
-        <section className="section projects pt-0">
+        {/* <section className="section projects pt-0">
           <div className="container">
             <div className="row">
               <div className="col-md-12 col-sm-12 col-12 mx-auto text-center">
@@ -517,7 +518,7 @@ const Home = () => {
                   </p>
                 </div>
               </div>
-              {/* Feature Item */}
+
               <div
                 className="col-xl-3 col-md-6 aos"
                 data-aos="zoom-in"
@@ -535,8 +536,7 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              {/* /Feature Item */}
-              {/* Feature Item */}
+              
               <div
                 className="col-xl-3 col-md-6 aos"
                 data-aos="zoom-in"
@@ -555,8 +555,7 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              {/* /Feature Item */}
-              {/* Feature Item */}
+           
               <div
                 className="col-xl-3 col-md-6 aos"
                 data-aos="zoom-in"
@@ -574,8 +573,7 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              {/* /Feature Item */}
-              {/* Feature Item */}
+           
               <div
                 className="col-xl-3 col-md-6 aos"
                 data-aos="zoom-in"
@@ -593,10 +591,10 @@ const Home = () => {
                   </div>
                 </div>
               </div>
-              {/* /Feature Item */}
+              
             </div>
           </div>
-        </section>
+        </section> */}
         {/* /Our Feature */}
         <section className="section review">
           <div className="container">
@@ -1144,7 +1142,7 @@ const Home = () => {
         </section>
 
         {/* /Main Wrapper */}
-        <button
+        {/* <button
           className={
             scroll
               ? "scroll-top scroll-to-target open"
@@ -1155,7 +1153,7 @@ const Home = () => {
           <span className="ti-angle-up">
             <img src={Top_icon} className="img-fluid" alt="" />
           </span>
-        </button>
+        </button> */}
       </>
     </>
   );

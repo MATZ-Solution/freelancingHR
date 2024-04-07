@@ -4,6 +4,11 @@ import PropTypes from 'prop-types';
 import '../../../assets/css/admin.css'
 function index(props) {
     const { message, errorStatus } = props;
+    // console.log("message")
+    // console.log(message)
+    console.log("errorStatus")
+    console.log(errorStatus)
+
     useEffect(() => {
         const showModal = () => {
             let modal = document.getElementById('delete_category')

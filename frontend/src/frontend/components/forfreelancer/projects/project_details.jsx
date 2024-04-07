@@ -27,8 +27,11 @@ import sampleCoverImage from '../../../assets/img/bg/breadcrumb-bg.png'
 import SuccessModal from '../../../../admin/component/pages/CustomModal/index'
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import parse from 'html-react-parser';
 
 const CompanyProfile = () => {
+  const [modalOpen,setModalOpen] = useState('#')
+
   const [date, setDate] = useState(new Date());
   const [rows, setRows] = useState([
     // Initial rows
@@ -103,13 +106,15 @@ const CompanyProfile = () => {
 
       const link = document.createElement('a');
       link.href = blobUrl;
-      link.download = `document`; 
+      link.download = `document`;
       link.click();
     } catch (error) {
       alert(error)
     }
 
   }
+
+
   // #########################  FUNCTION  END #########################################
 
 
@@ -121,7 +126,7 @@ const CompanyProfile = () => {
 
   const getProjectDescription = async () => {
     try {
-      const getProjectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/projectById/${id}`, {
+      const getProjectRequest = await fetch(`http://localhost:4500/project/projectById/${id}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -144,7 +149,7 @@ const CompanyProfile = () => {
 
   const sendproposal = async () => {
     try {
-      const getProposalRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/proposalSubmit`, {
+      const getProposalRequest = await fetch(`http://localhost:4500/project/proposalSubmit`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -165,6 +170,7 @@ const CompanyProfile = () => {
         }, 2000)
       }
       if (response.statusCode === 200) {
+        // setValue('#')
         setSuccessModal({ ...showSuccessModal, status: true, message: response.message, errorStatus: false });
         setTimeout(() => {
           setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: true })
@@ -258,7 +264,7 @@ const CompanyProfile = () => {
                       </ul>
                     </div>
                     <div className="project-proposal-detail">
-                      
+
                       <ul>
                         <li>
                           <div className="proposal-detail-img">
@@ -320,7 +326,7 @@ const CompanyProfile = () => {
                   <div className="company-detail-block company-description">
                     <h4 className="company-detail-title">Description</h4>
 
-                    {data?.description ? <p>{data?.description}</p> : <p style={{ color: "red" }}>Not Mentioned</p>}
+                    {data?.description ? <p>{parse(data?.description)}</p> : <p style={{ color: "red" }}>Not Mentioned</p>}
 
                   </div>
                   {/* <div className="company-detail-block company-description">
@@ -714,26 +720,26 @@ const CompanyProfile = () => {
                         <ul className="d-flex list-style mb-0 social-list">
                           {data?.facebook && (
                             <li>
-                              <Link to={data?.facebook} className="social-link-block">
+                              <a href={data?.facebook} className="social-link-block">
                                 <i className="fa-brands fa-facebook-f" />
-                              </Link>
+                              </a>
                             </li>
                           )}
                           {
                             data?.twitter && (
                               <li>
-                                <Link to={data?.twitter} className="social-link-block">
+                                <a href={data?.twitter} className="social-link-block">
                                   <i className="fab fa-twitter" />
-                                </Link>
+                                </a>
                               </li>
                             )
                           }
                           {
                             data?.linkedIn && (
                               <li>
-                                <Link to={data?.linkedIn} className="social-link-block">
+                                <a href={data?.linkedIn} className="social-link-block">
                                   <i className="fa-brands fa-linkedin-in" />
-                                </Link>
+                                </a>
                               </li>
                             )
                           }
@@ -817,7 +823,7 @@ const CompanyProfile = () => {
 
       {/* The Modal */}
       <>
-        <div className="modal fade" id="file">
+        <div className="modal fade" id="file" >
           {showSuccessModal.status && (<SuccessModal message={showSuccessModal.message} errorStatus={showSuccessModal.errorStatus} />)}
 
           <div className="modal-dialog modal-dialog-centered modal-lg">

@@ -158,7 +158,7 @@ const Dashboard = () => {
 
   const getDashboardDate = async () => {
     try {
-      const request = await fetch(`https://freelanceserver.xgentechnologies.com/freelancingDashboard`, {
+      const request = await fetch(`http://localhost:4500/freelancingDashboard`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -247,12 +247,12 @@ const Dashboard = () => {
                         </div>
                         <div className="dash-widget-more d-flex align-items-center justify-content-between">
                           <div className="dash-widget-count">30</div>
-                          <Link
+                          {/* <Link
                             to="/freelancer-completed-projects"
                             className="d-flex"
                           >
                             View Details
-                          </Link>
+                          </Link> */}
                         </div>
                       </div>
                     </div>
@@ -266,12 +266,12 @@ const Dashboard = () => {
                         </div>
                         <div className="dash-widget-more d-flex align-items-center justify-content-between">
                           <div className="dash-widget-count">5</div>
-                          <Link
+                          {/* <Link
                             to="/freelancer-completed-projects"
                             className="d-flex"
                           >
                             View Details
-                          </Link>
+                          </Link> */}
                         </div>
                       </div>
                     </div>
@@ -285,12 +285,12 @@ const Dashboard = () => {
                         </div>
                         <div className="dash-widget-more d-flex align-items-center justify-content-between">
                           <div className="dash-widget-count">25</div>
-                          <Link
+                          {/* <Link
                             to="/freelancer-completed-projects"
                             className="d-flex"
                           >
                             View Details
-                          </Link>
+                          </Link> */}
                         </div>
                       </div>
                     </div>
@@ -304,12 +304,12 @@ const Dashboard = () => {
                         </div>
                         <div className="dash-widget-more d-flex align-items-center justify-content-between">
                           <div className="dash-widget-count">5962</div>
-                          <Link
+                          {/* <Link
                             to="/freelancer-completed-projects"
                             className="d-flex"
                           >
                             View Details
-                          </Link>
+                          </Link> */}
                         </div>
                       </div>
                     </div>
@@ -317,7 +317,7 @@ const Dashboard = () => {
                 </div>
 
                 {/* Chart Content */}
-                <div className="row">
+                {/* <div className="row">
                   <div className="col-xl-8 d-flex">
                     <div className="card flex-fill">
                       <div className="card-header">
@@ -389,9 +389,9 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
 
-                <div className="row">
+                {/* <div className="row">
                   <div className="col-xl-12">
                     <div className="card mb-4 ongoing-project-card">
                       <div className="pro-head">
@@ -500,7 +500,7 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

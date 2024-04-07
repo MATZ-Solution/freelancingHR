@@ -1,19 +1,24 @@
 import React, { useState } from "react";
 // import { Link } from "react-router-dom";
 import { sidebar_icon_01, sidebar_icon_02, sidebar_icon_03, sidebar_icon_04, sidebar_icon_06, sidebar_icon_07, sidebar_icon_10, sidebar_icon_11, table_avatar, verified_badge } from "../../imagepath"
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import PropTypes from 'prop-types';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUserType } from "../../../../redux/Slices/UserType";
 
 const Sidebar = (props) => {
   // const pathname = window.location.pathname.split("/")[1];
   const { values } = props;
-  const freelancerDetails = useSelector(state=>state.freelancerDetails.data)
-  const {name, email, profileImage} = freelancerDetails
+
+  const freelancerDetails = useSelector(state => state.freelancerDetails.data)
+  const { name, email, profileImage } = freelancerDetails
+  const dispatch = useDispatch()
+
+
   const [isHighlighted, setIsHighlighted] = useState(false);
   const [isFavourities, setIsFavourities] = useState(false);
   const [isSettings, setIsSettings] = useState(false);
-
+  const history = useHistory();
 
   const toggleHighlight = () => {
     setIsHighlighted((prevState) => !prevState);
@@ -26,6 +31,12 @@ const Sidebar = (props) => {
   const toggleSettings = () => {
     setIsSettings((prevState) => !prevState);
   };
+
+  function Logout() {
+    dispatch(updateUserType(''))
+    localStorage.removeItem('token')
+    history.push('/')
+  }
 
   return (
     <>
@@ -56,10 +67,10 @@ const Sidebar = (props) => {
                 </Link>
               </li>
               <li className="nav-item submenu">
-                <Link to="#" className={`${isHighlighted ? 'nav-link subdrop' : 'nav-link'}`} onClick={toggleHighlight}>
+                {/* <Link to="#" className={`${isHighlighted ? 'nav-link subdrop' : 'nav-link'}`} onClick={toggleHighlight}>
                   <img src={sidebar_icon_02} alt="Img" /> Projects
                   <span className="menu-arrow" />
-                </Link>
+                </Link> */}
                 <ul className="sub-menu-ul" style={{ display: isHighlighted ? 'block' : 'none' }}>
                   <li>
                     <Link to="/manage-projects">All Projects</Link>
@@ -82,10 +93,10 @@ const Sidebar = (props) => {
                 </ul>
               </li>
               <li className="nav-item submenu">
-                <Link to="#" className={`${isFavourities ? 'nav-link subdrop' : 'nav-link'}`} onClick={toggleFavourities}>
+                {/* <Link to="#" className={`${isFavourities ? 'nav-link subdrop' : 'nav-link'}`} onClick={toggleFavourities}>
                   <img src={sidebar_icon_03} alt="Img" /> Favourites
                   <span className="menu-arrow" />
-                </Link>
+                </Link> */}
                 <ul className="sub-menu-ul" style={{ display: isFavourities ? 'block' : 'none' }}>
                   <li>
                     <Link to="/favourites">Bookmarked Projects</Link>
@@ -95,26 +106,26 @@ const Sidebar = (props) => {
                   </li>
                 </ul>
               </li>
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link to="/review" className="nav-link">
                   <img src={sidebar_icon_04} alt="Img" /> Reviews
                 </Link>
-              </li>
-              <li className="nav-item">
+              </li> */}
+              {/* <li className="nav-item">
                 <Link to="/chats" className="nav-link">
                   <img src={sidebar_icon_06} alt="Img" /> Chat
                 </Link>
-              </li>
-              <li className="nav-item">
+              </li> */}
+              {/* <li className="nav-item">
                 <Link to="/deposit-funds" className="nav-link">
                   <img src={sidebar_icon_07} alt="Img" /> Payments
                 </Link>
-              </li>
+              </li> */}
               <li className="nav-item">
-                <Link to="#" className={`${isSettings ? 'nav-link subdrop' : 'nav-link'}`} onClick={toggleSettings} >
+                {/* <Link to="#" className={`${isSettings ? '.logoutsubdrop' : 'nav-link'}`} onClick={toggleSettings} >
                   <img src={sidebar_icon_10} alt="Img" />  Settings
                   <span className="menu-arrow" />
-                </Link>
+                </Link> */}
                 <ul className="sub-menu-ul" style={{ display: isSettings ? 'block' : 'none' }}>
                   <li>
                     <Link to="/profile-settings">Profile</Link>
@@ -134,9 +145,9 @@ const Sidebar = (props) => {
                 </ul>
               </li>
               <li className="nav-item">
-                <Link to="/index" className="nav-link">
+                <div className="logout" onClick={Logout}>
                   <img src={sidebar_icon_11} alt="Img" /> Logout
-                </Link>
+                </div>
               </li>
             </ul>
           </div>
@@ -148,5 +159,5 @@ const Sidebar = (props) => {
 }
 export { Sidebar };
 Sidebar.propTypes = {
-  values: PropTypes.string.isRequired
+  values: PropTypes.string
 };

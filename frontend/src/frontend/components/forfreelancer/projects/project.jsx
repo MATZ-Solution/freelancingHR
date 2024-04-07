@@ -46,7 +46,7 @@ const Project = () => {
 
   const getProjects = async () => {
     try {
-      const getProjectsRequest = await fetch('https://freelanceserver.xgentechnologies.com/project/getAllProject', {
+      const getProjectsRequest = await fetch('http://localhost:4500/project/getAllProject', {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ const Project = () => {
 
   const getProjectsAccKeywords = async () => {
     try {
-      const ProjectsKeywordRequest = await fetch(`https://freelanceserver.xgentechnologies.com/searchProject/${keywords}`, {
+      const ProjectsKeywordRequest = await fetch(`http://localhost:4500/searchProject/${keywords}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -236,7 +236,7 @@ const Project = () => {
                 </div>
               </div>
 
-              <div className="row">
+              {/* <div className="row">
                 <div className="col-md-12">
                   <ul className="paginations list-pagination">
                     <li className="page-item"><Link to="#"><i className="feather-chevron-left" /></Link>
@@ -249,7 +249,7 @@ const Project = () => {
                     <li className="page-item"><Link to="#"><i className="feather-chevron-right" /></Link></li>
                   </ul>
                 </div>
-              </div>
+              </div> */}
 
             </div>
           </div>

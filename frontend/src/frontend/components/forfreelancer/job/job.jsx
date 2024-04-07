@@ -44,7 +44,7 @@ const Jobs = () => {
 
   const getJob = async () => {
     try {
-      const getJobRequest = await fetch('https://freelanceserver.xgentechnologies.com/job/getAllJobs', {
+      const getJobRequest = await fetch('http://localhost:4500/job/getAllJobs', {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ const Jobs = () => {
 
   const getJobAccKeywords = async () => {
     try {
-      const jobKeywordRequest = await fetch(`https://freelanceserver.xgentechnologies.com/searchJob/${keywords}`, {
+      const jobKeywordRequest = await fetch(`http://localhost:4500/searchJob/${keywords}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -236,11 +236,7 @@ const Jobs = () => {
                 </div>
 
               </div>
-
-
-
-
-              <div className="row">
+              {/* <div className="row">
                 <div className="col-md-12">
                   <ul className="paginations list-pagination">
                     <li className="page-item"><Link to="#"><i className="feather-chevron-left" /></Link>
@@ -253,7 +249,7 @@ const Jobs = () => {
                     <li className="page-item"><Link to="#"><i className="feather-chevron-right" /></Link></li>
                   </ul>
                 </div>
-              </div>
+              </div> */}
 
             </div>
           </div>

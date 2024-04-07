@@ -1,15 +1,21 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Avatar_1, sidebar_icon_01, sidebar_icon_02, sidebar_icon_03, sidebar_icon_04, sidebar_icon_05, sidebar_icon_06, sidebar_icon_07, sidebar_icon_08, sidebar_icon_09, sidebar_icon_10, verified_badge } from "../../imagepath";
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from "react-redux";
+import { updateUserType } from "../../../../redux/Slices/UserType";
+
 // import { freelancerDetailsSlice } from "../../../../redux/Slices/FreelancerDetailsSlice";
 
 
 const Sidebar = (props) => {
   const freelancerDetails = useSelector(state => state.freelancerDetails.data)
   const {name, email, profileImage} = freelancerDetails
+  const userType = useSelector(state => state.UserType.userType)
 
+
+  const history = useHistory();
+  const dispatch = useDispatch()
   const [isHighlighted, setIsHighlighted] = useState(false);
   const [isFavourities, setIsFavourities] = useState(false);
   const [isSettings, setIsSettings] = useState(false);
@@ -26,6 +32,12 @@ const Sidebar = (props) => {
   const toggleSettings = () => {
     setIsSettings((prevState) => !prevState);
   };
+
+  function Logout() {
+    dispatch(updateUserType(''))
+    localStorage.removeItem('token')
+    history.push('/')
+  }
 
   return (
     <>
@@ -68,7 +80,7 @@ const Sidebar = (props) => {
                 </Link>
               </li> */}
 
-              <li className="nav-item submenu">
+              {/* <li className="nav-item submenu">
                 <Link to="#" className={`${isHighlighted ? 'nav-link subdrop' : 'nav-link'}`} onClick={toggleHighlight}>
                   <img src={sidebar_icon_02} alt="Img" /> Projects
                   <span className="menu-arrow" />
@@ -155,11 +167,11 @@ const Sidebar = (props) => {
                     <Link to="/freelancer-delete-account">Delete Account</Link>
                   </li>
                 </ul>
-              </li>
-              <li className="nav-item">
-                <Link to="/index" className="nav-link">
+              </li> */}
+              <li className="nav-item" >
+                <div className="logout" onClick={Logout}>
                   <img src={sidebar_icon_09} alt="Img" /> Logout
-                </Link>
+                </div>
               </li>
             </ul>
           </div>

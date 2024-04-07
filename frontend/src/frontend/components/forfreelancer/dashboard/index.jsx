@@ -134,7 +134,7 @@ const FreelancerDashboard = () => {
 
   const getDashboardDetails = async () => {
     try {
-      const request = await fetch(`https://freelanceserver.xgentechnologies.com/freelancingDashboard`, {
+      const request = await fetch(`http://localhost:4500/freelancingDashboard`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -211,11 +211,11 @@ const FreelancerDashboard = () => {
                       </div>
                       <div className="dash-widget-more d-flex align-items-center justify-content-between">
                         <div className="dash-widget-count">{dashboardData[0]?.appliedJob}</div>
-                        <Link to="/freelancer-completed-projects" className="d-flex">View Details</Link>
+                        {/* <Link to="/freelancer-completed-projects" className="d-flex">View Details</Link> */}
                       </div>
                     </div>
                   </div>
-                  <div className="col-md-6 col-lg-4 col-xl-3">
+                  {/* <div className="col-md-6 col-lg-4 col-xl-3">
                     <div className="dash-widget">
                       <div className="dash-info">
                         <div className="dashboard-icon dashboard-icon-two">
@@ -228,7 +228,7 @@ const FreelancerDashboard = () => {
                         <Link to="/freelancer-completed-projects" className="d-flex">View Details</Link>
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-md-6 col-lg-4 col-xl-3">
                     <div className="dash-widget">
                       <div className="dash-info">
@@ -239,7 +239,7 @@ const FreelancerDashboard = () => {
                       </div>
                       <div className="dash-widget-more d-flex align-items-center justify-content-between">
                       <div className="dash-widget-count">{dashboardData[0]?.appliedProject}</div>
-                        <Link to="/freelancer-completed-projects" className="d-flex">View Details</Link>
+                        {/* <Link to="/freelancer-completed-projects" className="d-flex">View Details</Link> */}
                       </div>
                     </div>
                   </div>
@@ -259,7 +259,7 @@ const FreelancerDashboard = () => {
                   </div> */}
                 </div>
                 {/* Chart Content */}
-                <div className="row">
+                {/* <div className="row">
                   <div className="col-xl-8 d-flex">
                     <div className="card flex-fill ongoing-project-card">
                       <div className="pro-head">
@@ -312,10 +312,9 @@ const FreelancerDashboard = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 {/* /Chart Content */}
-                <div className="row">
-                  {/* Ongoing Projects */}
+                {/* <div className="row">
                   <div className="col-xl-6 d-flex">
                     <div className="card flex-fill ongoing-project-card ongoing-project-card">
                       <div className="pro-head">
@@ -390,8 +389,6 @@ const FreelancerDashboard = () => {
                       </div>
                     </div>
                   </div>
-                  {/* /Ongoing Projects */}
-                  {/* Past Earnings */}
                   <div className="col-xl-6">
                     <div className="card mb-4 ongoing-project-card">
                       <div className="pro-head">
@@ -462,9 +459,7 @@ const FreelancerDashboard = () => {
                       </div>
                     </div>
                   </div>
-                  {/* /Past Earnings */}
-                </div>
-
+                </div> */}
 
               </div>
             </div>

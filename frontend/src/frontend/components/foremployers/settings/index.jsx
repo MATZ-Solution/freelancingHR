@@ -167,7 +167,7 @@ const Settings = () => {
     formData.append('image', selectedFile)
     formData.append('type', 'profile')
     try {
-      let updateProfileImgReq = await fetch('https://freelanceserver.xgentechnologies.com/profile', {
+      let updateProfileImgReq = await fetch('http://localhost:4500/profile', {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -195,7 +195,7 @@ const Settings = () => {
 
   const updateProfile = async () => {
     try {
-      let updateProfileReq = await fetch('https://freelanceserver.xgentechnologies.com/CompanyProfile', {
+      let updateProfileReq = await fetch('http://localhost:4500/CompanyProfile', {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json',
@@ -223,7 +223,7 @@ const Settings = () => {
 
   const getProfileDetails = async () => {
     try {
-      let profileDetailsReq = await fetch('https://freelanceserver.xgentechnologies.com/getCompanyProfile', {
+      let profileDetailsReq = await fetch('http://localhost:4500/getCompanyProfile', {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',

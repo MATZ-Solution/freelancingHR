@@ -51,7 +51,7 @@ const CompanyPostedJob = () => {
 
   const getAllJob = async () => {
     try {
-      const getAllJobRequest = await fetch(`https://freelanceserver.xgentechnologies.com/job/allPostJobs`, {
+      const getAllJobRequest = await fetch(`http://localhost:4500/job/allPostJobs`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ const CompanyPostedJob = () => {
   const getAllJobUser = async (singleJobID) => {
     setStatusDetails({ ...statusDetails, getSingleJob: singleJobID })
     try {
-      const getAllprojectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/job/userAppliedJobs/${singleJobID}`, {
+      const getAllprojectRequest = await fetch(`http://localhost:4500/job/userAppliedJobs/${singleJobID}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ const CompanyPostedJob = () => {
 
   const updateStatus = async () => {
     try {
-      const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/updateStatus`, {
+      const request = await fetch(`http://localhost:4500/job/updateStatus`, {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json',
@@ -137,37 +137,37 @@ const CompanyPostedJob = () => {
 
   const deleteJob = async (id) => {
     try {
-        const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/deleteJob`, {
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify({jobId:id})
-        })
-        if (!request.ok) {
-            setError(true)
-        }
-        const response = await request.json()
-        if (!response.ok) {
-            setSuccessModal({ ...showSuccessModal, status: true, message: response.message, errorStatus: true });
-            setTimeout(() => {
-                setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: false })
-            }, 2000)
-        }
-        if (response.statusCode === 200) {
-            setSuccessModal({ ...showSuccessModal, status: true, message: response.message });
-            setTimeout(() => {
-                setSuccessModal({ ...showSuccessModal, status: false, message: '' })
-            }, 2000)
-            setFlag(true)
-
-        }
-    } catch (err) {
-        console.log(err)
+      const request = await fetch(`http://localhost:4500/job/deleteJob`, {
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ jobId: id })
+      })
+      if (!request.ok) {
         setError(true)
+      }
+      const response = await request.json()
+      if (!response.ok) {
+        setSuccessModal({ ...showSuccessModal, status: true, message: response.message, errorStatus: true });
+        setTimeout(() => {
+          setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: false })
+        }, 2000)
+      }
+      if (response.statusCode === 200) {
+        setSuccessModal({ ...showSuccessModal, status: true, message: response.message });
+        setTimeout(() => {
+          setSuccessModal({ ...showSuccessModal, status: false, message: '' })
+        }, 2000)
+        setFlag(true)
+
+      }
+    } catch (err) {
+      console.log(err)
+      setError(true)
     }
-}
+  }
 
   // #########################  API END #########################################
 
@@ -221,7 +221,7 @@ const CompanyPostedJob = () => {
     setStatusDetails({ ...statusDetails, status: selectedOption.label });
   }
 
-  console.log("this is status details", statusDetails)
+  console.log("this is all jobs", allJobs)
 
   // ######################### FUNCTION END #########################################
 
@@ -334,81 +334,87 @@ const CompanyPostedJob = () => {
                 {/* Table */}
                 <div className="table-top-section">
                 </div>
-                <div className="table-responsive">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th>Job Title</th>
-                        <th>Job Category</th>
-                        <th>Job Type</th>
-                        <th>Status</th>
-                        <th>Last Date</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                        allJobs?.map((data, index) => {
-                          return (
-                            <tr key={index}>
-                              <td>{data.jobTitle}</td>
-                              <td>{data.jobCategory}</td>
-                              <td>{data.jobType}</td>
-                              <td>
-                                <div className={`badge ${data.status === 'pending' ? 'badge-pending' : data.status === 'success' ? 'badge-success' : 'badge-fail'}`}>
-                                  <span>{data.status}</span>
-                                </div>
-                              </td>
-                              <td>{dates(data.lastDate)}</td>
-                              <td>
-                                {/* <div className="dropdown profile-action"> */}
-                                <Link
-                                  to="#"
-                                  className="action-icon "
-                                  data-bs-toggle="dropdown"
-                                  aria-expanded="false"
-                                >
-                                  <i className="fa fa-ellipsis-v" />
-                                </Link>
-                                <div className="dropdown-menu dropdown-menu-right">
-                                  <Link
-                                    className="dropdown-item"
-                                    to={`/edit-job/${data?.id}`}
-                                    // data-bs-toggle="modal"
-                                    // data-bs-target="#"
-                                  >
-                                    <i className="fas fa-pencil-alt me-1" /> Edit
-                                  </Link>
-                                  <div
-                                    className="dropdown-item"
-                                    onClick={()=>deleteJob(data?.id)}
-                                  >
-                                    <i className="far fa-trash-alt me-1" /> Delete
-                                  </div>
+                {
+                  allJobs.length === 0 ?
+                    <p>No Job Found</p>
+                    :
+                    <div className="table-responsive">
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th>Job Title</th>
+                            <th>Job Category</th>
+                            <th>Job Type</th>
+                            <th>Status</th>
+                            <th>Last Date</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {
+                            allJobs?.map((data, index) => {
+                              return (
+                                <tr key={index}>
+                                  <td>{data.jobTitle}</td>
+                                  <td>{data.jobCategory}</td>
+                                  <td>{data.jobType}</td>
+                                  <td>
+                                    <div className={`badge ${data.status === 'pending' ? 'badge-pending' : data.status === 'success' ? 'badge-success' : 'badge-fail'}`}>
+                                      <span>{data.status}</span>
+                                    </div>
+                                  </td>
+                                  <td>{dates(data.lastDate)}</td>
+                                  <td>
+                                    {/* <div className="dropdown profile-action"> */}
+                                    <Link
+                                      to="#"
+                                      className="action-icon "
+                                      data-bs-toggle="dropdown"
+                                      aria-expanded="false"
+                                    >
+                                      <i className="fa fa-ellipsis-v" />
+                                    </Link>
+                                    <div className="dropdown-menu dropdown-menu-right">
+                                      <Link
+                                        className="dropdown-item"
+                                        to={`/edit-job/${data?.id}`}
+                                      // data-bs-toggle="modal"
+                                      // data-bs-target="#"
+                                      >
+                                        <i className="fas fa-pencil-alt me-1" /> Edit
+                                      </Link>
+                                      <div
+                                        className="dropdown-item"
+                                        onClick={() => deleteJob(data?.id)}
+                                      >
+                                        <i className="far fa-trash-alt me-1" /> Delete
+                                      </div>
 
-                                  <Link data-bs-toggle="modal" to="#file" className="dropdown-item"
-                                    onClick={() => getAllJobUser(data?.id)}
-                                  >
-                                    <i className="feather-eye me-1" />
-                                    View Applicants
-                                  </Link>
-                                </div>
-                                {/* </div> */}
-                                {/* <Link data-bs-toggle="modal" to="#file" className="btn btn-primary sub-btn"
-                                  onClick={() => getAllJobUser(data?.id)}
-                                >
-                                  View Applicants
-                                </Link> */}
+                                      <Link data-bs-toggle="modal" to="#file" className="dropdown-item"
+                                        onClick={() => getAllJobUser(data?.id)}
+                                      >
+                                        <i className="feather-eye me-1" />
+                                        View Applicants
+                                      </Link>
+                                    </div>
+                                    {/* </div> */}
+                                    {/* <Link data-bs-toggle="modal" to="#file" className="btn btn-primary sub-btn"
+                                onClick={() => getAllJobUser(data?.id)}
+                              >
+                                View Applicants
+                              </Link> */}
 
-                              </td>
-                            </tr>
-                          )
-                        })
-                      }
+                                  </td>
+                                </tr>
+                              )
+                            })
+                          }
 
-                    </tbody>
-                  </table>
-                </div>
+                        </tbody>
+                      </table>
+                    </div>
+                }
+
                 {/* /Table */}
               </div>
             </div>

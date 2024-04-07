@@ -54,8 +54,8 @@ function InfoModal(props) {
 }
 
 InfoModal.propTypes = {
-    message: PropTypes.string.isRequired,
-    setMessageInfo: PropTypes.string.isRequired
+    message: PropTypes.string,
+    setMessageInfo: PropTypes.string
 
 };
 export default InfoModal

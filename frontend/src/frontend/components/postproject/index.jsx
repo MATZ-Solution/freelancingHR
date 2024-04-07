@@ -11,7 +11,8 @@ import SuccessModal from "../../../admin/component/pages/CustomModal/index";
 import { useForm, Controller } from 'react-hook-form'
 import TextEditor from "../foremployers/dashboard/texteditor";
 import { useHistory } from 'react-router-dom'
-
+import InfoModal from "../../../admin/component/pages/CustomModal/InfoModal";
+import getCurrentDate from "../../../CustomFunction/reactDatepickerVal";
 const PostProject = () => {
 
 
@@ -25,6 +26,7 @@ const PostProject = () => {
   let token = localStorage.getItem('token')
   let [error, setError] = useState(false)
   const [date, setDate] = useState(new Date(Date.now()));
+  let [messageInfo, setMessageInfo] = useState('')
 
   const [projectDetails, setProjectDetails] = useState({
     projectTitle: "",
@@ -86,6 +88,18 @@ const PostProject = () => {
     setDate(dateChange);
   };
 
+  const handleChangeProfileImg = (event) => {
+    const selectedFile = event.target.files[0];
+    if (selectedFile && (!selectedFile.type.startsWith('image/') || selectedFile.type === 'image/svg+xml')) {
+      setMessageInfo('Please select a image file.');
+      event.target.value = null;
+    } else {
+      setProjectDetails({...projectDetails,image: selectedFile})
+    }
+  }
+
+
+
 
   // #########################  HANDLE ONCHANGE END #########################################
 
@@ -104,15 +118,12 @@ const PostProject = () => {
     formData.append('deliveryDate', formatDate)
     formData.append('status', projectDetails.status)
     formData.append('image', projectDetails.image)
-
-
     try {
-      const postProjectReq = await fetch('https://freelanceserver.xgentechnologies.com/project/project', {
+      const postProjectReq = await fetch('http://localhost:4500/project/project', {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${token}`,
         },
-        // body: JSON.stringify(data)
         body: formData
       })
       const response = await postProjectReq.json()
@@ -151,7 +162,7 @@ const PostProject = () => {
 
   console.log("this is data: ", projectDetails)
   console.log("this is date: ", formatDate)
-
+  console.log("this is info message: ", messageInfo)
 
 
   return (
@@ -162,6 +173,7 @@ const PostProject = () => {
           :
           <>
             {/* Breadcrumb */}
+            {messageInfo === 'Please select a image file.' && (<InfoModal setMessageInfo={setMessageInfo} message={'Please select an image file.'} />)}
             {showSuccessModal.status && (<SuccessModal message={showSuccessModal.message} errorStatus={showSuccessModal.errorStatus} />)}
             <div className="bread-crumb-bar">
               <div className="container">
@@ -172,7 +184,7 @@ const PostProject = () => {
                       <nav aria-label="breadcrumb" className="page-breadcrumb">
                         <ol className="breadcrumb">
                           <li className="breadcrumb-item">
-                            <Link to="/index">Home</Link>
+                            <Link to='/'>Home</Link>
                           </li>
                           <li className="breadcrumb-item" aria-current="page">
                             Post a Project
@@ -199,6 +211,7 @@ const PostProject = () => {
                               <h3>Project Name</h3>
                               <div className="form-group mb-0">
                                 <input
+                                value={projectDetails.projectTitle}
                                   type="text"
                                   className="form-control"
                                   placeholder="Enter Project Name"
@@ -217,6 +230,7 @@ const PostProject = () => {
                               <h3>Company Type</h3>
                               <div className="form-group mb-0">
                                 <input
+                                value={projectDetails.companyType}
                                   type="text"
                                   className="form-control"
                                   placeholder="Enter Company Type"
@@ -235,7 +249,7 @@ const PostProject = () => {
                               <h3>Location</h3>
                               <div className="form-group mb-0">
                                 <input
-                                  // value={projectDetails.Location}
+                                  value={projectDetails.Location}
                                   type="text"
                                   className="form-control"
                                   placeholder="Enter Location"
@@ -256,7 +270,7 @@ const PostProject = () => {
                               <div className="form-group mb-0">
 
                                 <select
-                                  // value={projectDetails.projectType} 
+                                  value={projectDetails.projectType} 
                                   className="form-control select"
                                   {...register("projectType", {
                                     required: "Please fill Project Type",
@@ -282,7 +296,7 @@ const PostProject = () => {
                               <h3>Pricing Type</h3>
                               <div className="form-group price-cont mb-0" id="price_type">
                                 <select
-                                  // value={projectDetails.amount} 
+                                  value={projectDetails.amount} 
                                   name="price" className="form-control select"
                                   {...register("pricingType", {
                                     required: "Please fill Pricing Type",
@@ -419,11 +433,11 @@ const PostProject = () => {
                                 // ref={register}
                                 /> */}
 
-                                <input type="file" className="custom-file-input"
+                                <input accept="image/*" type="file" className="custom-file-input"
                                   {...register("image", {
                                     required: "Please Add Document",
                                   })}
-                                  onChange={handleDocument}
+                                  onChange={handleChangeProfileImg}
                                 />
                                 {errors.image && <p style={{ color: "red" }}>{errors.image.message}</p>}
 
@@ -492,6 +506,7 @@ const PostProject = () => {
                                         defaultValue={date}
                                         render={() => (
                                           <DatePicker
+                                          minDate={getCurrentDate()}
                                             className="custom-date-picker"
                                             selected={date}
                                             placeholderText="Select date"

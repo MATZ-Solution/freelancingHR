@@ -16,6 +16,7 @@ const PostJob = () => {
   // #########################  VARIABLES START #########################################
   const { register, handleSubmit, formState: { errors }, watch, control, setValue } = useForm()
   let [skills, setSkills] = useState('')
+  const [date, setDate] = useState(new Date(Date.now()));
   const [jobDetails, setjobDetails] = useState({
     jobTitle: "",
     jobCategory: "",
@@ -26,7 +27,7 @@ const PostJob = () => {
     skills: [],
     jobType: "",
     jobDescription: "",
-    lastDate: "",
+    lastDate: date,
     status: "pending",
     // image: null
   })
@@ -43,7 +44,7 @@ const PostJob = () => {
   })
   let [error, setError] = useState(false)
 
-  function DateFormat(date){
+  function DateFormat(date) {
     const dates = new Date(date);
     const formatDate = `${dates.getFullYear()}-${(dates.getMonth() + 1)
       .toString()
@@ -55,7 +56,7 @@ const PostJob = () => {
           .toString()
           .padStart(2, "0")}`;
 
-          return formatDate
+    return formatDate
   }
 
 
@@ -65,9 +66,14 @@ const PostJob = () => {
 
   // #########################  HANDLE ONCHANGE START #########################################
 
-  const handleLastDate = date => {
+  const handleLastDate = (date) => {
     // const dates = new Date(date);
-    setjobDetails({ ...jobDetails, lastDate: date})
+    // setjobDetails({ ...jobDetails, lastDate: date }) 
+    setValue("lastDate", date, {
+      shouldDirty: true
+    });
+    setDate(date);
+    setjobDetails({ ...jobDetails, lastDate: date }) 
 
   }
 
@@ -88,6 +94,8 @@ const PostJob = () => {
   }
 
   const submitJob = async (data) => {
+    setjobDetails({ ...jobDetails, lastDate: date }) 
+    // setjobDetails(prevJobDetails => ({ ...prevJobDetails, lastDate: date }))
     // const skills = JSON.stringify(jobDetails.skills);
     // let formData = new FormData()
     // formData.append('jobTitle', jobDetails.jobTitle)
@@ -103,7 +111,7 @@ const PostJob = () => {
     // formData.append('status', jobDetails.status)
     // formData.append('image', jobDetails?.image || '')
     try {
-      const postProjectReq = await fetch('https://freelanceserver.xgentechnologies.com/job/job', {
+      const postProjectReq = await fetch('http://localhost:4500/job/job', {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -185,7 +193,7 @@ const PostJob = () => {
                       <nav aria-label="breadcrumb" className="page-breadcrumb">
                         <ol className="breadcrumb">
                           <li className="breadcrumb-item">
-                            <Link to="/index">Home</Link>
+                            <Link to="/">Home</Link>
                           </li>
                           <li className="breadcrumb-item" aria-current="page">
                             Post a Job
@@ -437,9 +445,12 @@ const PostJob = () => {
                                     type="text"
                                     className="form-control"
                                     placeholder="Enter Skills"
-                                    // {...register("skill", {
-                                    //   required: "Please fill skills",
-                                    // })}
+                                    {...register("skill", {
+                                      validate: {
+                                        // nonEmpty: value => value.trim() !== '' || 'Please fill skills', // Validate input field
+                                        nonEmptyArray: () => jobDetails.skills.length > 0 || 'Please add skills', // Validate skills array
+                                      },
+                                    })}
                                     onChange={(e) => { setSkills(e.target.value) }}
                                   />
 
@@ -475,6 +486,8 @@ const PostJob = () => {
                                     })
                                   }
                                 </div>
+                                <p style={{ color: "red" }}>{errors?.skill?.message}</p>
+
                               </div>
                             </div>
 
@@ -558,16 +571,31 @@ const PostJob = () => {
                             <div className="title-detail">
                               <h3>Last Date</h3>
                               <div className="form-group mb-0">
-                                <DatePicker
+                                {/* <DatePicker
                                   minDate={getCurrentDate()}
                                   className="custom-date-picker"
                                   placeholderText="Select a date"
                                   selected={jobDetails.lastDate}
                                   onChange={handleLastDate}
-                                  // dateFormat="MM/dd/yyyy"
+                                  {...register("lastDate", {
+                                    required: "Please select a date",
+                                  })}
+                                /> */}
+                                <Controller
+                                  name="lastDate"
+                                  control={control}
+                                  // defaultValue={date}
+                                  render={() => (
+                                    <DatePicker
+                                      minDate={getCurrentDate()}
+                                      className="custom-date-picker"
+                                      selected={date}
+                                      placeholderText="Select date"
+                                      onChange={handleLastDate}
+                                    />
+                                  )}
                                 />
-
-                                {/* <p style={{ color: "red" }}>{errors?.lastDate?.message}</p> */}
+                                <p style={{ color: "red" }}>{errors?.lastDate?.message}</p>
                               </div>
                             </div>
                           </div>

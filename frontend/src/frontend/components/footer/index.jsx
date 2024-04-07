@@ -41,41 +41,41 @@ const Footer = (props) => {
                   </p>
                   <ul>
                     <li>
-                      <Link to="#">
+                      <a href="https://www.facebook.com/XGenTechSolutions">
                         <i
                           className="fa-brands fa-facebook-f"
                           aria-hidden="true"
                         />
-                      </Link>
+                      </a>
                     </li>
-                    <li>
-                      <Link to="#">
+                    {/* <li>
+                      <Link to="https://www.instagram.com/xgen.technologies?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
                         <i
                           className="fa-brands fa-twitter"
                           aria-hidden="true"
                         />
                       </Link>
-                    </li>
+                    </li> */}
                     <li>
-                      <Link to="#">
+                      <a href="https://www.instagram.com/xgen.technologies?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
                         <i
                           className="fa-brands fa-instagram"
                           aria-hidden="true"
                         />
-                      </Link>
+                      </a>
                     </li>
                     <li>
-                      <Link to="#">
+                      <a href="https://www.linkedin.com/company/xgentechnologies/mycompany/">
                         <i
                           className="fa-brands fa-linkedin"
                           aria-hidden="true"
                         />
-                      </Link>
+                      </a>
                     </li>
                   </ul>
-                  <Link to="#" className="btn btn-connectus">
+                  {/* <Link to="#" className="btn btn-connectus">
                     Contact with us
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
               <div className=" col-lg-8 col-md-12">
@@ -85,61 +85,67 @@ const Footer = (props) => {
                       <h2 className="footer-title">Useful Links</h2>
                       <ul>
                         <li>
-                          <Link to="/about">
+                          <Link to="/">
                             <i className="fas fa-angle-right me-1" />
-                            About Us
+                            Home
                           </Link>
                         </li>
                         <li>
-                          <Link to="/blog-list">
+                          <Link to="/project">
                             <i className="fas fa-angle-right me-1" />
-                            Blog
+                            Project
                           </Link>
                         </li>
                         <li>
+                          <Link to="/job">
+                            <i className="fas fa-angle-right me-1" />
+                            Job
+                          </Link>
+                        </li>
+                        {/* <li>
                           <Link to="/login">
                             <i className="fas fa-angle-right me-1" />
-                            Login
+                            Register
                           </Link>
-                        </li>
+                        </li> */}
                         <li>
                           <Link to="/register">
                             <i className="fas fa-angle-right me-1" />
                             Register
                           </Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link to="/forgot-password">
                             <i className="fas fa-angle-right me-1" />
                             Forgot Password
                           </Link>
-                        </li>
+                        </li> */}
                       </ul>
                     </div>
                   </div>
                   <div className="col-xl-3 col-md-6">
                     <div className="footer-widget footer-menu">
-                      <h2 className="footer-title">Help &amp; Support</h2>
+                      <h2 className="footer-title">Our Policy</h2>
                       <ul>
                         <li>
-                          <Link to="#">
+                          <Link to="/privacy-policy">
                             <i className="fas fa-angle-right me-1" />
-                            Browse Candidates
+                            Privacy Policy
                           </Link>
                         </li>
                         <li>
-                          <Link to="#">
+                          <Link to="/cookie-policy">
                             <i className="fas fa-angle-right me-1" />
-                            Employers Dashboard
+                            Cookie Policy
                           </Link>
                         </li>
                         <li>
-                          <Link to="#">
+                          <Link to="/term-condition">
                             <i className="fas fa-angle-right me-1" />
-                            Job Packages
+                            Terms and Condition
                           </Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link to="#">
                             <i className="fas fa-angle-right me-1" />
                             Jobs Featured
@@ -150,11 +156,11 @@ const Footer = (props) => {
                             <i className="fas fa-angle-right me-1" />
                             Post A Job
                           </Link>
-                        </li>
+                        </li> */}
                       </ul>
                     </div>
                   </div>
-                  <div className="col-xl-3 col-md-6">
+                  {/* <div className="col-xl-3 col-md-6">
                     <div className="footer-widget footer-menu">
                       <h2 className="footer-title">Other Links</h2>
                       <ul>
@@ -190,41 +196,47 @@ const Footer = (props) => {
                         </li>
                       </ul>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="col-xl-3 col-md-6">
                     <div className="footer-widget footer-menu">
                       <h2 className="footer-title">Connect With Us</h2>
                       <ul>
+                      <li>
+                          <Link to="/freelancer-chats">
+                          <i className="fa-solid fa-location-dot" style={{ fontSize: '18px' }}></i>
+                           Plot # 13-C, Stadium Commercial Lane 2, DHA Phase 5, Karachi South. 
+                          </Link>
+                        </li>
                         <li>
                           <Link to="/freelancer-chats">
-                            <i className="fas fa-angle-right me-1" />
-                            Chat
+                          <i className="fa-solid fa-envelope" style={{ fontSize: '18px' }}></i>
+                            info@xgentechnologies.com
                           </Link>
                         </li>
                         <li>
                           <Link to="/faq">
-                            <i className="fas fa-angle-right me-1" />
-                            Faq
+                          <i className="fa-solid fa-phone" style={{ fontSize: '18px' }}></i>
+                            021-35342222
                           </Link>
                         </li>
-                        <li>
+                        {/* <li>
                           <Link to="/freelancer-review">
                             <i className="fas fa-angle-right me-1" />
                             Reviews
                           </Link>
-                        </li>
-                        <li>
+                        </li> */}
+                        {/* <li>
                           <Link to="/privacy-policy">
                             <i className="fas fa-angle-right me-1" />
                             Privacy Policy
                           </Link>
-                        </li>
-                        <li>
+                        </li> */}
+                        {/* <li>
                           <Link to="/term-condition">
                             <i className="fas fa-angle-right me-1" />
                             Terms of use
                           </Link>
-                        </li>
+                        </li> */}
                       </ul>
                     </div>
                   </div>
