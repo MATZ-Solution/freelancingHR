@@ -48,7 +48,10 @@ exports.createUser = async function (req, res) {
     // const selectResult = await queryRunner(getuserQuery,[email]);
     // const result = mysqliQuery(conn,qyery)
     if (selectResult[0].length > 0) {
-      return res.status(400).send("Email already exists");
+      // return res.status(400).send("Email already exists");
+      return res.status(200).json({ 
+        message: "Email already exists",
+      });
     }
 
     const hashPassword = await hashedPassword(password);
@@ -77,7 +80,10 @@ exports.createUser = async function (req, res) {
         id : insertResult[0].insertid
       });
     } else {
-      return res.status(500).send("Failed to add user");
+      return res.status(200).json({ 
+        message: "Failed to add user",
+      });
+      // return res.status(500).send("Failed to add user");
     }
   } catch (error) {
     return res.status(500).json({
@@ -305,7 +311,10 @@ exports.experience = async (req, res)=> {
         id : insertResult[0].insertId
       });
     } else {
-      return res.status(500).send("Failed to add user experience");
+      return res.status(200).json({ 
+        message: "Failed to add user experience",
+      });
+      // return res.status(500).send("Failed to add user experience");
     }
   } catch (error) {
       return res.status(500).json({
@@ -342,7 +351,10 @@ exports.education = async (req, res)=> {
         id : insertResult[0].insertId
       });
     } else {
-      return res.status(500).send("Failed to add user education");
+      return res.status(200).json({ 
+        message: "Failed to add user education",
+      });
+      // return res.status(500).send("Failed to add user education");
     }
   } catch (error) {
 
