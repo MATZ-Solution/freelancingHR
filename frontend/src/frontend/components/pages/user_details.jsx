@@ -96,7 +96,7 @@ const UserDetails = () => {
 
   const updateUserProfile = async () => {
     try {
-      const updateProfileRequest = await fetch('http://localhost:4500/profileHeader', {
+      const updateProfileRequest = await fetch('https://freelanceserver.xgentechnologies.com/profileHeader', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ const UserDetails = () => {
 
   const updateExperience = async () => {
     try {
-      const updateExperienceRequest = await fetch('http://localhost:4500/experience', {
+      const updateExperienceRequest = await fetch('https://freelanceserver.xgentechnologies.com/experience', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -169,7 +169,7 @@ const UserDetails = () => {
     formData.append('image', selectedFile)
     formData.append('type', 'cover')
     try {
-      let updateCoverImgReq = await fetch('http://localhost:4500/cover', {
+      let updateCoverImgReq = await fetch('https://freelanceserver.xgentechnologies.com/cover', {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -205,7 +205,7 @@ const UserDetails = () => {
     formData.append('image', selectedFile)
     formData.append('type', 'profile')
     try {
-      let updateProfileImgReq = await fetch('http://localhost:4500/profile', {
+      let updateProfileImgReq = await fetch('https://freelanceserver.xgentechnologies.com/profile', {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -234,7 +234,7 @@ const UserDetails = () => {
 
   const updateOverView = async () => {
     try {
-      const updateOverViewRequest = await fetch('http://localhost:4500/profileOverview', {
+      const updateOverViewRequest = await fetch('https://freelanceserver.xgentechnologies.com/profileOverview', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -266,7 +266,7 @@ const UserDetails = () => {
 
   const updateEducation = async () => {
     try {
-      const updateEducationReq = await fetch('http://localhost:4500/education', {
+      const updateEducationReq = await fetch('https://freelanceserver.xgentechnologies.com/education', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -297,7 +297,7 @@ const UserDetails = () => {
   const updateSkills = async () => {
     if (skillsArray.length !== 0) {
       try {
-        const updateSkillsReq = await fetch('http://localhost:4500/skill', {
+        const updateSkillsReq = await fetch('https://freelanceserver.xgentechnologies.com/skill', {
           method: "POST",
           headers: {
             'Content-Type': 'application/json',
@@ -329,7 +329,7 @@ const UserDetails = () => {
 
   const getProfileData = async () => {
     try {
-      const getProfileReq = await fetch('http://localhost:4500/getUserProfile', {
+      const getProfileReq = await fetch('https://freelanceserver.xgentechnologies.com/getUserProfile', {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',

@@ -163,7 +163,7 @@ const AppContainer = function (props) {
   // let [error, setError] = useState(false)
   // const Authenticate = async () => {
   //   try {
-  //     const request = await fetch(`http://localhost:4500/protected`, {
+  //     const request = await fetch(`https://freelanceserver.xgentechnologies.com/protected`, {
   //       method: "GET",
   //       headers: {
   //         'Content-Type': 'application/json',

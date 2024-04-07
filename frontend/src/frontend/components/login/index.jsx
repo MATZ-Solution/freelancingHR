@@ -29,7 +29,7 @@ const Login = () => {
 
   const LogIn = async (data) => {
     try {
-      const loginRequest = await fetch('http://localhost:4500/signin', {
+      const loginRequest = await fetch('https://freelanceserver.xgentechnologies.com/signin', {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
