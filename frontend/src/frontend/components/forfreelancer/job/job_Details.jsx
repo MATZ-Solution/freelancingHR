@@ -128,7 +128,7 @@ const JobDetails = () => {
 
   const getJobDescription = async () => {
     try {
-      const request = await fetch(`http://localhost:4500/job/getJobById/${id}`, {
+      const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/getJobById/${id}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ const JobDetails = () => {
     formdata.append('image', propsalDetails?.image || '')
 
     try {
-      const getProposalRequest = await fetch(`http://localhost:4500/job/proposalSubmit`, {
+      const getProposalRequest = await fetch(`https://freelanceserver.xgentechnologies.com/job/proposalSubmit`, {
         method: "POST",
         headers: {
           // 'Content-Type': 'application/json',

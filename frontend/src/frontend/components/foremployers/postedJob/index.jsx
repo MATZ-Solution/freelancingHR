@@ -51,7 +51,7 @@ const CompanyPostedJob = () => {
 
   const getAllJob = async () => {
     try {
-      const getAllJobRequest = await fetch(`http://localhost:4500/job/allPostJobs`, {
+      const getAllJobRequest = await fetch(`https://freelanceserver.xgentechnologies.com/job/allPostJobs`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ const CompanyPostedJob = () => {
   const getAllJobUser = async (singleJobID) => {
     setStatusDetails({ ...statusDetails, getSingleJob: singleJobID })
     try {
-      const getAllprojectRequest = await fetch(`http://localhost:4500/job/userAppliedJobs/${singleJobID}`, {
+      const getAllprojectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/job/userAppliedJobs/${singleJobID}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ const CompanyPostedJob = () => {
 
   const updateStatus = async () => {
     try {
-      const request = await fetch(`http://localhost:4500/job/updateStatus`, {
+      const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/updateStatus`, {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ const CompanyPostedJob = () => {
 
   const deleteJob = async (id) => {
     try {
-      const request = await fetch(`http://localhost:4500/job/deleteJob`, {
+      const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/deleteJob`, {
         method: "DELETE",
         headers: {
           'Content-Type': 'application/json',

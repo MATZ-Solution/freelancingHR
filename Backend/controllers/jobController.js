@@ -41,7 +41,7 @@ exports.Job = async (req, res)=> {
         if (insertResult[0].affectedRows > 0) {
           
           const id = insertResult[0].insertId;
-          console.log("asd1");
+          // console.log("asd1");
         
         // #### Skill ####
         for (let i = 0; i < skills.length; i++) {
