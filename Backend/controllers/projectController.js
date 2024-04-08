@@ -17,7 +17,8 @@ const {
     updateProjectStatusQuery,
     updateProjectQuery,
     deleteProjectImageQuery,
-    deleteProjectQuery
+    deleteProjectQuery,
+    projectByIdAppliedQuery
 
   
   } = require("../constants/queries.js");
@@ -232,11 +233,14 @@ exports.proposalSubmit = async (req, res) => {
 // ######################  Get Project by Id start #######################################
 exports.projectById = async (req, res) => {
   try {
-    const { id } = req.params;
-    // const selectResult = await queryRunner( selectQuery("project","id"), [id]);
+    const { id,userId } = req.params;
     const selectResult = await queryRunner(ProjectByIdQuery, [id]);
     if (selectResult[0].length > 0) {
-    const selectImageResult = await queryRunner(selectQuery("uploadimage","userId","type"), [id,"project"]);
+      if(userId !== 0){
+        const selectAppliedResult = await queryRunner(projectByIdAppliedQuery, [id,userId]);
+        selectResult[0][0].Applied = selectAppliedResult[0][0].userApplied == 0 ? "Not Applied" : "Applied" ;
+      }
+      const selectImageResult = await queryRunner(selectQuery("uploadimage","userId","type"), [id,"project"]);
     selectResult[0][0].image = selectImageResult[0];   
     res.status(200).json({
         statusCode: 200,

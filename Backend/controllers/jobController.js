@@ -17,7 +17,8 @@ const {
   jobByIdQuery,
   updateJobQuery,
   deleteJobQuery,
-  deleteJobSkillsQuery
+  deleteJobSkillsQuery,
+  jobByIdAppliedQuery
 
 } = require("../constants/queries.js");
 const { queryRunner } = require("../helper/queryRunner.js");
@@ -258,9 +259,14 @@ exports.userAppliedJobs = async (req, res) => {
 // ###################### Get job By ID start #######################################
 exports.jobByID = async (req, res) => {
   try {
-    const { jobId } = req.params;
+    const { jobId,userId } = req.params;
     const selectResult = await queryRunner(jobByIdQuery, [jobId]);
     if (selectResult[0].length > 0) {
+
+      if(userId !== 0){
+        const selectAppliedResult = await queryRunner(jobByIdAppliedQuery, [jobId,userId]);
+        selectResult[0][0].Applied = selectAppliedResult[0][0].userApplied == 0 ? "Not Applied" : "Applied" ;
+      }
         const selectImage = await queryRunner(selectQuery("uploadimage", "type", "userId"), ["job", jobId]);
         selectResult[0][0].Images = selectImage[0] ? [selectImage[0]] : [];
         const selectSkill = await queryRunner(selectQuery("skills", "type", "userId"), ["job", jobId]);

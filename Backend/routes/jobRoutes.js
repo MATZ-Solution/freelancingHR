@@ -14,7 +14,8 @@ router.post("/proposalSubmit", [verifyToken,upload.single('image')], jobControll
 router.get("/allAppliedJobs", verifyToken, jobController.allAppliedJobs);
 router.get("/allPostJobs", verifyToken, jobController.allPostJobs);
 router.get("/userAppliedJobs/:id", verifyToken, jobController.userAppliedJobs);
-router.get("/getJobById/:jobId", jobController.jobByID);
+// router.get("/getJobById/:jobId", jobController.jobByID);
+router.get("/getJobById/:jobId/:userId", jobController.jobByID);
 router.put("/updateStatus", verifyToken, jobController.updateStatus);
 router.put("/updateJob", verifyToken, jobController.updateJob);
 router.delete("/deleteJob", verifyToken, jobController.deleteJob);

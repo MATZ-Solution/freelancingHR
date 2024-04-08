@@ -57,4 +57,5 @@ exports.updateProjectQuery = "UPDATE project SET projectTitle = ?, Location = ?,
 exports.deleteProjectImageQuery = "DELETE FROM `uploadimage` WHERE userId = ? and type = ?";
 exports.deleteProjectQuery = "DELETE P, PP FROM project as P LEFT JOIN project_proposal as PP ON P.id = PP.projectId LEFT JOIN uploadimage as UI ON P.id = UI.userId and UI.type = 'Project' WHERE P.id = ?";
 exports.deleteJobSkillsQuery = "DELETE FROM `skills` WHERE userId = ? and type = ?";
-
+exports.projectByIdAppliedQuery = "select count(id) as userApplied from project_proposal where projectId = ? and userId = ?";
+exports.jobByIdAppliedQuery = "select count(id) as userApplied from job_proposal where jobId = ? and userId = ?";
