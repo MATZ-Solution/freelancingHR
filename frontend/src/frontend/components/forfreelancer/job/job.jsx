@@ -44,7 +44,7 @@ const Jobs = () => {
 
   const getJob = async () => {
     try {
-      const getJobRequest = await fetch('https://freelanceserver.xgentechnologies.com/job/getAllJobs', {
+      const getJobRequest = await fetch('http://localhost:4500/job/getAllJobs', {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ const Jobs = () => {
 
   const getJobAccKeywords = async () => {
     try {
-      const jobKeywordRequest = await fetch(`https://freelanceserver.xgentechnologies.com/searchJob/${keywords}`, {
+      const jobKeywordRequest = await fetch(`http://localhost:4500/searchJob/${keywords}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',

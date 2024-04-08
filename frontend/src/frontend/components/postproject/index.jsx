@@ -119,7 +119,7 @@ const PostProject = () => {
     formData.append('status', projectDetails.status)
     formData.append('image', projectDetails.image)
     try {
-      const postProjectReq = await fetch('https://freelanceserver.xgentechnologies.com/project/project', {
+      const postProjectReq = await fetch('http://localhost:4500/project/project', {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -137,6 +137,7 @@ const PostProject = () => {
         setSuccessModal({ ...showSuccessModal, status: true, message: response.message, errorStatus: false });
         setTimeout(() => {
           setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: true })
+        history.push('/company-postedProject')
         }, 2000)
         setProjectDetails({
           ...projectDetails,
@@ -293,9 +294,9 @@ const PostProject = () => {
                           {/* Price Content */}
                           <div className="title-content">
                             <div className="title-detail">
-                              <h3>Pricing Type</h3>
+                              <h3>Pricing</h3>
                               <div className="form-group price-cont mb-0" id="price_type">
-                                <select
+                                {/* <select
                                   value={projectDetails.amount} 
                                   name="price" className="form-control select"
                                   {...register("pricingType", {
@@ -307,7 +308,17 @@ const PostProject = () => {
                                   {priceTypeOption.map((option, index) => (
                                     <option key={index} value={option}>{option}</option>
                                   ))}
-                                </select>
+                                </select> */}
+                                <input
+                                  value={projectDetails.amount}
+                                  type="text"
+                                  className="form-control"
+                                  placeholder="Enter Pricing"
+                                  {...register("pricingType", {
+                                    required: "Please fill Pricing",
+                                  })}
+                                  onChange={(e) => setProjectDetails({ ...projectDetails, amount: e.target.value })}
+                                />
                                 <p style={{ color: "red" }}>{errors?.pricingType?.message}</p>
 
                               </div>
@@ -420,7 +431,7 @@ const PostProject = () => {
 
                           <div className="title-content">
                             <div className="title-detail">
-                              <h3>Add Documents</h3>
+                              <h3>Add Image</h3>
                               <div className="custom-file">
                                 {/* <input
                                   name="image"

@@ -33,7 +33,7 @@ const CompanyPostedProject = () => {
 
     const getAllProject = async () => {
         try {
-            const getAllprojectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/allPostProject`, {
+            const getAllprojectRequest = await fetch(`http://localhost:4500/project/allPostProject`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const CompanyPostedProject = () => {
 
     const getAllProjectUser = async (singleProjectID) => {
         try {
-            const getAllprojectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/userAppliedProject/${singleProjectID}`, {
+            const getAllprojectRequest = await fetch(`http://localhost:4500/project/userAppliedProject/${singleProjectID}`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ const CompanyPostedProject = () => {
 
     const deleteProject = async (id) => {
         try {
-            const request = await fetch(`https://freelanceserver.xgentechnologies.com/project/deleteProject`, {
+            const request = await fetch(`http://localhost:4500/project/deleteProject`, {
                 method: "DELETE",
                 headers: {
                     'Content-Type': 'application/json',
@@ -178,7 +178,7 @@ const CompanyPostedProject = () => {
                                 <div className="table-top-section">
                                 </div>
                                 {
-                                    projectData ?
+                                    projectData.length ===0 ?
                                         <p>No Project Found.</p>
                                         :
                                         <div className="table-responsive">

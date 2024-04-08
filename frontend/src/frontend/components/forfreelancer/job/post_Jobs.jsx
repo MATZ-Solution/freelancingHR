@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import DatePicker from 'react-datepicker';
@@ -15,6 +15,7 @@ const PostJob = () => {
 
   // #########################  VARIABLES START #########################################
   const { register, handleSubmit, formState: { errors }, watch, control, setValue } = useForm()
+  const history = useHistory();
   let [skills, setSkills] = useState('')
   const [date, setDate] = useState(new Date(Date.now()));
   const [jobDetails, setjobDetails] = useState({
@@ -33,8 +34,8 @@ const PostJob = () => {
   })
 
   const jobCategoryOption = ['A', 'B', 'C']
-  const categoryOption = ['Apps Development', 'UI Development', 'Java']
-  const priceTypeOption = ['Fixed Budget Price', 'Hourly Pricing', 'Biding Price']
+  const categoryOption = ['Onsite', 'Remote', 'Hybrid']
+  const priceTypeOption = ['Onsite', 'Remote', 'Hybrid']
   let token = localStorage.getItem('token')
 
   let [showSuccessModal, setSuccessModal] = useState({
@@ -111,7 +112,7 @@ const PostJob = () => {
     // formData.append('status', jobDetails.status)
     // formData.append('image', jobDetails?.image || '')
     try {
-      const postProjectReq = await fetch('https://freelanceserver.xgentechnologies.com/job/job', {
+      const postProjectReq = await fetch('http://localhost:4500/job/job', {
         method: "POST",
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -132,21 +133,23 @@ const PostJob = () => {
         setSuccessModal({ ...showSuccessModal, status: true, message: response.message, errorStatus: false });
         setTimeout(() => {
           setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: true })
+          history.push('/company-postedJob')
         }, 2000)
-        // setjobDetails({
-        //   jobTitle: "",
-        //   jobCategory: "",
-        //   pay: "",
-        //   shift: "",
-        //   location: "",
-        //   qualification: "",
-        //   skills: "",
-        //   jobType: "",
-        //   jobDescription: "",
-        //   lastDate: "",
-        //   status: "pending",
-        //   image: null
-        // })
+        setjobDetails({
+          jobTitle: "",
+          jobCategory: "",
+          pay: "",
+          shift: "",
+          location: "",
+          qualification: "",
+          skills: [],
+          jobType: "",
+          jobDescription: "",
+          lastDate: "",
+          status: "pending",
+          image: null
+        })
+        // history.push('/company-postedJob')
       }
     } catch (err) {
       setError(true)

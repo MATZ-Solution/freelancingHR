@@ -81,7 +81,7 @@ const EditJob = () => {
     // #########################  SUBMIT PROJECT FUNCTION START #########################################
     const getSingleJobData = async () => {
         try {
-            const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/getJobById/${id}`, {
+            const request = await fetch(`http://localhost:4500/job/getJobById/${id}`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ const EditJob = () => {
         // formData.append('image', jobDetails.image)
         if(jobDetails.jobTitle && jobDetails.jobCategory && jobDetails.pay && jobDetails.shift && jobDetails.location && jobDetails.qualification && jobDetails.skills.length !== 0 && jobDetails.jobType && jobDetails.jobDescription && jobDetails.lastDate){
             try {
-                const postProjectReq = await fetch('https://freelanceserver.xgentechnologies.com/job/updateJob', {
+                const postProjectReq = await fetch('http://localhost:4500/job/updateJob', {
                     method: "PUT",
                     headers: {
                         'Authorization': `Bearer ${token}`,

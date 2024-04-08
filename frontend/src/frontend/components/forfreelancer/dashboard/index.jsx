@@ -134,7 +134,7 @@ const FreelancerDashboard = () => {
 
   const getDashboardDetails = async () => {
     try {
-      const request = await fetch(`https://freelanceserver.xgentechnologies.com/freelancingDashboard`, {
+      const request = await fetch(`http://localhost:4500/freelancingDashboard`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',

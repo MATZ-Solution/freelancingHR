@@ -149,7 +149,7 @@ const Home = () => {
 
   const getCategory = async () => {
     try {
-      const getCategoryRequest = await fetch('https://freelanceserver.xgentechnologies.com/project/projectCategoryCount', {
+      const getCategoryRequest = await fetch('http://localhost:4500/project/projectCategoryCount', {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',

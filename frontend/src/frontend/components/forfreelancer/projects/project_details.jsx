@@ -28,10 +28,14 @@ import SuccessModal from '../../../../admin/component/pages/CustomModal/index'
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import parse from 'html-react-parser';
+import { useSelector } from 'react-redux'
+import InfoModal from "../../../../admin/component/pages/CustomModal/InfoModal";
+import getCurrentDate from "../../../../CustomFunction/reactDatepickerVal";
 
 const CompanyProfile = () => {
-  const [modalOpen,setModalOpen] = useState('#')
-
+  const [modalOpen, setModalOpen] = useState('#')
+  const userType = useSelector(state => state.UserType.userType)
+  console.log("this is user type", userType)
   const [date, setDate] = useState(new Date());
   const [rows, setRows] = useState([
     // Initial rows
@@ -114,6 +118,25 @@ const CompanyProfile = () => {
 
   }
 
+  let [messageInfo, setMessageInfo] = useState('')
+  let [allow, setAllow] = useState(false)
+  function submitProposal() {
+    if (!userType || userType === 'company') {
+      // alert("Please Login as candidate to apply")
+      setMessageInfo('Please Login as candidate to apply');
+    } else {
+      setAllow(true)
+    }
+  }
+
+  useEffect(() => {
+    if (userType === 'freelancer') {
+      setAllow(true)
+    } else {
+      setAllow(false)
+    }
+  })
+
 
   // #########################  FUNCTION  END #########################################
 
@@ -126,7 +149,7 @@ const CompanyProfile = () => {
 
   const getProjectDescription = async () => {
     try {
-      const getProjectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/projectById/${id}`, {
+      const getProjectRequest = await fetch(`http://localhost:4500/project/projectById/${id}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -149,7 +172,7 @@ const CompanyProfile = () => {
 
   const sendproposal = async () => {
     try {
-      const getProposalRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/proposalSubmit`, {
+      const getProposalRequest = await fetch(`http://localhost:4500/project/proposalSubmit`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -219,7 +242,7 @@ const CompanyProfile = () => {
     <>
       {/* Breadcrumb */}
       {/* <ErrorModal message={'Something Went Wrong'} /> */}
-
+      {messageInfo === 'Please Login as candidate to apply' && (<InfoModal setMessageInfo={setMessageInfo} message={'Please Login as candidate to apply'} />)}
       <EmployerBreadcrumb title="Project Details" subtitle="Project Details" coverImage={coverImage ? coverImage : sampleCoverImage} />
       {/* /Breadcrumb */}
 
@@ -674,18 +697,18 @@ const CompanyProfile = () => {
                     <div className="card budget-widget">
                       <div className="budget-widget-details">
                         <h6>Budget</h6>
-                        <h4>{data?.HourlyRate}$</h4>
-                        {/* <p className="mb-0">Hourly Rate</p> */}
+                        <h4>{data?.amount}$</h4>
                       </div>
-                      <div>
-                        <Link
-                          data-bs-toggle="modal"
-                          to="#file"
-                          className="btn proposal-btn btn-primary"
-                        >
-                          Submit Proposal
-                        </Link>
-                      </div>
+
+                      <Link
+                        data-bs-toggle={allow ? "modal" : ""}
+                        to={`${allow ? '#file' : '#'}`}
+                        onClick={submitProposal}
+                        className="btn proposal-btn btn-primary"
+                      >
+                        Submit Proposal
+                      </Link>
+
                     </div>
                     <div className="card budget-widget">
                       <div className="budget-widget-details">
@@ -915,6 +938,7 @@ const CompanyProfile = () => {
                         >
                           <label className="form-label">Start Date</label>
                           <DatePicker
+                            minDate={getCurrentDate()}
                             selected={propsalDetails.startDate}
                             onChange={handleChangestartDate}
                             className="form-control datetimepicker"
@@ -928,6 +952,7 @@ const CompanyProfile = () => {
                         >
                           <label className="form-label">End Date</label>
                           <DatePicker
+                            minDate={getCurrentDate()}
                             selected={propsalDetails.endDate}
                             onChange={handleChangeEndDate}
                             className="form-control datetimepicker"

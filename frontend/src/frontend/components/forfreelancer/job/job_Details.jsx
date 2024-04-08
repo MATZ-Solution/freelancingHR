@@ -24,9 +24,12 @@ import SuccessModal from '../../../../admin/component/pages/CustomModal/index'
 import { useParams } from 'react-router-dom';
 import ErrorModal from "../../../../admin/component/pages/CustomModal/ErrorsModal";
 import sampleCoverImage from '../../../assets/img/bg/breadcrumb-bg.png'
+import { useSelector } from 'react-redux'
+import InfoModal from "../../../../admin/component/pages/CustomModal/InfoModal";
 
 const JobDetails = () => {
 
+  const userType = useSelector(state => state.UserType.userType)
   const [date, setDate] = useState(new Date());
   const handleChange = (date) => {
     setDate(date);
@@ -98,13 +101,34 @@ const JobDetails = () => {
     setProposalDetails({ ...propsalDetails, image: selectedFile })
   }
 
+  let [allow, setAllow] = useState(false)
+  let [messageInfo, setMessageInfo] = useState('')
+
+  function submitProposal() {
+    if (!userType || userType === 'company') {
+      // alert("Please Login as candidate to apply")
+      setMessageInfo('Please Login as candidate to apply');
+
+    } else {
+      setAllow(true)
+    }
+  }
+
+  useEffect(() => {
+    if (userType === 'freelancer') {
+      setAllow(true)
+    } else {
+      setAllow(false)
+    }
+  })
+
   // #########################  HANDLE CHANGE FUNCTION END #########################################
 
   // #########################  API START #########################################
 
   const getJobDescription = async () => {
     try {
-      const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/getJobById/${id}`, {
+      const request = await fetch(`http://localhost:4500/job/getJobById/${id}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -133,7 +157,7 @@ const JobDetails = () => {
     formdata.append('image', propsalDetails?.image || '')
 
     try {
-      const getProposalRequest = await fetch(`https://freelanceserver.xgentechnologies.com/job/proposalSubmit`, {
+      const getProposalRequest = await fetch(`http://localhost:4500/job/proposalSubmit`, {
         method: "POST",
         headers: {
           // 'Content-Type': 'application/json',
@@ -199,6 +223,7 @@ const JobDetails = () => {
   return (
     <>
       {/* Breadcrumb */}
+      {messageInfo === 'Please Login as candidate to apply' && (<InfoModal setMessageInfo={setMessageInfo} message={'Please Login as candidate to apply'} />)}
       <EmployerBreadcrumb title="Job Details" subtitle="Project Details" coverImage={descriptionData[0]?.coverImage ? descriptionData[0]?.coverImage : sampleCoverImage} />
 
       {/* <EmployerBreadcrumb title="Job Details" subtitle="Project Details" /> */}
@@ -613,8 +638,9 @@ const JobDetails = () => {
                   </div>
                   <div>
                     <Link
-                      data-bs-toggle="modal"
-                      to="#file"
+                      data-bs-toggle={allow ? "modal" : ""}
+                      to={`${allow ? '#file' : '#'}`}
+                      onClick={submitProposal}
                       className="btn proposal-btn btn-primary"
                     >
                       Apply Now

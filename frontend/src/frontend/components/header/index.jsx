@@ -132,7 +132,7 @@ const Header = (props) => {
   }
   const Authenticate = async () => {
     try {
-      const request = await fetch(`https://freelanceserver.xgentechnologies.com/protected`, {
+      const request = await fetch(`http://localhost:4500/protected`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',

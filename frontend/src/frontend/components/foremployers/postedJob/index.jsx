@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import StickyBox from "react-sticky-box";
 import { bank_line, paypal_line, wallet_icon } from "../../imagepath";
 import { Sidebar } from "../sidebar";
@@ -11,7 +11,7 @@ import SuccessModal from '../../../../admin/component/pages/CustomModal/index'
 const CompanyPostedJob = () => {
 
   // #########################  VARIABLE START #########################################
-
+  const history = useHistory();
   let [error, setError] = useState(false)
   let [flag, setFlag] = useState(false)
   let token = localStorage.getItem('token')
@@ -33,14 +33,14 @@ const CompanyPostedJob = () => {
     { value: 3, label: "reject" },
   ];
 
-  const cancelModal = () => {
-    let modal = document.getElementById('changeStatus')
-    if (modal) {
-      modal.classList.remove('show')
-      modal.style.display = 'none'
-      modal.setAttribute('aria-modal', 'false');
-    }
-  }
+  // const cancelModal = () => {
+  //   let modal = document.getElementById('changeStatus')
+  //   if (modal) {
+  //     modal.classList.remove('show')
+  //     modal.style.display = 'none'
+  //     modal.setAttribute('aria-modal', 'false');
+  //   }
+  // }
 
 
   // #########################  VARIABLE END #########################################
@@ -51,7 +51,7 @@ const CompanyPostedJob = () => {
 
   const getAllJob = async () => {
     try {
-      const getAllJobRequest = await fetch(`https://freelanceserver.xgentechnologies.com/job/allPostJobs`, {
+      const getAllJobRequest = await fetch(`http://localhost:4500/job/allPostJobs`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ const CompanyPostedJob = () => {
   const getAllJobUser = async (singleJobID) => {
     setStatusDetails({ ...statusDetails, getSingleJob: singleJobID })
     try {
-      const getAllprojectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/job/userAppliedJobs/${singleJobID}`, {
+      const getAllprojectRequest = await fetch(`http://localhost:4500/job/userAppliedJobs/${singleJobID}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ const CompanyPostedJob = () => {
 
   const updateStatus = async () => {
     try {
-      const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/updateStatus`, {
+      const request = await fetch(`http://localhost:4500/job/updateStatus`, {
         method: "PUT",
         headers: {
           'Content-Type': 'application/json',
@@ -127,7 +127,9 @@ const CompanyPostedJob = () => {
         setTimeout(() => {
           setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: true })
         }, 2000)
-        cancelModal()
+        setFlag(true)
+        history.push('/company-postedJob')
+        // cancelModal()
       }
     } catch (err) {
       console.log(err)
@@ -137,7 +139,7 @@ const CompanyPostedJob = () => {
 
   const deleteJob = async (id) => {
     try {
-      const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/deleteJob`, {
+      const request = await fetch(`http://localhost:4500/job/deleteJob`, {
         method: "DELETE",
         headers: {
           'Content-Type': 'application/json',
@@ -232,7 +234,7 @@ const CompanyPostedJob = () => {
   return (
     <>
       {/* Page Content */}
-      {showSuccessModal.status && (<SuccessModal message={showSuccessModal.message} errorStatus={showSuccessModal.errorStatus} />)}
+      {/* {showSuccessModal.status && (<SuccessModal message={showSuccessModal.message} errorStatus={showSuccessModal.errorStatus} />)} */}
 
       <div className="content">
         <div className="container-fluid">
@@ -359,7 +361,7 @@ const CompanyPostedJob = () => {
                                   <td>{data.jobCategory}</td>
                                   <td>{data.jobType}</td>
                                   <td>
-                                    <div className={`badge ${data.status === 'pending' ? 'badge-pending' : data.status === 'success' ? 'badge-success' : 'badge-fail'}`}>
+                                    <div className={`badge ${data.status === 'pending' ? 'badge-pending' : data.status === 'approved' ? 'badge-success' : 'badge-fail'}`}>
                                       <span>{data.status}</span>
                                     </div>
                                   </td>
@@ -532,7 +534,7 @@ const CompanyPostedJob = () => {
                                     <td>{data?.email}</td>
                                     <td>{data?.phoneNumber ? <>{data?.phoneNumber}</> : <p style={{ color: "red" }}>Not Available</p>}</td>
                                     <td>
-                                      <div className={`badge ${data?.status === 'pending' ? 'badge-pending' : data.status === 'success' ? 'badge-success' : 'badge-fail'}`}>
+                                      <div className={`badge ${data?.status === 'pending' ? 'badge-pending' : data.status === 'approved' ? 'badge-success' : 'badge-fail'}`}>
                                         <span>{data?.status}</span>
                                       </div>
                                     </td>
