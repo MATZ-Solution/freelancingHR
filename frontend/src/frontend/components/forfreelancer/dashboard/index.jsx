@@ -6,6 +6,7 @@ import { Avatar_1, Avatar_2, Avatar_3, Avatar_5, flag_icon, freelancer_dash_icon
 import { Sidebar } from '../sidebar';
 import ErrorModal from "../../../../admin/component/pages/CustomModal/ErrorsModal";
 import { useState } from "react";
+import Loader from "../../loader";
 
 const FreelancerDashboard = () => {
   var chartprofileoptions = {
@@ -128,7 +129,8 @@ const FreelancerDashboard = () => {
   let [error, setError] = useState(false)
   let [dashboardData, setDashboardData] = useState([])
   let token = localStorage.getItem('token')
-  console.log("this is data", dashboardData)
+  let [allJobs, setAllJobs] = useState([])
+  let [loader, setLoader] = useState(true)
 
   // #########################  API START #########################################
 
@@ -155,8 +157,45 @@ const FreelancerDashboard = () => {
     }
   }
 
+  const getAllJob = async () => {
+    try {
+      const getAllJobRequest = await fetch(`https://freelanceserver.xgentechnologies.com/job/allAppliedJobs`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
+      })
+      if (!getAllJobRequest.ok) {
+        setError(true)
+        setLoader(false)
+
+      }
+      const response = await getAllJobRequest.json()
+      console.log(response)
+      if (response.message === 'Success' || response.message === 'Jobs Not Found') {
+        setAllJobs(response?.data)
+        setLoader(false)
+      }
+    } catch (err) {
+      console.log(err)
+      setError(true)
+      setLoader(false)
+
+    }
+  }
+  console.log("this is loader", loader)
   // #########################  API END  #########################################
 
+  function dates(date) {
+    const dates = new Date(date);
+    const formattedDate = dates.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+    return formattedDate
+  }
 
   // #########################  USE EFFECT START  #########################################
 
@@ -180,7 +219,14 @@ const FreelancerDashboard = () => {
     getDashboardDetails()
   }, [])
 
+  useEffect(() => {
+    getAllJob()
+  }, [])
+
   // #########################  USE EFFECT END #########################################
+  if (loader) {
+    return <Loader />
+  }
 
   if (error) {
     return <ErrorModal message={'Something Went Wrong'} />
@@ -200,7 +246,7 @@ const FreelancerDashboard = () => {
             </div>
             <div className="col-xl-9 col-md-8">
               <div className="dashboard-sec">
-                <div className="row">
+                <div className="row" >
                   <div className="col-md-6 col-lg-4 col-xl-3">
                     <div className="dash-widget">
                       <div className="dash-info">
@@ -211,24 +257,9 @@ const FreelancerDashboard = () => {
                       </div>
                       <div className="dash-widget-more d-flex align-items-center justify-content-between">
                         <div className="dash-widget-count">{dashboardData[0]?.appliedJob}</div>
-                        {/* <Link to="/freelancer-completed-projects" className="d-flex">View Details</Link> */}
                       </div>
                     </div>
                   </div>
-                  {/* <div className="col-md-6 col-lg-4 col-xl-3">
-                    <div className="dash-widget">
-                      <div className="dash-info">
-                        <div className="dashboard-icon dashboard-icon-two">
-                          <img src={freelancer_dash_icon_02} alt="Img" />
-                        </div>
-                        <div className="dash-widget-info">Total Project</div>
-                      </div>
-                      <div className="dash-widget-more d-flex align-items-center justify-content-between">                        
-                      <div className="dash-widget-count">{dashboardData[0]?.totalProject}</div>
-                        <Link to="/freelancer-completed-projects" className="d-flex">View Details</Link>
-                      </div>
-                    </div>
-                  </div> */}
                   <div className="col-md-6 col-lg-4 col-xl-3">
                     <div className="dash-widget">
                       <div className="dash-info">
@@ -238,25 +269,60 @@ const FreelancerDashboard = () => {
                         <div className="dash-widget-info">Applied Project</div>
                       </div>
                       <div className="dash-widget-more d-flex align-items-center justify-content-between">
-                      <div className="dash-widget-count">{dashboardData[0]?.appliedProject}</div>
-                        {/* <Link to="/freelancer-completed-projects" className="d-flex">View Details</Link> */}
+                        <div className="dash-widget-count">{dashboardData[0]?.appliedProject}</div>
                       </div>
                     </div>
                   </div>
-                  {/* <div className="col-md-6 col-lg-4 col-xl-3">
-                    <div className="dash-widget">
-                      <div className="dash-info">
-                        <div className="dashboard-icon dashboard-icon-four">
-                          <img src={freelancer_dash_icon_04} alt="Img" />
-                        </div>
-                        <div className="dash-widget-info">Earning</div>
-                      </div>
-                      <div className="dash-widget-more d-flex align-items-center justify-content-between">
-                        <div className="dash-widget-count">5962</div>
-                        <Link to="/freelancer-completed-projects" className="d-flex">View Details</Link>
-                      </div>
+                </div>
+                {/* <div className="col-xl-9 col-lg-8"> */}
+                <div className="">
+                  <div className="dashboard-sec payout-section">
+                    <div className="page-title portfolio-title" style={{ marginBottom: "0px" }}>
+                      <h3 className="mb-0">Recently Applied Job</h3>
                     </div>
-                  </div> */}
+                    <div className="table-top-section">
+                    </div>
+
+                    {
+                      !allJobs ?
+                        <p>No Job Found</p>
+                        :
+                        <div className="table-responsive">
+                          <table className="table">
+                            <thead>
+                              <tr>
+                                <th>Job Title</th>
+                                <th>Job Category</th>
+                                <th>Job Type</th>
+                                <th>Status</th>
+                                <th>Last Date</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {
+                                allJobs?.map((data, index) => {
+                                  return (
+                                    <tr key={index}>
+                                      <td>{data.jobTitle}</td>
+                                      <td>{data.jobCategory}</td>
+                                      <td>{data.jobType}</td>
+                                      <td>
+                                        <div className={`badge ${data.status === 'pending' ? 'badge-pending' : data.status === 'success' ? 'badge-success' : 'badge-fail'}`}>
+                                          <span>{data.status}</span>
+                                        </div>
+                                      </td>
+                                      <td>{dates(data.lastDate)}</td>
+                                    </tr>
+                                  )
+                                })
+                              }
+
+                            </tbody>
+                          </table>
+                        </div>
+                    }
+                    {/* /Table */}
+                  </div>
                 </div>
                 {/* Chart Content */}
                 {/* <div className="row">

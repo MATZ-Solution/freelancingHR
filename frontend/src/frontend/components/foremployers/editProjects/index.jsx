@@ -13,12 +13,16 @@ import { useForm, Controller } from 'react-hook-form'
 import { useHistory } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
 import getCurrentDate from "../../../../CustomFunction/reactDatepickerVal";
+import { useSelector } from 'react-redux'
 
 const EditProject = () => {
 
 
     // #########################  VARIABLES START #########################################
     let { id } = useParams();
+    let {userId} = useSelector(state=> state.freelancerDetails.data)
+  console.log("this is user Id from job details", userId)
+
     const { register, handleSubmit, formState: { errors }, watch, control, setValue } = useForm()
     const getImage = watch("image");
     const history = useHistory();
@@ -99,7 +103,7 @@ const EditProject = () => {
 
     const getProjectDescription = async () => {
         try {
-            const getProjectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/projectById/${id}`, {
+            const getProjectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/projectById/${id}/${userId}`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',

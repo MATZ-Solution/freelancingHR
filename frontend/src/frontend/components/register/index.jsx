@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom'
 import Modal from '../../../admin/component/pages/CustomModal/index'
 // import ErrorModal from '../../../admin/component/pages/CustomModal/ErrorsModal';
+import ErrorModal from '../../../admin/component/pages/CustomModal/ErrorsModal';
 
 function FormFreelancer(props) {
   const { register, handleSubmit, formState: { errors }, getValues } = useForm()
@@ -32,6 +33,10 @@ function FormFreelancer(props) {
         body: JSON.stringify({ ...data, userType: currentPage })
       })
 
+      if (!registerRequest.ok) {
+        // setError(true)
+        alert("Some thing went wrong")
+      }
       const response = await registerRequest.json()
       console.log("this is freelancer sigin up response", response)
       if (response.message === 'Email already exists') {
@@ -53,6 +58,7 @@ function FormFreelancer(props) {
       if (err.message === 'Failed to fetch') {
         setMessage("Server Can't respond")
       }
+      alert("Some thing went wrong")
     }
   }
 
@@ -73,6 +79,7 @@ function FormFreelancer(props) {
     return () => { document.body.className = ''; }
   });
 
+ 
   return (
     <div role="tabpanel" id="company" className="tab-pane fade active show">
 
@@ -237,7 +244,10 @@ function FormCompany(props) {
         },
         body: JSON.stringify({ ...data, userType: currentPage })
       })
-
+      if (!registerRequest.ok) {
+        // setError(true)
+        alert("Some thing went wrong")
+      }
       const response = await registerRequest.json()
       if (response.message === 'Email already exists') {
         setMessage(response.message)
@@ -258,6 +268,8 @@ function FormCompany(props) {
       // cons
       console.log(err)
       console.log("this is error")
+      alert("Some thing went wrong")
+
     }
   }
 
@@ -422,7 +434,9 @@ const Register = () => {
     return () => { document.body.className = ''; }
   });
 
-
+  // if(error){
+  //   return <ErrorModal/>
+  // }
   return (
     <>
       {/* Page Content */}

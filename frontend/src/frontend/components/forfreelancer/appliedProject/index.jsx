@@ -5,6 +5,7 @@ import { bank_line, paypal_line, wallet_icon } from "../../imagepath";
 import { Sidebar } from "../sidebar";
 import { useState } from "react";
 import ErrorModal from "../../../../admin/component/pages/CustomModal/ErrorsModal";
+import Loader from "../../loader";
 
 const FreelancerAppliedProject = () => {
   useEffect(() => {
@@ -17,7 +18,7 @@ const FreelancerAppliedProject = () => {
   let [error, setError] = useState(false)
   let token = localStorage.getItem('token')
   let [projectData, setProjectData] = useState([])
-
+  let [loader, setLoader] = useState(true)
   const getAllProject = async () => {
     try {
       const getAllProjectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/allAppliedProject`, {
@@ -29,37 +30,45 @@ const FreelancerAppliedProject = () => {
       })
       if (!getAllProjectRequest.ok) {
         setError(true)
+        setLoader(false)
       }
       const response = await getAllProjectRequest.json()
       console.log(response)
-      if (response.message === 'Success') {
+      if (response?.message === 'Success' || response?.message === 'Project Not Found') {
         setProjectData(response?.data)
+        setLoader(false)
       }
     } catch (err) {
       console.log(err)
       setError(true)
+      setLoader(false)
+
     }
   }
 
 
-    // #########################  FUNCTION START #########################################
+  // #########################  FUNCTION START #########################################
 
-    function dates(date) {
-      const dates = new Date(date);
-      const formattedDate = dates.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
-      });
-      return formattedDate
-    }
-  
-    // ######################### FUNCTION END #########################################
-  
+  function dates(date) {
+    const dates = new Date(date);
+    const formattedDate = dates.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+    return formattedDate
+  }
+
+  // ######################### FUNCTION END #########################################
+
 
   useEffect(() => {
     getAllProject()
   }, [])
+
+  if (loader) {
+    return <Loader />
+  }
 
   if (error) {
     return <ErrorModal message={'Something Went Wrong'} />
@@ -172,36 +181,41 @@ const FreelancerAppliedProject = () => {
                     <h5 className="mb-0">Payout History</h5>
                   </div> */}
                 </div>
-                <div className="table-responsive">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th>Project Title</th>
-                        <th>Project Type</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Delievery Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {
-                        projectData?.map((data, index) => {
-                          return (
-                            <tr key={index}>
-                            <td>{data.projectTitle}</td>
-                            <td>{data.projectType}</td>
-                            <td>{data.amount}</td>
-                            <td>
-                            <div className={`badge ${ data.status === 'pending' ? 'badge-pending': data.status === 'success'? 'badge-success' : 'badge-fail'}`}>
-                                <span>{data.status}</span>
-                              </div>
-                            </td>
-                            <td>{dates(data.deliveryDate)}</td>
+
+                {
+                  !projectData ?
+                    <p>No Project Found</p>
+                    :
+                    <div className="table-responsive">
+                      <table className="table">
+                        <thead>
+                          <tr>
+                            <th>Project Title</th>
+                            <th>Project Type</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Delievery Date</th>
                           </tr>
-  )
-                        })
-                      }
-                      {/* <tr>
+                        </thead>
+                        <tbody>
+                          {
+                            projectData?.map((data, index) => {
+                              return (
+                                <tr key={index}>
+                                  <td>{data.projectTitle}</td>
+                                  <td>{data.projectType}</td>
+                                  <td>{data.amount}</td>
+                                  <td>
+                                    <div className={`badge ${data.status === 'pending' ? 'badge-pending' : data.status === 'success' ? 'badge-success' : 'badge-fail'}`}>
+                                      <span>{data.status}</span>
+                                    </div>
+                                  </td>
+                                  <td>{dates(data.deliveryDate)}</td>
+                                </tr>
+                              )
+                            })
+                          }
+                          {/* <tr>
                         <td>29 Sep 2023, 11:26 PM</td>
                         <td>PayPal</td>
                         <td>$80.00</td>
@@ -256,9 +270,10 @@ const FreelancerAppliedProject = () => {
                         </td>
                         <td>02 Sep 2023, 08:42 PM</td>
                       </tr> */}
-                    </tbody>
-                  </table>
-                </div>
+                        </tbody>
+                      </table>
+                    </div>
+                }
                 {/* /Table */}
               </div>
             </div>

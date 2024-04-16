@@ -41,14 +41,16 @@ exports.GetProjectProposalQuery = "SELECT * FROM user as u left join project_pro
 exports.GetJobProposalQuery = "SELECT * FROM user as u LEFT join job_proposal as jp on u.id = jp.userId LEFT join job as j on j.id = jp.jobId where jp.userId = ?";
 exports.projectSearchQuery = `SELECT * FROM project WHERE projectTitle LIKE ? OR projectType LIKE ? OR description LIKE ?`;
 exports.jobSearchQuery = `SELECT * FROM job WHERE jobDescription LIKE ? OR jobType LIKE ? OR jobCategory LIKE ? OR jobTitle LIKE ? OR skills LIKE ? OR qualification LIKE ?`;
-exports.postProjectQuery = `SELECT * FROM user as u LEFT join project as P on u.id = P.userId where P.userId = ?`;
-exports.postJobQuery = `SELECT * FROM user as u LEFT join job as J on u.id = J.userId where J.userId = ?`;
+exports.postProjectQuery = `SELECT *, P.createdAt as projectCreatedAt FROM user as u LEFT join project as P on u.id = P.userId where P.userId = ? order by projectCreatedAt`;
+exports.postJobQuery = `SELECT *, J.createdAt as jobCreatedAt FROM user as u LEFT join job as J on u.id = J.userId where J.userId = ? order by jobCreatedAt DESC`;
 exports.userProjectAppliedQuery = "SELECT * FROM `user` as U LEFT JOIN project_proposal as PP on U.id = PP.userId where PP.projectId = ?";
 exports.userJobAppliedQuery = "SELECT U.firstName, U.lastName, U.email, U.phoneNumber, JP.notice_Period, JP.resume, JP.resumeKey, JP.status, JP.createdAt  FROM `user` as U LEFT JOIN job_proposal as JP on U.id = JP.userId where JP.jobId = ?";
 exports.userDashboardQuery = "select (select count(*) from job) as totalJobs, (select count(*) from job_proposal as JP INNER JOIN user as U ON JP.userId = U.id WHERE JP.userId = ? ) as appliedJob, (select count(*) from project) as totalProject, (select count(*) from project_proposal as PP INNER JOIN user as U ON PP.userId = U.id WHERE PP.userId = ? ) as 	appliedProject";
 exports.updateStatusQuery = "UPDATE job SET status = ? WHERE id = ?";
 exports.updateProjectStatusQuery = "UPDATE project SET status = ? WHERE id = ?";
 exports.jobByIdQuery = "SELECT *,(select count(id) from job_proposal where jobId = J.id) as totalProposal FROM `job` as J LEFT JOIN user as U on J.userId = U.id LEFT JOIN user_company as UC on U.id = UC.userId where J.id = ?";
+exports.jobByIdAppliedQuery = "select count(id) as userApplied from job_proposal where jobId = ? and userId = ?";
+exports.projectByIdAppliedQuery = "select count(id) as userApplied from project_proposal where projectId = ? and userId = ?";
 exports.websiteCountQuery = "select (SELECT COUNT(id) FROM `user` where userType = 'freelancer') as totalfreelancer, (SELECT COUNT(id) FROM `user` where userType = 'company') as totalCompany, (SELECT COUNT(id) FROM `project` ) as totalProject  ,(SELECT COUNT(id) FROM `project` where status = 'Completed') as totalCompletedProject;";
 exports.updateJobQuery = "UPDATE `job` set jobTitle = ?, jobCategory = ?, pay = ?, shift = ?, location = ?, qualification = ? , jobType = ?, jobDescription = ?, updatedAt = ? where id = ? and userId = ? ";
 // exports.updateJobQuery = "UPDATE `job` set jobTitle = ?, jobCategory = ?, pay = ?, shift = ?, location = ?, qualification = ?, jobType = ?, jobDescription = ? where id = ? and userId = ? ";
@@ -57,5 +59,6 @@ exports.updateProjectQuery = "UPDATE project SET projectTitle = ?, Location = ?,
 exports.deleteProjectImageQuery = "DELETE FROM `uploadimage` WHERE userId = ? and type = ?";
 exports.deleteProjectQuery = "DELETE P, PP FROM project as P LEFT JOIN project_proposal as PP ON P.id = PP.projectId LEFT JOIN uploadimage as UI ON P.id = UI.userId and UI.type = 'Project' WHERE P.id = ?";
 exports.deleteJobSkillsQuery = "DELETE FROM `skills` WHERE userId = ? and type = ?";
-exports.projectByIdAppliedQuery = "select count(id) as userApplied from project_proposal where projectId = ? and userId = ?";
-exports.jobByIdAppliedQuery = "select count(id) as userApplied from job_proposal where jobId = ? and userId = ?";
+exports.addResetToken = "UPDATE user SET token = ?, updatedAt = ? where id = ?";
+exports.updatePassword =
+  "UPDATE user SET password = ? , updatedAt = ? where id = ? AND token = ?";

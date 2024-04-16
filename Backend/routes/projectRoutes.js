@@ -14,6 +14,7 @@ router.get("/projectCategoryCount", projectController.projectCategoryCount);
 router.post("/proposalSubmit", verifyToken, projectController.proposalSubmit);
 // router.get("/projectById/:id", projectController.projectById);
 router.get("/projectById/:id/:userId", projectController.projectById);
+// router.put("/updateProject/:id",[verifyToken
 router.get("/allAppliedProject", verifyToken, projectController.allAppliedProject);
 router.get("/allPostProject", verifyToken, projectController.AllPostProject);
 router.get("/userAppliedProject/:id", verifyToken, projectController.userAppliedProject);

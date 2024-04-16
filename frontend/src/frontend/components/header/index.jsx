@@ -196,6 +196,7 @@ const Header = (props) => {
   // ##############  CONSOLE START ###########################
 
   console.log("this is user type", userType)
+  console.log("this is freelancing details", freelancerDetails)
 
   // ##############  CONSOLE END ###########################
 
@@ -766,7 +767,8 @@ const Header = (props) => {
                                 className="dropdown-toggle nav-link"
                                 data-bs-toggle="dropdown"
                               >
-                                <span>MY ACCOUNT</span>
+                                {/* <span>MY ACCOUNT</span> */}
+                                <span>{freelancerDetails?.name}</span>
                               </Link>
                               <div className="dropdown-menu emp">
                                 <div className="drop-head">Account Details</div>

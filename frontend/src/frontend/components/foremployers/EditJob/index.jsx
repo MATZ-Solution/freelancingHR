@@ -10,6 +10,7 @@ import SuccessModal from '../../../../admin/component/pages/CustomModal/index.js
 import { useForm, Controller } from 'react-hook-form'
 import getCurrentDate from "../../../../CustomFunction/reactDatepickerVal.jsx";
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux'
 import Dates from "../../../../CustomFunction/formatDate.jsx";
 // import getCurrentDate from "../../../../CustomFunction/reactDatepickerVal.jsx";
 
@@ -17,6 +18,7 @@ const EditJob = () => {
 
     // #########################  VARIABLES START #########################################
     let { id } = useParams();
+    let {userId} = useSelector(state=> state.freelancerDetails.data)
     const { register, handleSubmit, formState: { errors }, watch, control, setValue } = useForm()
     let [skills, setSkills] = useState('')
     const [jobDetails, setjobDetails] = useState({
@@ -81,7 +83,7 @@ const EditJob = () => {
     // #########################  SUBMIT PROJECT FUNCTION START #########################################
     const getSingleJobData = async () => {
         try {
-            const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/getJobById/${id}`, {
+            const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/getJobById/${id}/${userId}`, {
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json',

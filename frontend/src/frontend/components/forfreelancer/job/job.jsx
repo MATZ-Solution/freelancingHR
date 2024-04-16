@@ -16,6 +16,8 @@ import {
 import Select from "react-select";
 import EmployerBreadcrumb from "../../foremployers/common/employerBreadcrumb";
 import FreelancerSidebar from "../../foremployers/common/freelancerSidebar";
+import Loader from "../../loader";
+import ErrorModal from "../../../../admin/component/pages/CustomModal/ErrorsModal";
 
 const Jobs = () => {
   const [selectedItems, setSelectedItems] = useState(Array(10).fill(false));
@@ -39,6 +41,7 @@ const Jobs = () => {
   const searchParams = new URLSearchParams(queryString);
   const hasKeywords = searchParams.has("keywords");
   const keywords = searchParams.get("keywords");
+  let [loader, setLoader] = useState(true)
 
   // ###################### API START ####################################################
 
@@ -50,14 +53,21 @@ const Jobs = () => {
           'Content-Type': 'application/json',
         }
       })
+      if (!getJobRequest.ok) {
+        setLoader(false)
+        setError(true)
+      }
       const response = await getJobRequest.json()
       console.log(response)
-      if (response.message === 'Success') {
+      if (response.message === 'Success' || response.message === ' Not Found') {
         setjob(response?.data)
+        setLoader(false)
       }
     } catch (err) {
       console.log(err)
+      setLoader(false)
       setError(true)
+
     }
   }
 
@@ -69,19 +79,19 @@ const Jobs = () => {
           'Content-Type': 'application/json',
         }
       })
-      const response = await jobKeywordRequest.json()
-      console.log(response)
       if (!jobKeywordRequest.ok) {
+        setLoader(false)
         setError(true)
       }
+      const response = await jobKeywordRequest.json()
+      console.log(response)
+      setLoader(false)
       if (response.message === 'Success') {
         setjob(response?.data)
       }
-      else {
-        setError(true)
-      }
     } catch (err) {
       console.log(err)
+      setLoader(false)
       setError(true)
     }
   }
@@ -113,21 +123,29 @@ const Jobs = () => {
     return formattedDate
   }
 
+  if (loader) {
+    return <Loader />
+  }
+
+  if (error) {
+    return <ErrorModal message={'Something Went Wrong'} />
+  }
+
   return (
     <>
       {/* Breadcrumb */}
-      <EmployerBreadcrumb title="Job Grid" subtitle="jobs" />
+      <EmployerBreadcrumb title="Open Jobs" subtitle="jobs" />
       {/* /Breadcrumb */}
       {/* Page Content */}
       <div className="content">
         <div className="container">
           <div className="row">
             {/* <div className="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar"> */}
-              {/* <StickyBox offsetTop={20} offsetBottom={20}> */}
-                {/* Search Filter */}
-                {/* <FreelancerSidebar /> */}
-                {/* /Search Filter */}
-              {/* </StickyBox> */}
+            {/* <StickyBox offsetTop={20} offsetBottom={20}> */}
+            {/* Search Filter */}
+            {/* <FreelancerSidebar /> */}
+            {/* /Search Filter */}
+            {/* </StickyBox> */}
             {/* </div> */}
             {/* <div className="col-md-12 col-lg-8 col-xl-9"> */}
             <div className="col-md-12 col-lg-12 col-xl-12">
@@ -137,12 +155,7 @@ const Jobs = () => {
                   <div className="col-xl-6 col-lg-6 col-md-6 col-sm-6">
                     <div className="d-flex align-items-center">
                       <div className="freelance-view">
-                        <h4> {
-                          getjob?.length ?
-                            <h4>Found {getjob?.length} Results</h4>
-                            :
-                            <h4>No Job Found</h4>
-                        } </h4>
+                        <h4>Found {getjob?.length} Results</h4>
                       </div>
                     </div>
                   </div>
@@ -209,7 +222,7 @@ const Jobs = () => {
                                       <ul style={{ justifyContent: 'space-between' }}>
                                         <li>
                                           <h5>{dates(job?.lastDate)}</h5>
-                                          <h3 className="counter-value">4 Days Left</h3>
+                                          {/* <h3 className="counter-value">4 Days Left</h3> */}
                                         </li>
                                         {/* <li>
                                     <h5>Proposals</h5>
@@ -231,7 +244,7 @@ const Jobs = () => {
                           })
                         }
                       </>
-                      : <p>No Project Found</p>
+                      : <p>No Job Found</p>
                   }
                 </div>
 

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import StickyBox from "react-sticky-box";
 import ApexCharts from "apexcharts";
 import {
@@ -12,12 +12,36 @@ import {
 import { Sidebar } from "../sidebar";
 import { useState } from "react";
 import ErrorModal from "../../../../admin/component/pages/CustomModal/ErrorsModal";
+import SuccessModal from '../../../../admin/component/pages/CustomModal/index'
+import Select from "react-select";
+import Loader from "../../loader";
 
 const Dashboard = () => {
-
+  const history = useHistory();
   let [error, setError] = useState(false)
   let [dashboardData, setDashboardData] = useState([])
   let token = localStorage.getItem('token')
+  let [allJobs, setAllJobs] = useState([])
+  let [projectUserData, setProjectUserData] = useState([])
+  let [flag, setFlag] = useState(false)
+  const [blobUrl, setBlobUrl] = useState(null)
+  let [loader, setLoader] = useState(true)
+
+  let [statusDetails, setStatusDetails] = useState({
+    status: "",
+    getSingleJob: ""
+  })
+
+  let [showSuccessModal, setSuccessModal] = useState({
+    status: false,
+    message: "",
+    errorStatus: false
+  })
+  const options = [
+    { value: 1, label: "pending" },
+    { value: 2, label: "approved" },
+    { value: 3, label: "reject" },
+  ];
 
   var chartprofileoptions = {
     series: [
@@ -179,7 +203,168 @@ const Dashboard = () => {
     }
   }
 
+  const getAllJob = async () => {
+    try {
+      const getAllJobRequest = await fetch(`https://freelanceserver.xgentechnologies.com/job/allPostJobs`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
+      })
+      if (!getAllJobRequest.ok) {
+        setError(true)
+        setLoader(false)
+      }
+      const response = await getAllJobRequest.json()
+      console.log(response)
+      if (response.message === 'Success' || response.message === 'Jobs Not Found') {
+        setAllJobs(response?.data)
+        setFlag(false)
+        setLoader(false)
+      }
+    } catch (err) {
+      console.log(err)
+      setLoader(false)
+      setError(true)
+    }
+  }
+
+  const getAllJobUser = async (singleJobID) => {
+    setStatusDetails({ ...statusDetails, getSingleJob: singleJobID })
+    try {
+      const getAllprojectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/job/userAppliedJobs/${singleJobID}`, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        }
+      })
+      if (!getAllprojectRequest.ok) {
+        setError(true)
+      }
+      const response = await getAllprojectRequest.json()
+      console.log(response)
+      if (response?.message === 'Success' && response?.data?.length !== 0) {
+        setProjectUserData(response?.data)
+      }
+    } catch (err) {
+      console.log(err)
+      setError(true)
+    }
+  }
+
+  function dates(date) {
+    const dates = new Date(date);
+    const formattedDate = dates.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+    return formattedDate
+  }
+
+  const deleteJob = async (id) => {
+    try {
+      const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/deleteJob`, {
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ jobId: id })
+      })
+      if (!request.ok) {
+        setError(true)
+      }
+      const response = await request.json()
+      if (!response.ok) {
+        setSuccessModal({ ...showSuccessModal, status: true, message: response.message, errorStatus: true });
+        setTimeout(() => {
+          setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: false })
+        }, 2000)
+      }
+      if (response.statusCode === 200) {
+        setSuccessModal({ ...showSuccessModal, status: true, message: response.message });
+        setTimeout(() => {
+          setSuccessModal({ ...showSuccessModal, status: false, message: '' })
+        }, 2000)
+        setFlag(true)
+
+      }
+    } catch (err) {
+      console.log(err)
+      setError(true)
+    }
+  }
+
+  const updateStatus = async () => {
+    try {
+      const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/updateStatus`, {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          jobId: statusDetails.getSingleJob,
+          status: statusDetails.status
+        })
+      })
+      if (!request.ok) {
+        setError(true)
+      }
+      const response = await request.json()
+      console.log(response)
+
+      if (!response.ok) {
+        setSuccessModal({ ...showSuccessModal, status: true, message: response.message, errorStatus: true });
+        setTimeout(() => {
+          setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: false })
+        }, 2000)
+      }
+      if (response.statusCode === 200) {
+        setSuccessModal({ ...showSuccessModal, status: true, message: response.message, errorStatus: false });
+        setTimeout(() => {
+          setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: true })
+        }, 2000)
+        setFlag(true)
+        // history.push('/company-postedJob')
+        // cancelModal()
+      }
+    } catch (err) {
+      console.log(err)
+      setError(true)
+    }
+  }
+
+  async function Download(url) {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      setBlobUrl(blobUrl);
+
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = `document`; // Specify the desired file name
+      link.click();
+    } catch (error) {
+      alert(error)
+    }
+  }
+
+
+
   // #########################  API END #########################################
+
+
+  // #########################  HANDLE CHANGE START  #########################################
+
+  const handleChangeStatus = (selectedOption) => {
+    setStatusDetails({ ...statusDetails, status: selectedOption.label });
+  }
+  // #########################  HANDLE CHANGE END  #########################################
 
 
 
@@ -207,11 +392,17 @@ const Dashboard = () => {
   }, [])
 
   useEffect(() => {
+    getAllJob()
+  }, [flag])
+
+  useEffect(() => {
     document.body.className = "dashboard-page";
   }, [])
 
   // #########################  USE EFFECT END #########################################
-
+  if (loader) {
+    return <Loader />
+  }
 
   if (error) {
     return <ErrorModal message={'Something Went Wrong'} />
@@ -275,7 +466,7 @@ const Dashboard = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="col-md-6 col-lg-4 col-xl-3">
+                    {/* <div className="col-md-6 col-lg-4 col-xl-3">
                       <div className="dash-widget">
                         <div className="dash-info">
                           <div className="dashboard-icon dashboard-icon-three">
@@ -285,16 +476,16 @@ const Dashboard = () => {
                         </div>
                         <div className="dash-widget-more d-flex align-items-center justify-content-between">
                           <div className="dash-widget-count">25</div>
-                          {/* <Link
+                          <Link
                             to="/freelancer-completed-projects"
                             className="d-flex"
                           >
                             View Details
-                          </Link> */}
+                          </Link>
                         </div>
                       </div>
-                    </div>
-                    <div className="col-md-6 col-lg-4 col-xl-3">
+                    </div> */}
+                    {/* <div className="col-md-6 col-lg-4 col-xl-3">
                       <div className="dash-widget">
                         <div className="dash-info">
                           <div className="dashboard-icon dashboard-icon-four">
@@ -304,15 +495,110 @@ const Dashboard = () => {
                         </div>
                         <div className="dash-widget-more d-flex align-items-center justify-content-between">
                           <div className="dash-widget-count">5962</div>
-                          {/* <Link
+                          <Link
                             to="/freelancer-completed-projects"
                             className="d-flex"
                           >
                             View Details
-                          </Link> */}
+                          </Link>
                         </div>
                       </div>
+                    </div> */}
+                  </div>
+                </div>
+
+                {/* <div className="col-xl-9 col-lg-8"> */}
+                <div className="">
+                  <div className="dashboard-sec payout-section">
+                    <div className="page-title portfolio-title" style={{ marginBottom: "0px" }}>
+                      <h3 className="mb-0">Recent Posted Jobs</h3>
                     </div>
+
+                    {/* Table */}
+                    <div className="table-top-section">
+                    </div>
+                    {
+                      !allJobs ?
+                        <p>No Job Found</p>
+                        :
+                        <div className="table-responsive">
+                          <table className="table">
+                            <thead>
+                              <tr>
+                                <th>Job Title</th>
+                                <th>Job Category</th>
+                                <th>Job Type</th>
+                                <th>Status</th>
+                                <th>Last Date</th>
+                                <th>Action</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {
+                                allJobs?.map((data, index) => {
+                                  return (
+                                    <tr key={index}>
+                                      <td>{data.jobTitle}</td>
+                                      <td>{data.jobCategory}</td>
+                                      <td>{data.jobType}</td>
+                                      <td>
+                                        <div className={`badge ${data.status === 'pending' ? 'badge-pending' : data.status === 'approved' ? 'badge-success' : 'badge-fail'}`}>
+                                          <span>{data.status}</span>
+                                        </div>
+                                      </td>
+                                      <td>{dates(data.lastDate)}</td>
+                                      <td>
+                                        {/* <div className="dropdown profile-action"> */}
+                                        <Link
+                                          to="#"
+                                          className="action-icon "
+                                          data-bs-toggle="dropdown"
+                                          aria-expanded="false"
+                                        >
+                                          <i className="fa fa-ellipsis-v" />
+                                        </Link>
+                                        <div className="dropdown-menu dropdown-menu-right">
+                                          <Link
+                                            className="dropdown-item"
+                                            to={`/edit-job/${data?.id}`}
+                                          // data-bs-toggle="modal"
+                                          // data-bs-target="#"
+                                          >
+                                            <i className="fas fa-pencil-alt me-1" /> Edit
+                                          </Link>
+                                          <div
+                                            className="dropdown-item"
+                                            onClick={() => deleteJob(data?.id)}
+                                          >
+                                            <i className="far fa-trash-alt me-1" /> Delete
+                                          </div>
+
+                                          <Link data-bs-toggle="modal" to="#file" className="dropdown-item"
+                                            onClick={() => getAllJobUser(data?.id)}
+                                          >
+                                            <i className="feather-eye me-1" />
+                                            View Applicants
+                                          </Link>
+                                        </div>
+                                        {/* </div> */}
+                                        {/* <Link data-bs-toggle="modal" to="#file" className="btn btn-primary sub-btn"
+                                onClick={() => getAllJobUser(data?.id)}
+                              >
+                                View Applicants
+                              </Link> */}
+
+                                      </td>
+                                    </tr>
+                                  )
+                                })
+                              }
+
+                            </tbody>
+                          </table>
+                        </div>
+                    }
+
+                    {/* /Table */}
                   </div>
                 </div>
 
@@ -508,6 +794,131 @@ const Dashboard = () => {
       </div>
       {/* /Page Content */}
       {/* /Main Wrapper */}
+
+      {/* Modal */}
+      <>
+        <div className="modal fade" id="file">
+          <div className="modal-dialog modal-dialog-centered modal-lg">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">Applied Applicants</h4>
+                <span className="modal-close">
+                  <Link to="#" data-bs-dismiss="modal" aria-label="Close"
+                    onClick={() => { setProjectUserData([]) }}
+                  >
+                    <i className="fa fa-times orange-text" />
+
+                  </Link>
+                </span>
+              </div>
+              <div className="modal-body" style={{ padding: "15px" }}>
+                <div className="table-top-section">
+                </div>
+                <div className="table-responsive">
+                  {
+                    projectUserData?.length !== 0 ?
+                      <>
+                        <table className="table">
+                          <thead>
+                            <tr>
+                              <th>Applicants Name</th>
+                              <th>Email</th>
+                              <th>Phone Number</th>
+                              <th>Status</th>
+                              <th>Apply Date</th>
+                              <th>Document</th>
+                              <th>Change Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {
+                              projectUserData?.map((data, index) => {
+                                return (
+                                  <tr key={index}>
+                                    <td>{data?.firstName} {data?.lastName}</td>
+                                    <td>{data?.email}</td>
+                                    <td>{data?.phoneNumber ? <>{data?.phoneNumber}</> : <p style={{ color: "red" }}>Not Available</p>}</td>
+                                    <td>
+                                      <div className={`badge ${data?.status === 'pending' ? 'badge-pending' : data.status === 'approved' ? 'badge-success' : 'badge-fail'}`}>
+                                        <span>{data?.status}</span>
+                                      </div>
+                                    </td>
+                                    <td>{dates(data?.createdAt)}</td>
+                                    <td>
+                                      <button
+                                        className="btn btn-primary sub-btn"
+                                        onClick={() => Download(data?.resume)}
+                                      >Download CV</button>
+                                    </td>
+                                    <td>
+                                      <Link data-bs-toggle="modal" to="#changeStatus">
+                                        <button
+                                          className="btn btn-primary sub-btn"
+                                        >Change Status</button>
+                                      </Link>
+                                    </td>
+                                  </tr>
+                                )
+                              })
+                            }
+                          </tbody>
+                        </table>
+                      </>
+                      :
+                      <p>No Applicants Found</p>
+                  }
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+
+      {/* Change Status Modal */}
+      <>
+        <div className="modal fade" id="changeStatus">
+          {showSuccessModal.status && (<SuccessModal message={showSuccessModal.message} errorStatus={showSuccessModal.errorStatus} />)}
+          <div className="modal-dialog modal-dialog-centered modal-lg">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h4 className="modal-title">Change Status</h4>
+                <span className="modal-close">
+                  <Link to="#" data-bs-dismiss="modal" aria-label="Close"
+                    onClick={() => { setProjectUserData([]) }}>
+                    <i className="fa fa-times orange-text" />
+                  </Link>
+                </span>
+              </div>
+              <div className="modal-body" style={{ padding: "15px" }}>
+                <div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                    <Select
+                      // value={profileDetails.companyCountry ? options.find((item) => item.label === profileDetails.companyCountry) : ''}
+                      className="select"
+                      options={options}
+                      placeholder="Select"
+                      onChange={handleChangeStatus}
+                    />
+                    <div className="card text-end border-0">
+                      <div className="pro-body">
+                        <button
+                          // type="button"
+                          className="btn btn-primary click-btn btn-plan"
+                          onClick={updateStatus}
+                        >
+                          Update
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+
     </>
   );
 };

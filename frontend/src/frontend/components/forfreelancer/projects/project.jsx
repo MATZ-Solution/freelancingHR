@@ -16,6 +16,8 @@ import {
 import Select from "react-select";
 import EmployerBreadcrumb from "../../foremployers/common/employerBreadcrumb";
 import FreelancerSidebar from "../../foremployers/common/freelancerSidebar";
+import Loader from "../../loader";
+import ErrorModal from "../../../../admin/component/pages/CustomModal/ErrorsModal";
 
 const Project = () => {
   const [selectedItems, setSelectedItems] = useState(Array(10).fill(false));
@@ -35,6 +37,7 @@ const Project = () => {
 
   const [getProject, setProject] = useState([])
   let [error, setError] = useState(false)
+  let [loader, setLoader] = useState(true)
 
   const queryString = window.location.search;
   const searchParams = new URLSearchParams(queryString);
@@ -53,20 +56,19 @@ const Project = () => {
         }
       })
       const response = await getProjectsRequest.json()
-      console.log(response)
-
       if (!getProjectsRequest.ok) {
         setError(true)
+        setLoader(false)
       }
+      setLoader(false)
       if (response.message === 'Success') {
         setProject(response?.data)
-      }
-      else {
-        setError(true)
+        setLoader(false)
       }
     } catch (err) {
       console.log(err)
       setError(true)
+      setLoader(false)
     }
   }
 
@@ -82,16 +84,16 @@ const Project = () => {
       console.log(response)
       if (!ProjectsKeywordRequest.ok) {
         setError(true)
+        setLoader(false)
       }
-      if (response.message === 'Success') {
+      setLoader(false)
+      if (response.message === 'Success' || response.message === 'Not Found') {
         setProject(response?.data)
-      }
-      else {
-        setError(true)
       }
     } catch (err) {
       console.log(err)
       setError(true)
+      setLoader(false)
     }
   }
 
@@ -108,6 +110,7 @@ const Project = () => {
     }
   }, [])
 
+
   // ###################### USE EFFECT START ####################################################
 
   function dates(date) {
@@ -120,10 +123,19 @@ const Project = () => {
     return formattedDate
   }
 
+
+  if (loader) {
+    return <Loader />
+  }
+
+  if (error) {
+    return <ErrorModal message={'Something Went Wrong'} />
+  }
+
   return (
     <>
       {/* Breadcrumb */}
-      <EmployerBreadcrumb title="Project Grid" subtitle="Projects" />
+      <EmployerBreadcrumb title="Open Projects" subtitle="Projects" />
       {/* /Breadcrumb */}
       {/* Page Content */}
       <div className="content">
@@ -208,7 +220,7 @@ const Project = () => {
                                     <ul style={{ justifyContent: 'space-between' }}>
                                       <li>
                                         <h5>{dates(project?.deliveryDate)}</h5>
-                                        <h3 className="counter-value">4 Days Left</h3>
+                                        {/* <h3 className="counter-value">4 Days Left</h3> */}
                                       </li>
                                       {/* <li>
                                      <h5>Proposals</h5>

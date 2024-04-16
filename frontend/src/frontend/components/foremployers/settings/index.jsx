@@ -185,9 +185,6 @@ const Settings = () => {
         }, 2000)
         setFile(null)
       }
-      else {
-        setError(true)
-      }
     } catch (err) {
       setError(true)
     }
@@ -272,9 +269,6 @@ const Settings = () => {
           pinterest: response?.data[0]?.Company[0]?.pinterest || '',
           twitter: response?.data[0]?.Company[0]?.twitter || '',
         })
-      }
-      else {
-        setError(true)
       }
     } catch (err) {
       console.log(err)

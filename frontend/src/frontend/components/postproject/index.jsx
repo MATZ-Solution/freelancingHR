@@ -21,7 +21,18 @@ const PostProject = () => {
   const { register, handleSubmit, formState: { errors }, watch, control, setValue } = useForm()
   const getImage = watch("image");
   const history = useHistory();
-  const categoryOption = ['Apps Development', 'UI Development', 'Java']
+  const categoryOption = ["Software Development Projects",
+  "Infrastructure Projects",
+  "Research and Development (R&D) Projects",
+  "Engineering Projects",
+  "Marketing Projects",
+  "Event Management Projects",
+  "Healthcare Projects",
+  "Education and Training Projects",
+  "Environmental Projects",
+  "Business Process Improvement Projects",
+  "Finance and Budgeting Projects", "others"]
+
   const priceTypeOption = ['Fixed Budget Price', 'Hourly Pricing', 'Biding Price']
   let token = localStorage.getItem('token')
   let [error, setError] = useState(false)

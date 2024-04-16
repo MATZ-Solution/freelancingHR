@@ -218,13 +218,14 @@ const Home = () => {
                     <h5>Trused by over 2M+ users</h5>
                   </div> */}
                   <h1>
-                    Get the perfect{" "}
+                  Build your career{" "}
                     <span className="orange-text">
                       <br />
-                      Developers &amp; Projects
+                      with exciting projects and opportunities
+                      {/* Developers &amp; Projects */}
                     </span>
                   </h1>
-                  <p>With the world's #1 Developers marketplace</p>
+                  <p>Search millions of jobs & projects and find your perfect fit.</p>
                   {/* <form
                     className="form"
                     name="store"
@@ -469,11 +470,11 @@ const Home = () => {
                 >
                   <div className="work-content">
                     <h2>
-                      I need a Developed <span>Project</span>
+                    Explore Open Projects
+                      {/* I need a Developed <span>Project</span> */}
                     </h2>
                     <p>
-                      Get the perfect Developed project for your budget from our
-                      creative community.
+                    Match your skills and passion and contribute to the projects that await you.
                     </p>
                     <Link to="/project" className="btn btn-primary">
                       Browse
@@ -493,8 +494,7 @@ const Home = () => {
                       Find Your Next Great <span>Job Opportunity!</span>
                     </h2>
                     <p>
-                      Do you want to earn money, find unlimited clients and
-                      build your freelance career?
+                    Connect with top companies and launch your dream career.
                     </p>
                     <Link to="/job" className="btn btn-primary">
                       Browse
@@ -633,12 +633,12 @@ const Home = () => {
               <div className="col-lg-6">
                 <div className="aos " data-aos="fade-up">
                   <div className="demand-professional">
-                    <h2>Get Expert in Less Time and Our Work Process</h2>
-                    <p>
+                    <h2>Fill Openings Faster, Focus on Growth</h2>
+                    {/* <p>
                       Lorem ipsum dolor sit amet, consectetur adipiscing elit,
                       sed do eiusmod tempor incididunt ut labore et dolore magna
                       aliqua.{" "}
-                    </p>
+                    </p> */}
                   </div>
                   <div className="demand-post-job">
                     <div className="demand-post-img">
@@ -649,11 +649,9 @@ const Home = () => {
                       />
                     </div>
                     <div className="demand-content">
-                      <h6>Post a job</h6>
+                      <h6>Fastest Hiring</h6>
                       <p>
-                        Publish the job posting on your selected platforms.
-                        Follow the specific submission process for each
-                        platform.
+                      Streamlined process to find top talent quickly.
                       </p>
                     </div>
                   </div>
@@ -666,11 +664,9 @@ const Home = () => {
                       />
                     </div>
                     <div className="demand-content">
-                      <h6>Hire Freelancers</h6>
+                      <h6>Reduced Time-to-Fill</h6>
                       <p>
-                        Depending on the platform, you can either wait for
-                        freelancers to apply or invite specific freelancers to
-                        submit proposals.
+                      Fill open positions with qualified candidates in less time.
                       </p>
                     </div>
                   </div>
@@ -683,10 +679,9 @@ const Home = () => {
                       />
                     </div>
                     <div className="demand-content">
-                      <h6>Get Work Done</h6>
+                      <h6>Effortless Expertise</h6>
                       <p>
-                        Utilize productivity tools and apps to help you stay
-                        organized, manage tasks, and set reminders.
+                      Find the perfect expert for your project, hassle-free.
                       </p>
                     </div>
                   </div>
@@ -1120,13 +1115,12 @@ const Home = () => {
               <div className="col-12">
                 <div className="register-job-blk">
                   <div className="job-content-blk aos" data-aos="fade-up">
-                    <h2>Find Your Next Great Job Opportunity!</h2>
+                    <h2>Don't Wait! Find Your Perfect Fit!</h2>
                     <p>
-                      Quisque pretium dolor turpis, quis blandit turpis semper
-                      ut. Nam malesuada eros nec luctus laoreet.
+                    Whether you are an Employer or a Talented individual, this platform is for you.
                     </p>
                     <Link to="/register" className="btn all-btn">
-                      Join Now
+                    Get Started
                     </Link>
                   </div>
                   <div

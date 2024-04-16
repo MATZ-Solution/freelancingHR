@@ -33,7 +33,28 @@ const PostJob = () => {
     // image: null
   })
 
-  const jobCategoryOption = ['A', 'B', 'C']
+  const jobCategoryOption = [    "Administrative & Clerical",
+  "Accounting & Finance",
+  "Customer Service",
+  "Sales & Marketing",
+  "Information Technology",
+  "Healthcare",
+  "Engineering",
+  "Human Resources",
+  "Education",
+  "Manufacturing & Production",
+  "Retail",
+  "Hospitality & Tourism",
+  "Legal",
+  "Creative & Design",
+  "Media & Communication",
+  "Science",
+  "Transportation & Logistics",
+  "Construction & Skilled Trades",
+  "Nonprofit & Social Services",
+  "Consulting",
+"others"
+]
   const categoryOption = ['Onsite', 'Remote', 'Hybrid']
   const priceTypeOption = ['Onsite', 'Remote', 'Hybrid']
   let token = localStorage.getItem('token')

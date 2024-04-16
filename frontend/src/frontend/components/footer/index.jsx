@@ -36,8 +36,7 @@ const Footer = (props) => {
                     <img src={logo} className="img-fluid" alt="Logo" />
                   </Link>
                   <p>
-                    We’re always in search for talented and motivated people.
-                    Don’t be shy introduce yourself!
+                  Connect, Discover and Grow with the XGEN Freelancing Platform – Let’s connect, follow us for the latest updates.
                   </p>
                   <ul>
                     <li>
@@ -93,13 +92,13 @@ const Footer = (props) => {
                         <li>
                           <Link to="/project">
                             <i className="fas fa-angle-right me-1" />
-                            Project
+                            Projects
                           </Link>
                         </li>
                         <li>
                           <Link to="/job">
                             <i className="fas fa-angle-right me-1" />
-                            Job
+                            Jobs
                           </Link>
                         </li>
                         {/* <li>

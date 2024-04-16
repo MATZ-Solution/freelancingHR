@@ -66,6 +66,7 @@ const JobDetails = () => {
   let { id } = useParams();
   let [error, setError] = useState(false)
   let [descriptionData, setDescription] = useState([])
+  let [flag, setFlag] = useState(false)
   let coverImage;
   let [showSuccessModal, setSuccessModal] = useState({
     status: false,
@@ -115,20 +116,24 @@ const JobDetails = () => {
   }
 
   useEffect(() => {
-    if (userType === 'freelancer') {
-      setAllow(true)
-    } else {
+    if (descriptionData[0]?.Applied === 'Applied') {
       setAllow(false)
+    } else {
+      setAllow(true)
     }
   })
 
   // #########################  HANDLE CHANGE FUNCTION END #########################################
 
   // #########################  API START #########################################
-
+  let {userId} = useSelector(state=> state.freelancerDetails.data)
+  console.log("this is user Id from job details", userId)
   const getJobDescription = async () => {
+    // if(!token){
+    //   userId = 0
+    // }
     try {
-      const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/getJobById/${id}`, {
+      const request = await fetch(`https://freelanceserver.xgentechnologies.com/job/getJobById/${id}/${userId}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -141,6 +146,7 @@ const JobDetails = () => {
       console.log(response)
       if (response.message === 'Success') {
         setDescription(response?.data)
+        setFlag(false)
       }
     } catch (err) {
       console.log(err)
@@ -179,6 +185,7 @@ const JobDetails = () => {
         setTimeout(() => {
           setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: true })
         }, 2000)
+        setFlag(true)
       }
     } catch (err) {
       console.log(err)
@@ -210,7 +217,7 @@ const JobDetails = () => {
 
   useEffect(() => {
     getJobDescription()
-  }, [])
+  }, [flag])
 
   // console.log("this is description data", descriptionData)
 
@@ -634,16 +641,16 @@ const JobDetails = () => {
                 <div className="card budget-widget">
                   <div className="budget-widget-details">
                     <h6>Budget</h6>
-                    <h4>{descriptionData[0]?.pay}</h4>
+                    <h4>$ {descriptionData[0]?.pay}</h4>
                   </div>
                   <div>
                     <Link
-                      data-bs-toggle={allow ? "modal" : ""}
-                      to={`${allow ? '#file' : '#'}`}
+                      data-bs-toggle={allow && userType === 'freelancer' ? "modal" : ""}
+                      to={`${allow && userType === 'freelancer' ? '#file' : '#'}`}
                       onClick={submitProposal}
                       className="btn proposal-btn btn-primary"
                     >
-                      Apply Now
+                      <p>{descriptionData[0]?.Applied === 'Applied' ? <p>Applied</p> : <p>Apply Now</p>}</p>
                     </Link>
                   </div>
                 </div>

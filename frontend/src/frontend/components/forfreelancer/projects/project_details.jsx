@@ -33,10 +33,7 @@ import InfoModal from "../../../../admin/component/pages/CustomModal/InfoModal";
 import getCurrentDate from "../../../../CustomFunction/reactDatepickerVal";
 
 const CompanyProfile = () => {
-  const [modalOpen, setModalOpen] = useState('#')
-  const userType = useSelector(state => state.UserType.userType)
-  console.log("this is user type", userType)
-  const [date, setDate] = useState(new Date());
+
   const [rows, setRows] = useState([
     // Initial rows
     {
@@ -74,6 +71,11 @@ const CompanyProfile = () => {
   let [coverImage, setCoverimage] = useState('')
   let token = localStorage.getItem('token')
   const [blobUrl, setBlobUrl] = useState(null);
+  const [modalOpen, setModalOpen] = useState('#')
+  const userType = useSelector(state => state.UserType.userType)
+  let { userId } = useSelector(state => state.freelancerDetails.data)
+  const [date, setDate] = useState(new Date());
+  let [flag, setFlag] = useState(false)
   let [showSuccessModal, setSuccessModal] = useState({
     status: false,
     message: "",
@@ -130,10 +132,10 @@ const CompanyProfile = () => {
   }
 
   useEffect(() => {
-    if (userType === 'freelancer') {
-      setAllow(true)
-    } else {
+    if (getProj_Details[0]?.Applied === 'Applied') {
       setAllow(false)
+    } else {
+      setAllow(true)
     }
   })
 
@@ -148,8 +150,11 @@ const CompanyProfile = () => {
   // #########################  API START #########################################
 
   const getProjectDescription = async () => {
+    if(!token){
+      userId = 0
+    }
     try {
-      const getProjectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/projectById/${id}`, {
+      const getProjectRequest = await fetch(`https://freelanceserver.xgentechnologies.com/project/projectById/${id}/${userId}`, {
         method: "GET",
         headers: {
           'Content-Type': 'application/json',
@@ -163,6 +168,7 @@ const CompanyProfile = () => {
       if (response.message === 'Success') {
         setProj_Details(response?.data)
         setCoverimage(response?.data[0]?.coverImage)
+        setFlag(false)
       }
     } catch (err) {
       console.log(err)
@@ -198,12 +204,14 @@ const CompanyProfile = () => {
         setTimeout(() => {
           setSuccessModal({ ...showSuccessModal, status: false, message: '', errorStatus: true })
         }, 2000)
+        setFlag(true)
       }
     } catch (err) {
       console.log(err)
       setError(true)
     }
   }
+
 
   // #########################  API END #########################################
 
@@ -231,7 +239,7 @@ const CompanyProfile = () => {
 
   useEffect(() => {
     getProjectDescription()
-  }, [])
+  }, [flag])
 
   // #########################  USE EFFECT END #########################################
   if (error) {
@@ -697,16 +705,17 @@ const CompanyProfile = () => {
                     <div className="card budget-widget">
                       <div className="budget-widget-details">
                         <h6>Budget</h6>
-                        <h4>{data?.amount}$</h4>
+                        <h4>$ {data?.amount}</h4>
                       </div>
 
                       <Link
-                        data-bs-toggle={allow ? "modal" : ""}
-                        to={`${allow ? '#file' : '#'}`}
+                        data-bs-toggle={allow && userType === 'freelancer' ? "modal" : ""}
+                        to={`${allow && userType === 'freelancer' ? '#file' : '#'}`}
                         onClick={submitProposal}
                         className="btn proposal-btn btn-primary"
                       >
-                        Submit Proposal
+                        {getProj_Details[0]?.Applied === 'Applied' ? <p>Submitted</p>: <p>Submit Proposal</p>}
+                        
                       </Link>
 
                     </div>

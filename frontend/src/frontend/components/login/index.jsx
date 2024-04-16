@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { fb_icon, google_icon, ios_icon, logo } from "../imagepath";
@@ -8,9 +7,9 @@ import Modal from '../../../admin/component/pages/CustomModal/index'
 import ErrorModal from '../../../admin/component/pages/CustomModal/ErrorsModal';
 import { useSelector, useDispatch } from 'react-redux'
 import { updateStatus } from '../../../redux/Slices/NavbarSlice';
-// import ErrorModal from '../../../admin/component/pages/CustomModal/ErrorsModal';
-// import { FaCheckCircle } from "react-icons/fa";
+
 const Login = () => {
+  
   const dispatch = useDispatch()
   const history = useHistory();
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -37,17 +36,12 @@ const Login = () => {
         body: JSON.stringify(data)
       })
       const response = await loginRequest.json()
-      console.log(response)
-      console.log("this is message: ", response?.message)
-
       if (response?.message === "Email not found") {
         setMessage(response?.message)
       }
-
       else if (response?.message === 'Incorrect Password') {
         setMessage(response?.message)
       }
-
       else if (response?.message === 'SignIn successfully') {
         setMessage(response?.message)
         localStorage.setItem('token', response?.token);
@@ -64,15 +58,11 @@ const Login = () => {
         setMessage(response.error?.message)
       }
     } catch (err) {
-
       if (err.message === 'Failed to fetch') {
         setMessage("Server Can't respond")
-
       }
     }
   }
-
-  console.log("this is message:", message)
 
   useEffect(() => {
     document.body.className = 'account-page';

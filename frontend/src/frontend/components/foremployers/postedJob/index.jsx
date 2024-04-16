@@ -7,6 +7,7 @@ import { useState } from "react";
 import ErrorModal from "../../../../admin/component/pages/CustomModal/ErrorsModal";
 import Select from "react-select";
 import SuccessModal from '../../../../admin/component/pages/CustomModal/index'
+import Loader from "../../loader";
 
 const CompanyPostedJob = () => {
 
@@ -18,6 +19,7 @@ const CompanyPostedJob = () => {
   let [allJobs, setAllJobs] = useState([])
   let [projectUserData, setProjectUserData] = useState([])
   const [blobUrl, setBlobUrl] = useState(null);
+  let [loader, setLoader] = useState(true)
   let [statusDetails, setStatusDetails] = useState({
     status: "",
     getSingleJob: ""
@@ -60,16 +62,19 @@ const CompanyPostedJob = () => {
       })
       if (!getAllJobRequest.ok) {
         setError(true)
+        setLoader(false)
       }
       const response = await getAllJobRequest.json()
       console.log(response)
-      if (response.message === 'Success') {
+      if (response.message === 'Success' || response.message === 'Jobs Not Found') {
         setAllJobs(response?.data)
         setFlag(false)
+        setLoader(false)
       }
     } catch (err) {
       console.log(err)
       setError(true)
+      setLoader(false)
     }
   }
 
@@ -163,7 +168,6 @@ const CompanyPostedJob = () => {
           setSuccessModal({ ...showSuccessModal, status: false, message: '' })
         }, 2000)
         setFlag(true)
-
       }
     } catch (err) {
       console.log(err)
@@ -226,6 +230,10 @@ const CompanyPostedJob = () => {
   console.log("this is all jobs", allJobs)
 
   // ######################### FUNCTION END #########################################
+
+  if (loader) {
+    return <Loader />
+  }
 
   if (error) {
     return <ErrorModal message={'Something Went Wrong'} />
@@ -337,7 +345,7 @@ const CompanyPostedJob = () => {
                 <div className="table-top-section">
                 </div>
                 {
-                  allJobs.length === 0 ?
+                  !allJobs ?
                     <p>No Job Found</p>
                     :
                     <div className="table-responsive">

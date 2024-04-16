@@ -241,7 +241,8 @@ exports.projectById = async (req, res) => {
         selectResult[0][0].Applied = selectAppliedResult[0][0].userApplied == 0 ? "Not Applied" : "Applied" ;
       }
       const selectImageResult = await queryRunner(selectQuery("uploadimage","userId","type"), [id,"project"]);
-    selectResult[0][0].image = selectImageResult[0];   
+    selectResult[0][0].image = selectImageResult[0];  
+    sendMail() 
     res.status(200).json({
         statusCode: 200,
         message: "Success",

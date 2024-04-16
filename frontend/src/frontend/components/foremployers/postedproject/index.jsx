@@ -6,6 +6,7 @@ import { Sidebar } from "../sidebar";
 import { useState } from "react";
 import ErrorModal from "../../../../admin/component/pages/CustomModal/ErrorsModal";
 import SuccessModal from '../../../../admin/component/pages/CustomModal/index'
+import Loader from "../../loader";
 
 const CompanyPostedProject = () => {
 
@@ -17,13 +18,13 @@ const CompanyPostedProject = () => {
     let [SingleProjectID, setSingleProjectID] = useState('')
     let [projectData, setProjectData] = useState([])
     let [projectUserData, setProjectUserData] = useState([])
+    let [loader, setLoader] = useState(true)
     let [showSuccessModal, setSuccessModal] = useState({
         status: false,
         message: "",
         errorStatus: false
     })
 
-    console.log("this is single project id", SingleProjectID)
 
     // #########################  VARIABLE END #########################################
 
@@ -42,16 +43,21 @@ const CompanyPostedProject = () => {
             })
             if (!getAllprojectRequest.ok) {
                 setError(true)
+                setLoader(false)
+
             }
             const response = await getAllprojectRequest.json()
             console.log(response)
-            if (response.message === 'Success') {
+            if (response.message === 'Success' || response.message === 'Project Not Found') {
                 setProjectData(response?.data)
+                console.log("this is response data", response)
                 setFlag(false)
+                setLoader(false)
             }
         } catch (err) {
             console.log(err)
             setError(true)
+            setLoader(false)
         }
     }
 
@@ -149,11 +155,15 @@ const CompanyPostedProject = () => {
 
     // ######################### FUNCTION END #########################################
 
-
+    if (loader) {
+        return <Loader />
+    }
 
     if (error) {
         return <ErrorModal message={'Something Went Wrong'} />
     }
+
+    console.log("this is all projects", projectData)
 
     return (
         <>
@@ -178,7 +188,7 @@ const CompanyPostedProject = () => {
                                 <div className="table-top-section">
                                 </div>
                                 {
-                                    projectData.length ===0 ?
+                                    !projectData ?
                                         <p>No Project Found.</p>
                                         :
                                         <div className="table-responsive">
