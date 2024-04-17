@@ -733,9 +733,9 @@ exports.createResetEmail = async (req, res) => {
         userid,
       ]);
       if (updateResult[0].affectedRows === 0) {
-        res.status(200).json({ message: "Token Not Updated" });
+        res.status(200).json({ message: "Token Not Updated in database" });
       } else {
-        res.status(200).json({ message: "Sended", id: userid });
+        res.status(200).json({ message: "Successfully Email Sended", id: userid });
       }
     } else if (selectResult[0].length === 0) {
       res.status(200).json({ message: "Email not found"});
@@ -743,7 +743,7 @@ exports.createResetEmail = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: "Error", error: error.message });
+    res.status(500).json({ message: "Error", error: error.message });
   }
 };
 //  ############################# Reset Email ############################################################
