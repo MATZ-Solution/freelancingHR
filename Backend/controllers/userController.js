@@ -724,7 +724,7 @@ exports.createResetEmail = async (req, res) => {
     if (selectResult[0].length > 0) {
       const userid = selectResult[0][0].id;
       const name = selectResult[0][0].firstName + " " + selectResult[0][0].lastName;
-      ForgetsendMail(email, mailSubject, random, name);
+      await ForgetsendMail(email, mailSubject, random, name);
       const now = new Date();
       const formattedDate = now.toISOString().slice(0, 19).replace("T", " ");
       const updateResult = await queryRunner(addResetToken, [

@@ -46,7 +46,8 @@ exports.ForgetsendMail = async (email, mailSubject, random, name ) => {
       if (error) {
         console.log("Error occur to send email" + error);
       } else {
-        console.log("email send sucessfully");
+        console.log("email send successfully");
+        // return info;
       }
     });
   } catch (error) {
