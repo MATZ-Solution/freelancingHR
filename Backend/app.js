@@ -19,6 +19,14 @@ app.use(bodyParser.json());
 // app.use(cors({ credentials: true, origin: '*' }))
 app.use(cors({ credentials: true, origin: "*" }))
 
+app.use((req, res, next) => {
+  res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Pragma", "no-cache");
+  res.header("Expires", "0");
+  next();
+});
+
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
