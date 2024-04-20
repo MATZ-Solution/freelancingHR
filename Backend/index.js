@@ -9,7 +9,7 @@ const app = express();
 app.use(cookieParser());
 app.use(bodyParser.json());
 // app.use(cors());
-app.use(cors({ credentials: true, origin: '*' }))
+app.use(cors({ credentials: true, origin: "*" }))
 
 app.use((req, res, next) => {
   res.header("Cache-Control", "no-cache, no-store, must-revalidate");
